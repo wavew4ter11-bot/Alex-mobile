@@ -3,31 +3,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#030706">
+<meta name="theme-color" content="#020711">
 
-<title>A.L.E.X</title>
+<title>A.L.E.X // MOBILE ASSET TERMINAL</title>
 
 <style>
 :root{
-    --bg:#030706;
-    --panel:#07100d;
-    --panel2:#0a1511;
-    --green:#39ff14;
-    --green2:#8cff68;
-    --dim:#126b20;
-    --cyan:#19d9ff;
-    --white:#eaffea;
-    --border:rgba(57,255,20,.35);
-    --glow:rgba(57,255,20,.18);
+    --bg:#020711;
+    --bg2:#030b18;
+    --panel:#061222;
+    --panel2:#08182b;
+    --blue:#159cff;
+    --blue2:#5cc8ff;
+    --cyan:#19e6ff;
+    --white:#eaf7ff;
+    --dim:#155b91;
+    --muted:#47728f;
+    --border:rgba(21,156,255,.35);
+    --glow:rgba(21,156,255,.22);
     --font:"Courier New",Consolas,monospace;
 }
 
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
 
 html,body{
     width:100%;
@@ -35,29 +38,33 @@ html,body{
     margin:0;
     overflow:hidden;
     background:var(--bg);
-    color:var(--green);
+    color:var(--blue);
     font-family:var(--font);
 }
 
-button,input,textarea{font-family:var(--font)}
-
-button{
-    border:1px solid var(--border);
-    background:linear-gradient(180deg,#0a1910,#050b08);
-    color:var(--green);
-    font-size:10px;
-    letter-spacing:1px;
-    padding:11px 14px;
-    border-radius:4px;
-    cursor:pointer;
+button,input,textarea{
+    font-family:var(--font);
 }
 
-button:active{transform:scale(.97)}
+button{
+    color:var(--blue);
+    background:linear-gradient(180deg,#0a1c31,#040c17);
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:10px 13px;
+    cursor:pointer;
+    letter-spacing:1px;
+    transition:.18s ease;
+}
+
+button:active{
+    transform:scale(.96);
+}
 
 button:hover{
-    border-color:var(--green);
+    border-color:var(--blue);
+    box-shadow:0 0 15px var(--glow);
     color:white;
-    box-shadow:0 0 12px var(--glow);
 }
 
 #app{
@@ -66,13 +73,40 @@ button:hover{
     position:relative;
     overflow:hidden;
     background:
-        radial-gradient(circle at 50% 42%,
-        rgba(20,100,40,.09),
-        transparent 42%),
-        #030706;
+        radial-gradient(circle at 50% 35%,rgba(0,130,255,.09),transparent 45%),
+        linear-gradient(180deg,#020711,#01050b);
 }
 
-/* HOME */
+/* =========================================================
+   SCANLINES / HUD
+========================================================= */
+
+#app::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:500;
+    background:repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(40,150,255,.012) 4px
+    );
+}
+
+#app::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:501;
+    border:1px solid rgba(21,156,255,.12);
+}
+
+/* =========================================================
+   HOME
+========================================================= */
 
 #home{
     position:absolute;
@@ -81,50 +115,86 @@ button:hover{
     flex-direction:column;
     align-items:center;
     padding:
-        max(20px,env(safe-area-inset-top))
-        18px
-        max(20px,env(safe-area-inset-bottom));
+        max(18px,env(safe-area-inset-top))
+        14px
+        max(14px,env(safe-area-inset-bottom));
+    transition:.3s ease;
 }
 
-#home.hidden{display:none}
+#home.hidden{
+    opacity:0;
+    pointer-events:none;
+    transform:scale(.985);
+}
+
+.top-hud{
+    width:min(96vw,650px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:3px;
+}
+
+.system-id{
+    font-size:8px;
+    letter-spacing:2px;
+    color:var(--muted);
+}
+
+.connection{
+    font-size:8px;
+    letter-spacing:2px;
+    color:var(--blue2);
+}
+
+.connection::before{
+    content:"●";
+    margin-right:6px;
+    color:var(--cyan);
+    text-shadow:0 0 9px var(--cyan);
+}
 
 .logo{
     margin-top:12px;
-    font-size:25px;
+    font-size:28px;
     font-weight:bold;
-    letter-spacing:7px;
+    letter-spacing:8px;
+    color:var(--blue);
     text-shadow:
-        0 0 7px var(--green),
-        0 0 20px rgba(57,255,20,.5);
+        0 0 8px var(--blue),
+        0 0 25px rgba(21,156,255,.5);
 }
 
 .subtitle{
-    margin-top:4px;
-    font-size:9px;
-    letter-spacing:4px;
-    color:#197f2a;
-    text-align:center;
+    margin-top:3px;
+    color:#2875a8;
+    font-size:8px;
+    letter-spacing:3px;
 }
 
 .status{
-    margin-top:28px;
+    margin-top:19px;
     font-size:10px;
     letter-spacing:3px;
-    color:var(--green2);
+    color:var(--blue2);
 }
 
 .status::before{
     content:"●";
     margin-right:8px;
-    color:var(--green);
-    text-shadow:0 0 8px var(--green);
+    color:var(--blue);
+    text-shadow:0 0 10px var(--blue);
 }
 
-.wave-area{
+/* =========================================================
+   REACTOR / WAVE
+========================================================= */
+
+.reactor{
     position:relative;
-    width:min(92vw,480px);
-    height:250px;
-    margin-top:15px;
+    width:min(94vw,500px);
+    height:220px;
+    margin-top:3px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -135,290 +205,393 @@ button:hover{
     height:100%;
 }
 
+.reactor-ring{
+    position:absolute;
+    width:110px;
+    height:110px;
+    border:1px solid rgba(21,156,255,.16);
+    border-radius:50%;
+    animation:spin 12s linear infinite;
+    pointer-events:none;
+}
+
+.reactor-ring::before,
+.reactor-ring::after{
+    content:"";
+    position:absolute;
+    inset:11px;
+    border:1px dashed rgba(25,230,255,.15);
+    border-radius:50%;
+}
+
+.reactor-ring::after{
+    inset:25px;
+    border-color:rgba(21,156,255,.25);
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
 #chat{
-    width:min(92vw,520px);
+    width:min(94vw,600px);
     flex:1;
-    min-height:100px;
-    max-height:38vh;
+    min-height:75px;
+    max-height:29vh;
     overflow-y:auto;
-    padding:8px 6px;
-    font-size:11px;
-    line-height:1.65;
+    padding:7px 5px;
+    font-size:10px;
+    line-height:1.6;
     scrollbar-width:thin;
     scrollbar-color:var(--dim) transparent;
 }
 
-.chat-line{margin-bottom:10px}
-.chat-user{color:var(--cyan)}
-.chat-alex{color:var(--green2)}
-.chat-time{
-    color:#397744;
-    font-size:8px;
+.chat-line{
+    margin-bottom:9px;
+    border-left:2px solid transparent;
+    padding-left:7px;
 }
 
+.chat-line.user{
+    border-left-color:var(--cyan);
+}
+
+.chat-line.alex{
+    border-left-color:var(--blue);
+}
+
+.chat-time{
+    color:#315c78;
+    font-size:7px;
+}
+
+.chat-user{
+    color:var(--cyan);
+}
+
+.chat-alex{
+    color:var(--blue2);
+}
+
+/* =========================================================
+   COMMAND INPUT
+========================================================= */
+
 .home-controls{
-    width:min(92vw,520px);
+    width:min(94vw,600px);
     display:flex;
-    gap:8px;
-    margin-top:10px;
+    gap:7px;
+    margin-top:6px;
 }
 
 #textInput{
     flex:1;
     min-width:0;
-    background:var(--panel);
+    padding:12px;
+    outline:none;
     border:1px solid var(--border);
     border-radius:5px;
+    background:#030b15;
     color:var(--white);
-    padding:13px;
-    outline:none;
-    font-size:11px;
+    font-size:10px;
+    box-shadow:inset 0 0 15px rgba(0,0,0,.3);
 }
 
 #textInput:focus{
-    border-color:var(--green);
-    box-shadow:0 0 10px var(--glow);
+    border-color:var(--blue);
+    box-shadow:0 0 14px var(--glow);
 }
 
 .home-buttons{
-    width:min(92vw,520px);
-    display:flex;
-    gap:8px;
-    margin-top:9px;
+    width:min(94vw,600px);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-top:7px;
 }
 
-.home-buttons button{flex:1}
+.home-buttons button{
+    font-size:8px;
+    padding:10px 4px;
+}
 
 .mic-active{
     border-color:var(--cyan)!important;
     color:var(--cyan)!important;
-    box-shadow:0 0 15px rgba(25,217,255,.25);
+    box-shadow:0 0 18px rgba(25,230,255,.25)!important;
 }
 
-/* ARCHIVE */
+/* =========================================================
+   MINI STATUS
+========================================================= */
+
+.mini-status{
+    width:min(94vw,600px);
+    display:flex;
+    justify-content:space-between;
+    margin-top:7px;
+    padding:6px 8px;
+    border-top:1px solid rgba(21,156,255,.12);
+    color:#315c78;
+    font-size:7px;
+    letter-spacing:1px;
+}
+
+/* =========================================================
+   ARCHIVE
+========================================================= */
 
 #archive{
     position:absolute;
     inset:0;
     display:none;
+    flex-direction:column;
     background:
-        radial-gradient(circle at 50% 40%,
-        rgba(30,100,40,.08),
-        transparent 55%),
-        #020605;
+        radial-gradient(circle at 50% 35%,rgba(0,130,255,.08),transparent 55%),
+        #020711;
+    z-index:20;
 }
 
 #archive.visible{
     display:flex;
-    flex-direction:column;
 }
 
 .archive-top{
-    width:100%;
-    min-height:72px;
+    min-height:70px;
     display:flex;
     align-items:center;
     gap:10px;
     padding:
-        max(10px,env(safe-area-inset-top))
-        16px
-        10px;
+        max(9px,env(safe-area-inset-top))
+        12px
+        9px;
     border-bottom:1px solid var(--border);
-    background:linear-gradient(
-        180deg,
-        rgba(7,20,13,.98),
-        rgba(3,9,6,.98)
-    );
+    background:rgba(3,12,23,.96);
     flex-shrink:0;
 }
 
-.archive-title{margin-right:auto}
+.archive-title{
+    margin-right:auto;
+}
 
 .archive-title-main{
-    font-size:15px;
+    font-size:14px;
     font-weight:bold;
     letter-spacing:3px;
+    text-shadow:0 0 9px rgba(21,156,255,.45);
 }
 
 .archive-title-sub{
     margin-top:4px;
-    color:#297e36;
-    font-size:8px;
+    color:#367ba7;
+    font-size:7px;
     letter-spacing:2px;
 }
 
 .archive-toolbar{
     display:flex;
-    gap:7px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
+    gap:5px;
 }
 
-.archive-toolbar button{white-space:nowrap}
-
-.archive-body{
-    flex:1;
-    min-height:0;
-    display:grid;
-    grid-template-columns:minmax(240px,32%) minmax(0,68%);
+.archive-toolbar button{
+    font-size:7px;
+    padding:8px;
 }
 
-.suit-list{
-    min-width:0;
-    min-height:0;
-    overflow-y:auto;
-    border-right:1px solid var(--border);
-    padding:14px;
-    scrollbar-width:thin;
-    scrollbar-color:var(--dim) transparent;
+/* =========================================================
+   CAROUSEL
+========================================================= */
+
+.carousel-zone{
+    position:relative;
+    flex:0 0 47%;
+    min-height:250px;
+    overflow:hidden;
+    border-bottom:1px solid rgba(21,156,255,.2);
+    perspective:1000px;
+    touch-action:pan-y;
 }
 
-.list-heading{
-    font-size:9px;
-    letter-spacing:2px;
-    color:#34843f;
-    margin-bottom:12px;
+.carousel-zone::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:14%;
+    bottom:8%;
+    width:1px;
+    background:linear-gradient(
+        transparent,
+        rgba(21,156,255,.18),
+        transparent
+    );
 }
 
-#suitListItems{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+.carousel-track{
+    position:absolute;
+    inset:0;
+    transform-style:preserve-3d;
 }
 
-.suit-card{
-    display:grid;
-    grid-template-columns:68px 1fr;
-    gap:10px;
-    min-height:74px;
-    padding:7px;
-    border:1px solid rgba(57,255,20,.18);
-    background:rgba(5,15,10,.7);
-    border-radius:4px;
+.suit-slide{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:min(54vw,230px);
+    height:min(35vh,230px);
+    transform-style:preserve-3d;
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        opacity .45s ease,
+        filter .45s ease;
     cursor:pointer;
 }
 
-.suit-card.selected{
-    border-color:var(--green);
-    box-shadow:
-        inset 3px 0 0 var(--green),
-        0 0 12px rgba(57,255,20,.08);
-}
-
-.suit-thumb{
-    width:68px;
-    height:58px;
-    object-fit:cover;
-    background:#020504;
-    border:1px solid rgba(57,255,20,.15);
-}
-
-.suit-card-name{
-    color:var(--green2);
-    font-size:10px;
-    font-weight:bold;
-    margin-top:5px;
-}
-
-.suit-card-meta{
-    color:#447c4b;
-    font-size:8px;
-    margin-top:6px;
-}
-
-.empty-archive{
-    padding:35px 20px;
-    text-align:center;
-    color:#397344;
-    font-size:10px;
-    line-height:1.8;
-}
-
-.empty-icon{
-    font-size:32px;
-    margin-bottom:12px;
-    color:#195d26;
-}
-
-.suit-viewer{
-    min-width:0;
-    min-height:0;
-    display:grid;
-    grid-template-columns:minmax(280px,55%) minmax(230px,45%);
-}
-
-.image-panel{
-    min-width:0;
-    min-height:0;
+.suit-slide-inner{
+    width:100%;
+    height:100%;
     position:relative;
+    overflow:hidden;
+    border:1px solid rgba(21,156,255,.25);
+    background:
+        radial-gradient(circle at center,rgba(0,110,210,.13),transparent 70%),
+        #030a13;
+    box-shadow:0 0 25px rgba(21,156,255,.07);
+}
+
+.suit-slide img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.suit-slide-placeholder{
+    width:100%;
+    height:100%;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:25px;
-}
-
-#selectedImage{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-    display:none;
-    border:1px solid rgba(57,255,20,.15);
-    box-shadow:0 0 25px rgba(57,255,20,.05);
-}
-
-.image-placeholder{
-    text-align:center;
-    color:#2b6734;
-    font-size:10px;
+    color:#244c68;
+    font-size:8px;
     letter-spacing:2px;
 }
 
-.image-nav{
+.slide-label{
     position:absolute;
-    left:50%;
-    bottom:18px;
-    transform:translateX(-50%);
-    display:flex;
-    gap:8px;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:8px;
+    background:linear-gradient(transparent,rgba(0,4,10,.95));
+    color:var(--blue2);
+    font-size:9px;
+    font-weight:bold;
+    letter-spacing:1px;
 }
 
-.suit-details{
-    min-width:0;
+.carousel-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:10;
+    width:38px;
+    height:55px;
+    padding:0;
+    font-size:20px;
+    background:rgba(2,8,15,.72);
+}
+
+#carouselPrev{left:8px}
+#carouselNext{right:8px}
+
+.carousel-info{
+    position:absolute;
+    left:50%;
+    bottom:8px;
+    transform:translateX(-50%);
+    z-index:11;
+    padding:5px 10px;
+    border:1px solid rgba(21,156,255,.2);
+    background:rgba(2,8,15,.8);
+    color:#5791b5;
+    font-size:7px;
+    letter-spacing:2px;
+}
+
+/* =========================================================
+   ARCHIVE DETAILS
+========================================================= */
+
+.archive-details{
+    flex:1;
     min-height:0;
     overflow-y:auto;
-    padding:30px 30px 80px;
-    border-left:1px solid rgba(57,255,20,.15);
+    padding:15px 17px 45px;
 }
 
 .detail-label{
-    color:#3b8745;
-    font-size:8px;
+    color:#3e7da5;
+    font-size:7px;
     letter-spacing:2px;
-    margin-bottom:7px;
+    margin-bottom:6px;
 }
 
 #detailName{
-    color:var(--green);
-    font-size:22px;
+    color:var(--blue);
+    font-size:19px;
     font-weight:bold;
     letter-spacing:2px;
-    margin-bottom:22px;
+    text-shadow:0 0 9px rgba(21,156,255,.25);
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:14px;
+}
+
+.detail-box{
+    border:1px solid rgba(21,156,255,.15);
+    background:rgba(5,17,30,.6);
+    padding:10px;
+}
+
+.detail-value{
+    color:var(--white);
+    font-size:9px;
 }
 
 #detailDescription{
-    color:var(--white);
-    font-size:11px;
-    line-height:1.8;
+    color:#b5d7ea;
+    font-size:9px;
+    line-height:1.7;
     white-space:pre-wrap;
 }
 
 .detail-section{
-    margin-top:25px;
-    padding-top:15px;
-    border-top:1px solid rgba(57,255,20,.12);
+    margin-top:15px;
+    padding-top:11px;
+    border-top:1px solid rgba(21,156,255,.12);
 }
 
-/* MODAL */
+.archive-actions{
+    display:flex;
+    gap:6px;
+    margin-top:15px;
+}
+
+.archive-actions button{
+    flex:1;
+    font-size:8px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
 
 .modal{
     position:fixed;
@@ -427,153 +600,207 @@ button:hover{
     align-items:center;
     justify-content:center;
     z-index:100;
-    background:rgba(0,0,0,.75);
+    background:rgba(0,3,8,.82);
+    padding:15px;
 }
 
-.modal.visible{display:flex}
+.modal.visible{
+    display:flex;
+}
 
 .modal-box{
-    width:min(92vw,500px);
-    max-height:90vh;
+    width:min(94vw,500px);
+    max-height:88vh;
     overflow-y:auto;
-    padding:24px;
-    background:#06100b;
-    border:1px solid var(--green);
-    box-shadow:0 0 30px rgba(57,255,20,.12);
+    padding:20px;
+    background:#04101d;
+    border:1px solid var(--blue);
+    box-shadow:0 0 35px rgba(21,156,255,.16);
 }
 
 .modal-title{
-    font-size:15px;
+    font-size:14px;
     letter-spacing:3px;
-    margin-bottom:20px;
+    margin-bottom:16px;
 }
 
 .form-label{
     display:block;
-    color:#47874f;
-    font-size:8px;
+    margin:13px 0 5px;
+    color:#4b83a6;
+    font-size:7px;
     letter-spacing:2px;
-    margin:14px 0 6px;
 }
 
 .form-input,
 .form-textarea{
     width:100%;
-    background:#020604;
+    padding:10px;
+    background:#020811;
     color:var(--white);
-    border:1px solid rgba(57,255,20,.3);
-    padding:11px;
+    border:1px solid rgba(21,156,255,.3);
     outline:none;
-    font-size:10px;
+    font-size:9px;
 }
 
 .form-textarea{
-    min-height:100px;
+    min-height:95px;
     resize:vertical;
 }
 
 .file-input{
     width:100%;
-    color:#8bb98e;
-    font-size:9px;
+    color:#8ab7d0;
+    font-size:8px;
 }
 
 .modal-buttons{
     display:flex;
-    gap:8px;
-    margin-top:20px;
+    gap:7px;
+    margin-top:17px;
 }
 
-.modal-buttons button{flex:1}
+.modal-buttons button{
+    flex:1;
+}
 
-/* TOAST */
+/* =========================================================
+   TOAST
+========================================================= */
 
 #toast{
     position:fixed;
     left:50%;
-    bottom:25px;
-    transform:translateX(-50%) translateY(20px);
+    bottom:22px;
+    transform:translate(-50%,20px);
     opacity:0;
     pointer-events:none;
-    background:#06130b;
-    border:1px solid var(--green);
-    color:var(--green2);
-    padding:10px 18px;
-    font-size:9px;
-    z-index:200;
+    z-index:300;
+    background:#041522;
+    border:1px solid var(--blue);
+    color:var(--blue2);
+    padding:9px 15px;
+    font-size:8px;
     transition:.25s ease;
+    box-shadow:0 0 20px rgba(21,156,255,.15);
 }
 
 #toast.show{
     opacity:1;
-    transform:translateX(-50%) translateY(0);
+    transform:translate(-50%,0);
 }
 
-/* MOBILE */
+/* =========================================================
+   TOOLS PANEL
+========================================================= */
 
-@media(max-width:700px){
-
-    .archive-top{
-        min-height:110px;
-        align-items:flex-start;
-    }
-
-    .archive-title{padding-top:5px}
-
-    .archive-toolbar{max-width:65%}
-
-    .archive-toolbar button{
-        padding:8px 9px;
-        font-size:8px;
-    }
-
-    .archive-body{
-        grid-template-columns:115px 1fr;
-    }
-
-    .suit-card{display:block}
-
-    .suit-thumb{
-        width:100%;
-        height:70px;
-    }
-
-    .suit-card-name{font-size:8px}
-    .suit-card-meta{display:none}
-
-    .suit-viewer{
-        grid-template-columns:1fr;
-        grid-template-rows:55% 45%;
-    }
-
-    .suit-details{
-        border-left:none;
-        border-top:1px solid rgba(57,255,20,.15);
-        padding:15px 18px 60px;
-    }
-
-    #detailName{
-        font-size:16px;
-        margin-bottom:10px;
-    }
-
-    #detailDescription{font-size:9px}
+#tools{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    z-index:30;
+    background:#020711;
 }
 
-@media(orientation:landscape) and (max-height:650px){
+#tools.visible{
+    display:flex;
+}
 
-    #home{padding-top:8px}
+.tools-top{
+    padding:
+        max(12px,env(safe-area-inset-top))
+        14px
+        12px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+}
 
-    .logo{margin-top:3px}
+.tools-title{
+    margin-right:auto;
+    font-size:14px;
+    letter-spacing:3px;
+}
 
-    .status{margin-top:8px}
+.tools-grid{
+    padding:14px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    overflow-y:auto;
+}
 
-    .wave-area{
-        height:150px;
-        margin-top:2px;
+.tool-card{
+    min-height:105px;
+    padding:14px;
+    border:1px solid rgba(21,156,255,.22);
+    background:linear-gradient(
+        145deg,
+        rgba(8,27,46,.8),
+        rgba(2,9,17,.9)
+    );
+}
+
+.tool-card-title{
+    color:var(--blue2);
+    font-size:10px;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.tool-card-text{
+    color:#6f9db8;
+    font-size:8px;
+    line-height:1.6;
+}
+
+/* =========================================================
+   LANDSCAPE
+========================================================= */
+
+@media (orientation:landscape) and (max-height:600px){
+
+    .logo{
+        margin-top:3px;
+        font-size:20px;
     }
 
-    #chat{max-height:22vh}
+    .status{
+        margin-top:6px;
+    }
+
+    .reactor{
+        height:125px;
+    }
+
+    #chat{
+        max-height:22vh;
+    }
+
+    .home-buttons button{
+        padding:7px 4px;
+    }
+
+    .carousel-zone{
+        flex-basis:55%;
+    }
+}
+
+@media (min-width:700px){
+
+    #home{
+        padding-left:30px;
+        padding-right:30px;
+    }
+
+    .reactor{
+        height:260px;
+    }
+
+    .carousel-zone{
+        flex-basis:53%;
+    }
 }
 </style>
 </head>
@@ -582,7 +809,16 @@ button:hover{
 
 <div id="app">
 
+<!-- =====================================================
+     HOME
+===================================================== -->
+
 <section id="home">
+
+    <div class="top-hud">
+        <div class="system-id">A.L.E.X // FIELD TERMINAL</div>
+        <div class="connection" id="connectionState">ONLINE</div>
+    </div>
 
     <div class="logo">A.L.E.X</div>
 
@@ -590,12 +826,11 @@ button:hover{
         ADVANCED LOGIC &amp; EXPLORATION SYSTEM
     </div>
 
-    <div id="status" class="status">
-        STANDBY
-    </div>
+    <div id="status" class="status">STANDBY</div>
 
-    <div class="wave-area">
+    <div class="reactor">
         <canvas id="wave"></canvas>
+        <div class="reactor-ring"></div>
     </div>
 
     <div id="chat"></div>
@@ -606,7 +841,7 @@ button:hover{
             id="textInput"
             type="text"
             autocomplete="off"
-            placeholder="Speak to A.L.E.X..."
+            placeholder="Command A.L.E.X..."
         >
 
         <button id="sendButton">SEND</button>
@@ -619,12 +854,28 @@ button:hover{
 
         <button id="speakButton">SPEAK</button>
 
-        <button id="archiveButton">ARCHIVES</button>
+        <button id="archiveButton">ARCHIVE</button>
+
+        <button id="toolsButton">TOOLS</button>
+
+    </div>
+
+    <div class="mini-status">
+
+        <span id="timeDisplay">--:--:--</span>
+
+        <span>AI LINK: <b id="aiState">READY</b></span>
+
+        <span>VOICE: <b id="voiceState">READY</b></span>
 
     </div>
 
 </section>
 
+
+<!-- =====================================================
+     ARCHIVE
+===================================================== -->
 
 <section id="archive">
 
@@ -637,98 +888,189 @@ button:hover{
             </div>
 
             <div class="archive-title-sub">
-                SUIT DATABASE
+                SUIT DATABASE // FIELD ASSET REGISTRY
             </div>
 
         </div>
 
         <div class="archive-toolbar">
 
-            <button id="addSuitButton">
-                + ADD SUIT
+            <button id="addSuitButton">+ ADD</button>
+
+            <button id="deleteSuitButton">DELETE</button>
+
+            <button id="backButton">&lt; HOME</button>
+
+        </div>
+
+    </div>
+
+
+    <div class="carousel-zone" id="carouselZone">
+
+        <div id="carouselTrack" class="carousel-track"></div>
+
+        <button
+            id="carouselPrev"
+            class="carousel-arrow"
+        >&lt;</button>
+
+        <button
+            id="carouselNext"
+            class="carousel-arrow"
+        >&gt;</button>
+
+        <div
+            id="carouselInfo"
+            class="carousel-info"
+        >
+            0 / 0
+        </div>
+
+    </div>
+
+
+    <div class="archive-details">
+
+        <div class="detail-label">
+            CURRENT ASSET
+        </div>
+
+        <div id="detailName">
+            NO SUIT SELECTED
+        </div>
+
+        <div class="detail-section">
+
+            <div class="detail-label">
+                DESCRIPTION
+            </div>
+
+            <div id="detailDescription">
+                Add a suit to begin building the A.L.E.X archive.
+            </div>
+
+        </div>
+
+        <div class="detail-grid">
+
+            <div class="detail-box">
+
+                <div class="detail-label">
+                    IMAGE COUNT
+                </div>
+
+                <div
+                    id="detailImageCount"
+                    class="detail-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="detail-box">
+
+                <div class="detail-label">
+                    ARCHIVE ID
+                </div>
+
+                <div
+                    id="detailId"
+                    class="detail-value"
+                >
+                    ----
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="archive-actions">
+
+            <button id="imagePrevButton">
+                PREVIOUS IMAGE
             </button>
 
-            <button id="deleteSuitButton">
-                DELETE
-            </button>
-
-            <button id="backButton">
-                &lt; HOME
+            <button id="imageNextButton">
+                NEXT IMAGE
             </button>
 
         </div>
 
     </div>
 
-    <div class="archive-body">
+</section>
 
-        <div class="suit-list">
 
-            <div class="list-heading">
-                ARCHIVED SUITS
+<!-- =====================================================
+     TOOLS
+===================================================== -->
+
+<section id="tools">
+
+    <div class="tools-top">
+
+        <div class="tools-title">
+            A.L.E.X // TOOLS
+        </div>
+
+        <button id="toolsBack">
+            &lt; HOME
+        </button>
+
+    </div>
+
+    <div class="tools-grid">
+
+        <div class="tool-card">
+
+            <div class="tool-card-title">
+                QUICK COMMAND
             </div>
 
-            <div id="suitListItems"></div>
+            <div class="tool-card-text">
+                Ask A.L.E.X anything using the command terminal.
+                Voice input and spoken responses are supported.
+            </div>
 
         </div>
 
-        <div class="suit-viewer">
+        <div class="tool-card">
 
-            <div class="image-panel">
-
-                <div
-                    id="imagePlaceholder"
-                    class="image-placeholder"
-                >
-                    SELECT A SUIT
-                </div>
-
-                <img
-                    id="selectedImage"
-                    alt="Selected suit"
-                >
-
-                <div class="image-nav">
-
-                    <button id="previousImage">&lt;</button>
-                    <button id="nextImage">&gt;</button>
-
-                </div>
-
+            <div class="tool-card-title">
+                SUIT ARCHIVE
             </div>
 
-            <div class="suit-details">
+            <div class="tool-card-text">
+                Store suit concepts, images and descriptions
+                inside the persistent local asset database.
+            </div>
 
-                <div class="detail-label">
-                    CURRENT ARCHIVE ENTRY
-                </div>
+        </div>
 
-                <div id="detailName">
-                    NO SUIT SELECTED
-                </div>
+        <div class="tool-card">
 
-                <div class="detail-section">
+            <div class="tool-card-title">
+                VOICE CONTROL
+            </div>
 
-                    <div class="detail-label">
-                        DESCRIPTION
-                    </div>
+            <div class="tool-card-text">
+                Activate the microphone and issue commands
+                without touching the command field.
+            </div>
 
-                    <div id="detailDescription">
-                        Add a suit to begin building the archive.
-                    </div>
+        </div>
 
-                </div>
+        <div class="tool-card">
 
-                <div class="detail-section">
+            <div class="tool-card-title">
+                SYSTEM STATUS
+            </div>
 
-                    <div class="detail-label">
-                        IMAGE COUNT
-                    </div>
-
-                    <div id="detailImageCount">0</div>
-
-                </div>
-
+            <div class="tool-card-text">
+                Monitor AI connection, voice system and
+                interface state from the main terminal.
             </div>
 
         </div>
@@ -738,31 +1080,41 @@ button:hover{
 </section>
 
 
+<!-- =====================================================
+     ADD SUIT MODAL
+===================================================== -->
+
 <div id="addModal" class="modal">
 
     <div class="modal-box">
 
         <div class="modal-title">
-            ADD SUIT TO ARCHIVE
+            ADD ASSET TO ARCHIVE
         </div>
 
-        <label class="form-label">SUIT NAME</label>
+        <label class="form-label">
+            ASSET / SUIT NAME
+        </label>
 
         <input
             id="suitName"
             class="form-input"
-            placeholder="e.g. INTEGRATED SUIT"
+            placeholder="INTEGRATED SUIT"
         >
 
-        <label class="form-label">DESCRIPTION</label>
+        <label class="form-label">
+            DESCRIPTION
+        </label>
 
         <textarea
             id="suitDescription"
             class="form-textarea"
-            placeholder="Leave blank for automatic description."
+            placeholder="Leave blank for A.L.E.X automatic description."
         ></textarea>
 
-        <label class="form-label">SUIT IMAGES</label>
+        <label class="form-label">
+            SUIT IMAGES
+        </label>
 
         <input
             id="suitImages"
@@ -775,7 +1127,7 @@ button:hover{
         <div class="modal-buttons">
 
             <button id="saveSuitButton">
-                SAVE SUIT
+                SAVE ASSET
             </button>
 
             <button id="cancelSuitButton">
@@ -795,18 +1147,51 @@ button:hover{
 
 
 <script>
+/* =========================================================
+   A.L.E.X MOBILE
+   BLUE ASSET TERMINAL
+========================================================= */
 
-/* ============================================================
-   A.L.E.X PHONE CORE
-   100% LOCAL
-   NO API
-   NO OLLAMA
-   NO SERVER
-============================================================ */
+/*
+    ========================================================
+    API CONFIGURATION
+    ========================================================
 
-const STORAGE_KEY = "alex_phone_archive_v3";
-const MEMORY_KEY = "alex_phone_memory_v3";
-const CHAT_KEY = "alex_phone_chat_v3";
+    Put your API key below.
+
+    IMPORTANT:
+    Do not publish a real API key in a public GitHub
+    repository or public website.
+
+    The interface will still work without the key,
+    but AI responses will not be available.
+*/
+
+const API_KEY = "PASTE_YOUR_API_KEY_HERE";
+
+
+/*
+    Change this endpoint/model if your API provider
+    uses a different OpenAI-compatible endpoint.
+
+    The default is structured for an OpenAI-compatible
+    chat-completions API.
+*/
+
+const API_URL = "https://api.openai.com/v1/chat/completions";
+const API_MODEL = "gpt-4o-mini";
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const STORAGE_KEY = "alex_mobile_asset_archive_v4";
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let suits = [];
 let selectedSuit = -1;
@@ -816,106 +1201,789 @@ let micActive = false;
 let recognition = null;
 
 let speechEnabled = true;
-let conversation = [];
+let apiBusy = false;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const home =
+    document.getElementById("home");
+
+const archive =
+    document.getElementById("archive");
+
+const tools =
+    document.getElementById("tools");
+
+const chat =
+    document.getElementById("chat");
+
+const textInput =
+    document.getElementById("textInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const micButton =
+    document.getElementById("micButton");
+
+const speakButton =
+    document.getElementById("speakButton");
+
+const archiveButton =
+    document.getElementById("archiveButton");
+
+const toolsButton =
+    document.getElementById("toolsButton");
+
+const toolsBack =
+    document.getElementById("toolsBack");
+
+const backButton =
+    document.getElementById("backButton");
+
+const status =
+    document.getElementById("status");
+
+const connectionState =
+    document.getElementById("connectionState");
+
+const aiState =
+    document.getElementById("aiState");
+
+const voiceState =
+    document.getElementById("voiceState");
+
+const timeDisplay =
+    document.getElementById("timeDisplay");
+
+const addSuitButton =
+    document.getElementById("addSuitButton");
+
+const deleteSuitButton =
+    document.getElementById("deleteSuitButton");
+
+const carouselZone =
+    document.getElementById("carouselZone");
+
+const carouselTrack =
+    document.getElementById("carouselTrack");
+
+const carouselInfo =
+    document.getElementById("carouselInfo");
+
+const carouselPrev =
+    document.getElementById("carouselPrev");
+
+const carouselNext =
+    document.getElementById("carouselNext");
+
+const imagePrevButton =
+    document.getElementById("imagePrevButton");
+
+const imageNextButton =
+    document.getElementById("imageNextButton");
+
+const detailName =
+    document.getElementById("detailName");
+
+const detailDescription =
+    document.getElementById("detailDescription");
+
+const detailImageCount =
+    document.getElementById("detailImageCount");
+
+const detailId =
+    document.getElementById("detailId");
+
+const addModal =
+    document.getElementById("addModal");
+
+const suitName =
+    document.getElementById("suitName");
+
+const suitDescription =
+    document.getElementById("suitDescription");
+
+const suitImages =
+    document.getElementById("suitImages");
+
+const saveSuitButton =
+    document.getElementById("saveSuitButton");
+
+const cancelSuitButton =
+    document.getElementById("cancelSuitButton");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* =========================================================
+   TIME
+========================================================= */
+
+function updateClock(){
+
+    timeDisplay.textContent =
+        new Date().toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit"
+            }
+        );
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 let toastTimer = null;
 
+function showToast(message){
 
-/* ============================================================
-   ELEMENTS
-============================================================ */
+    toast.textContent = message;
+    toast.classList.add("show");
 
-const home = document.getElementById("home");
-const archive = document.getElementById("archive");
+    clearTimeout(toastTimer);
 
-const chat = document.getElementById("chat");
-
-const textInput = document.getElementById("textInput");
-const sendButton = document.getElementById("sendButton");
-
-const micButton = document.getElementById("micButton");
-const speakButton = document.getElementById("speakButton");
-
-const archiveButton = document.getElementById("archiveButton");
-const backButton = document.getElementById("backButton");
-
-const addSuitButton = document.getElementById("addSuitButton");
-const deleteSuitButton = document.getElementById("deleteSuitButton");
-
-const suitListItems = document.getElementById("suitListItems");
-
-const selectedImage = document.getElementById("selectedImage");
-const imagePlaceholder = document.getElementById("imagePlaceholder");
-
-const detailName = document.getElementById("detailName");
-const detailDescription = document.getElementById("detailDescription");
-const detailImageCount = document.getElementById("detailImageCount");
-
-const previousImage = document.getElementById("previousImage");
-const nextImage = document.getElementById("nextImage");
-
-const addModal = document.getElementById("addModal");
-
-const suitName = document.getElementById("suitName");
-const suitDescription = document.getElementById("suitDescription");
-const suitImages = document.getElementById("suitImages");
-
-const saveSuitButton = document.getElementById("saveSuitButton");
-const cancelSuitButton = document.getElementById("cancelSuitButton");
-
-const status = document.getElementById("status");
-const toast = document.getElementById("toast");
+    toastTimer =
+        setTimeout(
+            ()=>{
+                toast.classList.remove("show");
+            },
+            2500
+        );
+}
 
 
-/* ============================================================
-   STORAGE
-============================================================ */
+/* =========================================================
+   STATUS
+========================================================= */
 
-function safeJSON(key, fallback){
+function setStatus(value){
+
+    status.textContent = value;
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+function currentTime(){
+
+    return new Date().toLocaleTimeString(
+        [],
+        {
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+        }
+    );
+}
+
+
+function addChat(speaker,text){
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "chat-line " +
+        (
+            speaker === "USER"
+                ? "user"
+                : "alex"
+        );
+
+    const time =
+        document.createElement("div");
+
+    time.className =
+        "chat-time";
+
+    time.textContent =
+        speaker +
+        " // " +
+        currentTime();
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        speaker === "USER"
+            ? "chat-user"
+            : "chat-alex";
+
+    message.textContent =
+        text;
+
+    wrapper.appendChild(time);
+    wrapper.appendChild(message);
+
+    chat.appendChild(wrapper);
+
+    chat.scrollTop =
+        chat.scrollHeight;
+}
+
+
+/* =========================================================
+   AI PERSONALITY
+========================================================= */
+
+const SYSTEM_PROMPT = `
+You are A.L.E.X, a futuristic personal AI assistant.
+
+Your personality is calm, intelligent, helpful and slightly
+Jarvis-inspired without pretending to have abilities you do
+not actually possess.
+
+You are running inside the user's personal mobile asset
+terminal.
+
+Be concise when a concise answer is appropriate.
+
+You can help with:
+- everyday questions
+- planning
+- calculations
+- explanations
+- programming
+- the user's suit archive
+- interface commands
+- general productivity
+
+Do not claim that you performed an action unless the interface
+actually performed it.
+
+When the user asks about the archive, the mobile interface
+can open the archive using the command system.
+`;
+
+
+/* =========================================================
+   API REQUEST
+========================================================= */
+
+async function askAI(userText){
+
+    if(
+        !API_KEY ||
+        API_KEY === "PASTE_YOUR_API_KEY_HERE"
+    ){
+
+        return (
+            "AI connection is not configured yet. " +
+            "Add your API key in the API configuration section."
+        );
+    }
+
+    if(apiBusy){
+
+        return "I'm still processing the previous request.";
+    }
+
+    apiBusy = true;
+
+    aiState.textContent = "PROCESSING";
+    connectionState.textContent = "PROCESSING";
+    setStatus("THINKING");
 
     try{
 
-        const value = localStorage.getItem(key);
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
 
-        if(!value)
-            return fallback;
+                    headers:{
+                        "Content-Type":
+                            "application/json",
 
-        return JSON.parse(value);
+                        "Authorization":
+                            "Bearer " + API_KEY
+                    },
+
+                    body:JSON.stringify({
+
+                        model:API_MODEL,
+
+                        messages:[
+                            {
+                                role:"system",
+                                content:SYSTEM_PROMPT
+                            },
+                            {
+                                role:"user",
+                                content:userText
+                            }
+                        ],
+
+                        temperature:.7,
+
+                        max_tokens:700
+                    })
+                }
+            );
+
+        if(!response.ok){
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "A.L.E.X API error:",
+                errorText
+            );
+
+            throw new Error(
+                "API returned " +
+                response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        const answer =
+            data?.choices?.[0]?.message?.content;
+
+        if(!answer){
+
+            throw new Error(
+                "No response returned."
+            );
+        }
+
+        aiState.textContent = "READY";
+        connectionState.textContent = "ONLINE";
+
+        return answer.trim();
 
     }catch(error){
 
-        console.warn("Storage error:",error);
+        console.error(error);
 
-        return fallback;
+        aiState.textContent = "ERROR";
+        connectionState.textContent = "OFFLINE";
+
+        return (
+            "I couldn't establish the AI connection. " +
+            "Check the API key, endpoint and network connection."
+        );
+
+    }finally{
+
+        apiBusy = false;
+        setStatus("STANDBY");
     }
 }
 
 
-function loadEverything(){
+/* =========================================================
+   COMMAND INTERPRETER
+========================================================= */
 
-    suits = safeJSON(STORAGE_KEY,[]);
+function handleLocalCommand(text){
 
-    conversation = safeJSON(CHAT_KEY,[]);
+    const low =
+        text.toLowerCase().trim();
 
-    if(!Array.isArray(suits))
-        suits=[];
+    if(
+        low === "archive" ||
+        low.includes("open archive") ||
+        low.includes("open the archive") ||
+        low.includes("show archive") ||
+        low.includes("show my suits") ||
+        low.includes("show suits")
+    ){
 
-    if(!Array.isArray(conversation))
-        conversation=[];
+        openArchive();
 
-    conversation.slice(-40).forEach(item=>{
+        return true;
+    }
 
-        if(item &&
-           (item.speaker==="USER" ||
-            item.speaker==="ALEX")){
+    if(
+        low === "home" ||
+        low === "go home"
+    ){
+
+        closeArchive();
+        closeTools();
+
+        return true;
+    }
+
+    if(
+        low.includes("open tools") ||
+        low === "tools"
+    ){
+
+        openTools();
+
+        return true;
+    }
+
+    if(
+        low.includes("what suits do i have") ||
+        low.includes("list my suits")
+    ){
+
+        if(suits.length === 0){
 
             addChat(
-                item.speaker,
-                item.text,
-                false
+                "ALEX",
+                "The suit archive is currently empty."
+            );
+
+        }else{
+
+            addChat(
+                "ALEX",
+                "You currently have " +
+                suits.length +
+                " archived suit" +
+                (suits.length === 1 ? "" : "s") +
+                ": " +
+                suits.map(s=>s.name).join(", ") +
+                "."
             );
         }
-    });
+
+        return true;
+    }
+
+    if(
+        low === "mic" ||
+        low === "microphone"
+    ){
+
+        toggleMicrophone();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(){
+
+    const text =
+        textInput.value.trim();
+
+    if(!text) return;
+
+    textInput.value = "";
+
+    addChat("USER",text);
+
+    if(handleLocalCommand(text)){
+
+        return;
+    }
+
+    const answer =
+        await askAI(text);
+
+    addChat("ALEX",answer);
+
+    if(speechEnabled){
+
+        speakText(answer);
+    }
+}
+
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+textInput.addEventListener(
+    "keydown",
+    event=>{
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    }
+);
+
+
+/* =========================================================
+   SPEECH
+========================================================= */
+
+function speakText(text){
+
+    if(
+        !speechEnabled ||
+        !("speechSynthesis" in window)
+    ){
+
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.rate = .94;
+    utterance.pitch = .92;
+    utterance.volume = 1;
+
+    const voices =
+        speechSynthesis.getVoices();
+
+    const preferred =
+        voices.find(
+            voice =>
+                /en-GB/i.test(voice.lang)
+        );
+
+    if(preferred){
+
+        utterance.voice =
+            preferred;
+    }
+
+    setStatus("SPEAKING");
+    voiceState.textContent = "SPEAKING";
+
+    utterance.onend =
+        ()=>{
+            setStatus("STANDBY");
+            voiceState.textContent = "READY";
+        };
+
+    utterance.onerror =
+        ()=>{
+            setStatus("STANDBY");
+            voiceState.textContent = "READY";
+        };
+
+    speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+speakButton.addEventListener(
+    "click",
+    ()=>{
+
+        const messages =
+            chat.querySelectorAll(
+                ".chat-alex"
+            );
+
+        if(!messages.length){
+
+            speakText(
+                "A.L.E.X online."
+            );
+
+            return;
+        }
+
+        speakText(
+            messages[messages.length-1]
+                .textContent
+        );
+    }
+);
+
+
+/* =========================================================
+   MICROPHONE
+========================================================= */
+
+function setupMicrophone(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        recognition = null;
+        voiceState.textContent = "UNAVAILABLE";
+
+        return;
+    }
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-GB";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart =
+        ()=>{
+
+            micActive = true;
+
+            micButton.textContent =
+                "MIC ON";
+
+            micButton.classList.add(
+                "mic-active"
+            );
+
+            setStatus("LISTENING");
+            voiceState.textContent = "LISTENING";
+        };
+
+    recognition.onresult =
+        event=>{
+
+            const transcript =
+                event.results[0][0].transcript;
+
+            textInput.value =
+                transcript;
+
+            sendMessage();
+        };
+
+    recognition.onerror =
+        event=>{
+
+            console.log(
+                "Speech recognition:",
+                event.error
+            );
+
+            showToast(
+                "Microphone: " +
+                event.error
+            );
+        };
+
+    recognition.onend =
+        ()=>{
+
+            micActive = false;
+
+            micButton.textContent =
+                "MIC OFF";
+
+            micButton.classList.remove(
+                "mic-active"
+            );
+
+            voiceState.textContent =
+                "READY";
+
+            if(
+                status.textContent ===
+                "LISTENING"
+            ){
+
+                setStatus("STANDBY");
+            }
+        };
+}
+
+
+function toggleMicrophone(){
+
+    if(!recognition){
+
+        showToast(
+            "Speech recognition is not supported here."
+        );
+
+        return;
+    }
+
+    if(micActive){
+
+        recognition.stop();
+
+        return;
+    }
+
+    try{
+
+        recognition.start();
+
+    }catch(error){
+
+        console.log(error);
+    }
+}
+
+
+micButton.addEventListener(
+    "click",
+    toggleMicrophone
+);
+
+
+/* =========================================================
+   ARCHIVE STORAGE
+========================================================= */
+
+function loadArchive(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if(!saved){
+
+            suits = [];
+            return;
+        }
+
+        const parsed =
+            JSON.parse(saved);
+
+        suits =
+            Array.isArray(parsed)
+                ? parsed
+                : [];
+
+        if(
+            selectedSuit >= suits.length
+        ){
+
+            selectedSuit =
+                suits.length - 1;
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        suits = [];
+    }
 }
 
 
@@ -932,794 +2000,95 @@ function saveArchive(){
 
         console.error(error);
 
-        showToast("Archive storage is full.");
-    }
-}
-
-
-function saveConversation(){
-
-    try{
-
-        localStorage.setItem(
-            CHAT_KEY,
-            JSON.stringify(
-                conversation.slice(-40)
-            )
+        showToast(
+            "Archive storage limit reached."
         );
-
-    }catch(error){
-
-        console.warn(error);
     }
 }
 
 
-/* ============================================================
-   TOAST
-============================================================ */
-
-function showToast(text){
-
-    toast.textContent=text;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer=setTimeout(()=>{
-
-        toast.classList.remove("show");
-
-    },2400);
-}
-
-
-/* ============================================================
-   TIME
-============================================================ */
-
-function currentTime(){
-
-    return new Date().toLocaleTimeString(
-        [],
-        {
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit"
-        }
-    );
-}
-
-
-/* ============================================================
-   CHAT
-============================================================ */
-
-function addChat(speaker,text,save=true){
-
-    const wrapper=document.createElement("div");
-    wrapper.className="chat-line";
-
-    const time=document.createElement("div");
-    time.className="chat-time";
-
-    time.textContent=
-        speaker+" // "+currentTime();
-
-    const message=document.createElement("div");
-
-    message.className=
-        speaker==="USER"
-        ? "chat-user"
-        : "chat-alex";
-
-    message.textContent=text;
-
-    wrapper.appendChild(time);
-    wrapper.appendChild(message);
-
-    chat.appendChild(wrapper);
-
-    chat.scrollTop=chat.scrollHeight;
-
-    if(save){
-
-        conversation.push({
-            speaker,
-            text,
-            time:Date.now()
-        });
-
-        saveConversation();
-    }
-}
-
-
-/* ============================================================
-   LOCAL MEMORY
-============================================================ */
-
-function getMemory(){
-
-    const memory=safeJSON(
-        MEMORY_KEY,
-        {
-            name:null,
-            preferences:[],
-            notes:[]
-        }
-    );
-
-    if(!memory || typeof memory!=="object")
-        return {
-            name:null,
-            preferences:[],
-            notes:[]
-        };
-
-    return memory;
-}
-
-
-function saveMemory(memory){
-
-    try{
-
-        localStorage.setItem(
-            MEMORY_KEY,
-            JSON.stringify(memory)
-        );
-
-    }catch(error){
-
-        console.warn(error);
-    }
-}
-
-
-/* ============================================================
-   TEXT UTILITIES
-============================================================ */
-
-function cleanText(text){
-
-    return text
-        .toLowerCase()
-        .replace(/[!?.,;:()[\]{}"'`]/g," ")
-        .replace(/\s+/g," ")
-        .trim();
-}
-
-
-function hasAny(text,words){
-
-    return words.some(word=>text.includes(word));
-}
-
-
-function randomItem(array){
-
-    return array[
-        Math.floor(
-            Math.random()*array.length
-        )
-    ];
-}
-
-
-/* ============================================================
-   LOCAL A.L.E.X INTELLIGENCE
-============================================================ */
-
-function alexResponse(input){
-
-    const original=input.trim();
-    const low=cleanText(original);
-
-    if(!low)
-        return "Awaiting input.";
-
-
-    /* ARCHIVE COMMANDS */
-
-    if(
-        hasAny(low,[
-            "open archive",
-            "open archives",
-            "show archive",
-            "show archives",
-            "suit archive",
-            "suit archives",
-            "open suits",
-            "show suits"
-        ])
-    ){
-
-        openArchive();
-
-        return "Opening suit archive.";
-    }
-
-
-    if(
-        low==="archive" ||
-        low==="archives" ||
-        low==="suits"
-    ){
-
-        openArchive();
-
-        return "Archive interface opened.";
-    }
-
-
-    if(
-        hasAny(low,[
-            "close archive",
-            "close archives",
-            "exit archive",
-            "back home"
-        ])
-    ){
-
-        closeArchive();
-
-        return "Returning to main interface.";
-    }
-
-
-    /* GREETINGS */
-
-    if(
-        low==="hi" ||
-        low==="hello" ||
-        low==="hey" ||
-        low.includes("hello alex") ||
-        low.includes("hi alex") ||
-        low.includes("hey alex")
-    ){
-
-        const memory=getMemory();
-
-        if(memory.name){
-
-            return randomItem([
-                `Good to see you, ${memory.name}. A.L.E.X is online.`,
-                `Hello, ${memory.name}. All local systems are standing by.`,
-                `Welcome back, ${memory.name}.`
-            ]);
-
-        }
-
-        return randomItem([
-            "A.L.E.X online. All local systems standing by.",
-            "Hello. A.L.E.X is ready.",
-            "Systems online. How can I help?"
-        ]);
-    }
-
-
-    /* WHO ARE YOU */
-
-    if(
-        hasAny(low,[
-            "who are you",
-            "what are you",
-            "tell me about yourself"
-        ])
-    ){
-
-        return "I am A.L.E.X — a local phone-based assistant interface. I run directly in this webpage without an API or external AI server.";
-    }
-
-
-    /* CAPABILITIES */
-
-    if(
-        hasAny(low,[
-            "what can you do",
-            "what do you do",
-            "your capabilities",
-            "capabilities"
-        ])
-    ){
-
-        return "I can control this interface, use the microphone, speak responses, manage your suit archive, remember simple local preferences, report interface status, and respond to a growing library of commands.";
-    }
-
-
-    /* STATUS */
-
-    if(
-        low.includes("status") ||
-        low.includes("system status") ||
-        low.includes("systems")
-    ){
-
-        return "SYSTEM STATUS: ONLINE. Interface operational. Archive operational. Speech available. Microphone "+(recognition ? "available" : "browser support not detected")+". External AI connection: NOT REQUIRED.";
-    }
-
-
-    /* TIME */
-
-    if(
-        low==="time" ||
-        low.includes("what time") ||
-        low.includes("current time")
-    ){
-
-        return "The current time is "+currentTime()+".";
-    }
-
-
-    /* DATE */
-
-    if(
-        low==="date" ||
-        low.includes("what date") ||
-        low.includes("today")
-    ){
-
-        const now=new Date();
-
-        return "Today is "+
-            now.toLocaleDateString(
-                [],
-                {
-                    weekday:"long",
-                    year:"numeric",
-                    month:"long",
-                    day:"numeric"
-                }
-            )+".";
-    }
-
-
-    /* NAME MEMORY */
-
-    const nameMatch=
-        original.match(
-            /(?:my name is|call me|remember me as)\s+(.+)/i
-        );
-
-    if(nameMatch){
-
-        const name=nameMatch[1]
-            .trim()
-            .replace(/[.!?]+$/,"")
-            .slice(0,40);
-
-        const memory=getMemory();
-
-        memory.name=name;
-
-        saveMemory(memory);
-
-        return `Understood. I'll remember your name as ${name}.`;
-    }
-
-
-    if(
-        low.includes("what is my name") ||
-        low.includes("do you know my name")
-    ){
-
-        const memory=getMemory();
-
-        if(memory.name)
-            return `Your name is ${memory.name}.`;
-
-        return "You haven't given me a name to remember yet.";
-    }
-
-
-    /* MEMORY CLEAR */
-
-    if(
-        hasAny(low,[
-            "forget my name",
-            "forget my information",
-            "clear memory"
-        ])
-    ){
-
-        localStorage.removeItem(MEMORY_KEY);
-
-        return "Local memory cleared.";
-    }
-
-
-    /* MICROPHONE */
-
-    if(
-        hasAny(low,[
-            "turn on mic",
-            "turn on microphone",
-            "enable microphone",
-            "start microphone"
-        ])
-    ){
-
-        if(recognition){
-
-            if(!micActive)
-                toggleMicrophone();
-
-            return "Microphone activation requested.";
-
-        }
-
-        return "This browser does not expose speech recognition.";
-    }
-
-
-    if(
-        hasAny(low,[
-            "turn off mic",
-            "turn off microphone",
-            "disable microphone"
-        ])
-    ){
-
-        if(micActive)
-            toggleMicrophone();
-
-        return "Microphone disabled.";
-    }
-
-
-    /* SPEECH */
-
-    if(
-        hasAny(low,[
-            "stop speaking",
-            "be quiet",
-            "silence"
-        ])
-    ){
-
-        window.speechSynthesis.cancel();
-
-        status.textContent="STANDBY";
-
-        return "Speech stopped.";
-    }
-
-
-    if(
-        hasAny(low,[
-            "speak",
-            "say something"
-        ])
-    ){
-
-        return "Speech systems are operational.";
-    }
-
-
-    /* ARCHIVE INFORMATION */
-
-    if(
-        hasAny(low,[
-            "how many suits",
-            "how many suits do i have",
-            "suit count"
-        ])
-    ){
-
-        return `There are currently ${suits.length} suit${suits.length===1?"":"s"} in the archive.`;
-    }
-
-
-    if(
-        hasAny(low,[
-            "how many images",
-            "image count"
-        ])
-    ){
-
-        let total=0;
-
-        suits.forEach(suit=>{
-            total+=(suit.images||[]).length;
-        });
-
-        return `The archive currently contains ${total} stored image${total===1?"":"s"}.`;
-    }
-
-
-    /* LOCAL HELP */
-
-    if(
-        low==="help" ||
-        low.includes("help me")
-    ){
-
-        return "Try commands such as: open archives, status, what can you do, what time is it, remember my name is..., how many suits, turn on microphone, or stop speaking.";
-    }
-
-
-    /* THANKS */
-
-    if(
-        hasAny(low,[
-            "thank you",
-            "thanks",
-            "cheers"
-        ])
-    ){
-
-        return randomItem([
-            "You're welcome.",
-            "Anytime.",
-            "Glad to help.",
-            "Of course."
-        ]);
-    }
-
-
-    /* GOODBYE */
-
-    if(
-        hasAny(low,[
-            "goodbye",
-            "bye alex",
-            "see you"
-        ])
-    ){
-
-        return "Standing by. Interface remains active.";
-    }
-
-
-    /* SIMPLE QUESTIONS */
-
-    if(
-        low.startsWith("can you ")
-    ){
-
-        const subject=original
-            .slice(7)
-            .replace(/[?]+$/,"")
-            .trim();
-
-        if(
-            hasAny(
-                cleanText(subject),
-                ["help","assist","remember","speak","listen"]
-            )
-        ){
-
-            return "Yes. I can handle that locally when the required browser feature is available.";
-        }
-
-        return "I can try. My current intelligence runs locally in the webpage, so I work best with interface commands, information, memory and predefined knowledge.";
-    }
-
-
-    /* DEFAULT — IMPORTANT:
-       DO NOT PRETEND TO BE A CLOUD AI */
-
-    return localFallback(original);
-}
-
-
-/* ============================================================
-   LOCAL FALLBACK ENGINE
-============================================================ */
-
-function localFallback(text){
-
-    const low=cleanText(text);
-
-    if(low.length<4)
-        return "Input received. Please give me a little more detail.";
-
-
-    if(
-        low.includes("why")
-    ){
-
-        return "That's a question I can't reliably answer from my local knowledge base yet. This version deliberately has no external AI connection.";
-    }
-
-
-    if(
-        low.includes("how")
-    ){
-
-        return "I can handle that if it matches one of my local systems. Try asking about the interface, archive, microphone, speech, memory or system status.";
-    }
-
-
-    if(
-        low.includes("what") ||
-        low.includes("where") ||
-        low.includes("when")
-    ){
-
-        return "I don't have an external knowledge service connected. I can still handle local A.L.E.X commands and information stored in this phone interface.";
-    }
-
-
-    return randomItem([
-        "Input received. I don't have that capability in my current local knowledge base yet.",
-        "Understood. That request isn't in my local command library yet.",
-        "I can process that locally, but I don't have enough built-in information to give you a reliable answer.",
-        "Command acknowledged. My local response library doesn't contain that topic yet."
-    ]);
-}
-
-
-/* ============================================================
-   SEND MESSAGE
-============================================================ */
-
-function processMessage(text,shouldSpeak=true){
-
-    const clean=text.trim();
-
-    if(!clean)
-        return;
-
-    addChat("USER",clean);
-
-    textInput.value="";
-
-    status.textContent="THINKING";
-
-    setTimeout(()=>{
-
-        const answer=alexResponse(clean);
-
-        if(answer){
-
-            addChat("ALEX",answer);
-
-            if(
-                shouldSpeak &&
-                speechEnabled
-            ){
-
-                speakText(answer);
-
-            }else{
-
-                status.textContent="STANDBY";
-            }
-        }
-
-    },220);
-}
-
-
-function sendMessage(){
-
-    processMessage(
-        textInput.value,
-        true
-    );
-}
-
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-textInput.addEventListener(
-    "keydown",
-    event=>{
-
-        if(event.key==="Enter")
-            sendMessage();
-    }
-);
-
-
-/* ============================================================
-   ARCHIVE NAVIGATION
-============================================================ */
-
-function openArchive(){
-
-    home.classList.add("hidden");
-
-    archive.classList.add("visible");
-
-    renderArchive();
-}
-
-
-function closeArchive(){
-
-    archive.classList.remove("visible");
-
-    home.classList.remove("hidden");
-
-    status.textContent="STANDBY";
-}
-
-
-archiveButton.addEventListener(
-    "click",
-    openArchive
-);
-
-
-backButton.addEventListener(
-    "click",
-    closeArchive
-);
-
-
-/* ============================================================
-   DESCRIPTION
-============================================================ */
+/* =========================================================
+   DESCRIPTION GENERATOR
+========================================================= */
 
 function generateDescription(name){
 
-    const lower=name.toLowerCase();
-    const upper=name.toUpperCase();
+    const lower =
+        name.toLowerCase();
 
-    let style="advanced superhero suit";
+    let type =
+        "advanced superhero suit concept";
 
     if(
         lower.includes("iron") ||
-        lower.includes("tech")
+        lower.includes("tech") ||
+        lower.includes("armor")
     ){
 
-        style="technology-focused suit";
+        type =
+            "technology-focused armored suit concept";
 
     }else if(
         lower.includes("stealth") ||
         lower.includes("black")
     ){
 
-        style="stealth-oriented suit";
+        type =
+            "stealth-oriented suit concept";
 
     }else if(
         lower.includes("classic") ||
         lower.includes("red")
     ){
 
-        style="classic superhero suit";
+        type =
+            "classic superhero suit concept";
 
     }else if(
         lower.includes("symbiote")
     ){
 
-        style="dark symbiote-inspired suit";
+        type =
+            "dark symbiote-inspired suit concept";
     }
 
-    return `${upper} is an ${style} concept. The design combines a distinctive visual identity with a practical superhero aesthetic. Its appearance, materials and technology can be expanded as additional archive information is added. A.L.E.X automatically generated this description from the archive name.`;
+    return (
+        name.toUpperCase() +
+        " is an " +
+        type +
+        ". The archive entry can be expanded with " +
+        "additional imagery, specifications and design " +
+        "information as the asset database develops."
+    );
 }
 
 
-/* ============================================================
-   ADD SUIT
-============================================================ */
+/* =========================================================
+   ADD SUIT MODAL
+========================================================= */
 
 function openAddModal(){
 
-    suitName.value="";
-    suitDescription.value="";
-    suitImages.value="";
+    suitName.value = "";
+    suitDescription.value = "";
+    suitImages.value = "";
 
-    addModal.classList.add("visible");
+    addModal.classList.add(
+        "visible"
+    );
 
     setTimeout(
         ()=>suitName.focus(),
-        50
+        60
     );
 }
 
 
 function closeAddModal(){
 
-    addModal.classList.remove("visible");
+    addModal.classList.remove(
+        "visible"
+    );
 }
 
 
@@ -1735,22 +2104,25 @@ cancelSuitButton.addEventListener(
 );
 
 
-/* ============================================================
+/* =========================================================
    FILE -> DATA URL
-============================================================ */
+========================================================= */
 
 function fileToDataURL(file){
 
     return new Promise(
         (resolve,reject)=>{
 
-            const reader=new FileReader();
+            const reader =
+                new FileReader();
 
-            reader.onload=()=>{
-                resolve(reader.result);
-            };
+            reader.onload =
+                ()=>resolve(
+                    reader.result
+                );
 
-            reader.onerror=reject;
+            reader.onerror =
+                reject;
 
             reader.readAsDataURL(file);
         }
@@ -1758,32 +2130,38 @@ function fileToDataURL(file){
 }
 
 
-/* ============================================================
+/* =========================================================
    SAVE SUIT
-============================================================ */
+========================================================= */
 
 saveSuitButton.addEventListener(
     "click",
-    async()=>{
+    async ()=>{
 
-        const name=suitName.value.trim();
+        const name =
+            suitName.value.trim();
 
         if(!name){
 
-            showToast("Enter a suit name.");
+            showToast(
+                "Enter an asset name."
+            );
 
             return;
         }
 
-        const files=Array.from(
-            suitImages.files
-        );
+        const files =
+            Array.from(
+                suitImages.files
+            );
 
-        const images=[];
+        const images = [];
 
         try{
 
-            for(const file of files){
+            for(
+                const file of files
+            ){
 
                 images.push(
                     await fileToDataURL(file)
@@ -1792,70 +2170,84 @@ saveSuitButton.addEventListener(
 
         }catch(error){
 
-            showToast("Could not load image.");
+            showToast(
+                "Could not load image."
+            );
 
             return;
         }
 
-        const description=
-            suitDescription.value.trim()
-            ||
-            generateDescription(name);
-
-        suits.push({
+        const newSuit = {
 
             id:Date.now(),
 
             name:name.toUpperCase(),
 
-            description,
+            description:
+                suitDescription.value.trim() ||
+                generateDescription(name),
 
-            images,
+            images:images,
 
-            created:new Date().toISOString()
+            created:
+                new Date().toISOString()
+        };
 
-        });
+        suits.push(newSuit);
 
-        selectedSuit=suits.length-1;
-        selectedImageIndex=0;
+        selectedSuit =
+            suits.length - 1;
+
+        selectedImageIndex = 0;
 
         saveArchive();
 
         closeAddModal();
 
-        renderArchive();
+        renderCarousel();
+        renderSelectedSuit();
 
         showToast(
-            `${name.toUpperCase()} added.`
+            newSuit.name +
+            " added to archive."
         );
     }
 );
 
 
-/* ============================================================
-   DELETE SUIT
-============================================================ */
+/* =========================================================
+   DELETE
+========================================================= */
 
 deleteSuitButton.addEventListener(
     "click",
     ()=>{
 
         if(
-            selectedSuit<0 ||
+            selectedSuit < 0 ||
             !suits[selectedSuit]
         ){
 
-            showToast("Select a suit first.");
+            showToast(
+                "Select an asset first."
+            );
 
             return;
         }
 
-        const name=suits[selectedSuit].name;
+        const name =
+            suits[selectedSuit].name;
 
-        if(!confirm(
-            `Delete ${name} from the archive?`
-        ))
+        if(
+            !confirm(
+                "Delete " +
+                name +
+                " from the archive?"
+            )
+        ){
+
             return;
+        }
 
         suits.splice(
             selectedSuit,
@@ -1864,548 +2256,663 @@ deleteSuitButton.addEventListener(
 
         if(!suits.length){
 
-            selectedSuit=-1;
+            selectedSuit = -1;
 
         }else{
 
-            selectedSuit=Math.min(
-                selectedSuit,
-                suits.length-1
-            );
+            selectedSuit =
+                Math.min(
+                    selectedSuit,
+                    suits.length - 1
+                );
         }
 
-        selectedImageIndex=0;
+        selectedImageIndex = 0;
 
         saveArchive();
 
-        renderArchive();
+        renderCarousel();
+        renderSelectedSuit();
 
         showToast(
-            `${name} deleted.`
+            name +
+            " deleted."
         );
     }
 );
 
 
-/* ============================================================
-   RENDER ARCHIVE
-============================================================ */
+/* =========================================================
+   3D SUIT CAROUSEL
+========================================================= */
 
-function renderArchive(){
+function renderCarousel(){
 
-    renderSuitList();
-
-    renderSelectedSuit();
-}
-
-
-function renderSuitList(){
-
-    suitListItems.innerHTML="";
+    carouselTrack.innerHTML = "";
 
     if(!suits.length){
 
-        const empty=document.createElement("div");
+        carouselInfo.textContent =
+            "ARCHIVE EMPTY";
 
-        empty.className="empty-archive";
+        const empty =
+            document.createElement("div");
 
-        empty.innerHTML=`
-            <div class="empty-icon">◇</div>
-            ARCHIVE EMPTY
-            <br><br>
-            Use + ADD SUIT to create
-            your first archive entry.
+        empty.className =
+            "suit-slide";
+
+        empty.style.transform =
+            "translate(-50%,-50%)";
+
+        empty.innerHTML = `
+            <div class="suit-slide-inner">
+                <div class="suit-slide-placeholder">
+                    NO ASSETS ARCHIVED
+                </div>
+            </div>
         `;
 
-        suitListItems.appendChild(empty);
+        carouselTrack.appendChild(empty);
 
         return;
     }
 
-
     suits.forEach(
         (suit,index)=>{
 
-            const card=document.createElement("div");
+            const slide =
+                document.createElement("div");
 
-            card.className="suit-card";
+            slide.className =
+                "suit-slide";
 
-            if(index===selectedSuit)
-                card.classList.add("selected");
+            const inner =
+                document.createElement("div");
 
-
-            const thumb=document.createElement("img");
-
-            thumb.className="suit-thumb";
-
+            inner.className =
+                "suit-slide-inner";
 
             if(
                 suit.images &&
                 suit.images.length
             ){
 
-                thumb.src=suit.images[0];
+                const image =
+                    document.createElement("img");
+
+                image.src =
+                    suit.images[0];
+
+                image.alt =
+                    suit.name;
+
+                inner.appendChild(image);
 
             }else{
 
-                thumb.style.display="none";
+                const placeholder =
+                    document.createElement("div");
+
+                placeholder.className =
+                    "suit-slide-placeholder";
+
+                placeholder.textContent =
+                    "NO IMAGE";
+
+                inner.appendChild(
+                    placeholder
+                );
             }
 
+            const label =
+                document.createElement("div");
 
-            const information=document.createElement("div");
+            label.className =
+                "slide-label";
 
-            const name=document.createElement("div");
+            label.textContent =
+                suit.name;
 
-            name.className="suit-card-name";
+            inner.appendChild(label);
 
-            name.textContent=suit.name;
+            slide.appendChild(inner);
 
-
-            const meta=document.createElement("div");
-
-            meta.className="suit-card-meta";
-
-            meta.textContent=
-                `${suit.images?.length||0} IMAGE(S)`;
-
-
-            information.appendChild(name);
-            information.appendChild(meta);
-
-            card.appendChild(thumb);
-            card.appendChild(information);
-
-
-            card.addEventListener(
+            slide.addEventListener(
                 "click",
                 ()=>{
+                    selectedSuit = index;
+                    selectedImageIndex = 0;
 
-                    selectedSuit=index;
-                    selectedImageIndex=0;
-
-                    renderArchive();
+                    renderCarousel();
+                    renderSelectedSuit();
                 }
             );
 
+            carouselTrack.appendChild(slide);
+        }
+    );
 
-            suitListItems.appendChild(card);
+    updateCarouselPositions();
+}
+
+
+function updateCarouselPositions(){
+
+    const slides =
+        carouselTrack.querySelectorAll(
+            ".suit-slide"
+        );
+
+    const total =
+        slides.length;
+
+    if(!total){
+
+        carouselInfo.textContent =
+            "0 / 0";
+
+        return;
+    }
+
+    if(selectedSuit < 0){
+
+        selectedSuit = 0;
+    }
+
+    carouselInfo.textContent =
+        (selectedSuit + 1) +
+        " / " +
+        total;
+
+    slides.forEach(
+        (slide,index)=>{
+
+            let offset =
+                index - selectedSuit;
+
+            if(offset > total / 2){
+
+                offset -= total;
+            }
+
+            if(offset < -total / 2){
+
+                offset += total;
+            }
+
+            const distance =
+                Math.abs(offset);
+
+            const x =
+                offset * 58;
+
+            const z =
+                -distance * 75;
+
+            const scale =
+                Math.max(
+                    .58,
+                    1 - distance * .16
+                );
+
+            const opacity =
+                Math.max(
+                    .22,
+                    1 - distance * .27
+                );
+
+            const rotateY =
+                offset * -24;
+
+            slide.style.transform =
+                `
+                translate(
+                    calc(-50% + ${x}px),
+                    -50%
+                )
+                translateZ(${z}px)
+                rotateY(${rotateY}deg)
+                scale(${scale})
+                `;
+
+            slide.style.opacity =
+                opacity;
+
+            slide.style.zIndex =
+                100 - distance;
+
+            slide.style.filter =
+                distance === 0
+                    ? "none"
+                    : "brightness(.55)";
+
+            if(distance === 0){
+
+                slide.classList.add(
+                    "selected"
+                );
+
+            }else{
+
+                slide.classList.remove(
+                    "selected"
+                );
+            }
         }
     );
 }
 
 
-/* ============================================================
+function moveCarousel(direction){
+
+    if(!suits.length)
+        return;
+
+    selectedSuit =
+        (
+            selectedSuit +
+            direction +
+            suits.length
+        ) %
+        suits.length;
+
+    selectedImageIndex = 0;
+
+    updateCarouselPositions();
+    renderSelectedSuit();
+}
+
+
+carouselPrev.addEventListener(
+    "click",
+    ()=>{
+        moveCarousel(-1);
+    }
+);
+
+
+carouselNext.addEventListener(
+    "click",
+    ()=>{
+        moveCarousel(1);
+    }
+);
+
+
+/* =========================================================
+   SWIPE CAROUSEL
+========================================================= */
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+carouselZone.addEventListener(
+    "touchstart",
+    event=>{
+
+        const touch =
+            event.changedTouches[0];
+
+        touchStartX =
+            touch.clientX;
+
+        touchStartY =
+            touch.clientY;
+    },
+    {passive:true}
+);
+
+
+carouselZone.addEventListener(
+    "touchend",
+    event=>{
+
+        const touch =
+            event.changedTouches[0];
+
+        const dx =
+            touch.clientX -
+            touchStartX;
+
+        const dy =
+            touch.clientY -
+            touchStartY;
+
+        if(
+            Math.abs(dx) > 45 &&
+            Math.abs(dx) > Math.abs(dy)
+        ){
+
+            moveCarousel(
+                dx < 0 ? 1 : -1
+            );
+        }
+    },
+    {passive:true}
+);
+
+
+/* =========================================================
    SELECTED SUIT
-============================================================ */
+========================================================= */
 
 function renderSelectedSuit(){
 
     if(
-        selectedSuit<0 ||
+        selectedSuit < 0 ||
         !suits[selectedSuit]
     ){
 
-        imagePlaceholder.style.display="block";
-        imagePlaceholder.textContent="SELECT A SUIT";
+        detailName.textContent =
+            "NO SUIT SELECTED";
 
-        selectedImage.style.display="none";
+        detailDescription.textContent =
+            "Add a suit to begin building the A.L.E.X archive.";
 
-        detailName.textContent="NO SUIT SELECTED";
+        detailImageCount.textContent =
+            "0";
 
-        detailDescription.textContent=
-            "Add a suit to begin building the archive.";
-
-        detailImageCount.textContent="0";
+        detailId.textContent =
+            "----";
 
         return;
     }
 
+    const suit =
+        suits[selectedSuit];
 
-    const suit=suits[selectedSuit];
+    detailName.textContent =
+        suit.name;
 
-    detailName.textContent=suit.name;
-
-    detailDescription.textContent=
+    detailDescription.textContent =
         suit.description ||
         generateDescription(suit.name);
 
+    const images =
+        suit.images || [];
 
-    const images=suit.images||[];
-
-    detailImageCount.textContent=
+    detailImageCount.textContent =
         String(images.length);
 
-
-    if(!images.length){
-
-        imagePlaceholder.style.display="block";
-
-        imagePlaceholder.textContent="NO IMAGE ATTACHED";
-
-        selectedImage.style.display="none";
-
-        return;
-    }
-
-
-    if(selectedImageIndex>=images.length)
-        selectedImageIndex=images.length-1;
-
-
-    imagePlaceholder.style.display="none";
-
-    selectedImage.style.display="block";
-
-    selectedImage.src=
-        images[selectedImageIndex];
-}
-
-
-/* ============================================================
-   IMAGE NAVIGATION
-============================================================ */
-
-previousImage.addEventListener(
-    "click",
-    ()=>{
-
-        if(selectedSuit<0)
-            return;
-
-        const images=
-            suits[selectedSuit].images||[];
-
-        if(images.length<2)
-            return;
-
-        selectedImageIndex=
-            (
-                selectedImageIndex-1+
-                images.length
-            )%images.length;
-
-        renderSelectedSuit();
-    }
-);
-
-
-nextImage.addEventListener(
-    "click",
-    ()=>{
-
-        if(selectedSuit<0)
-            return;
-
-        const images=
-            suits[selectedSuit].images||[];
-
-        if(images.length<2)
-            return;
-
-        selectedImageIndex=
-            (
-                selectedImageIndex+1
-            )%images.length;
-
-        renderSelectedSuit();
-    }
-);
-
-
-/* ============================================================
-   SPEECH
-============================================================ */
-
-function speakText(text){
+    detailId.textContent =
+        String(suit.id);
 
     if(
-        !speechEnabled ||
-        !("speechSynthesis" in window)
+        selectedImageIndex >= images.length
     ){
 
-        status.textContent="STANDBY";
+        selectedImageIndex =
+            Math.max(
+                0,
+                images.length - 1
+            );
+    }
+}
+
+
+/* =========================================================
+   IMAGE NAV
+========================================================= */
+
+function moveImage(direction){
+
+    if(
+        selectedSuit < 0 ||
+        !suits[selectedSuit]
+    ){
 
         return;
     }
 
+    const images =
+        suits[selectedSuit].images || [];
 
-    speechSynthesis.cancel();
+    if(images.length < 2){
 
-    const utterance=
-        new SpeechSynthesisUtterance(text);
-
-    utterance.rate=.95;
-    utterance.pitch=.95;
-    utterance.volume=1;
-
-
-    const voices=
-        speechSynthesis.getVoices();
-
-
-    const preferred=
-        voices.find(
-            voice=>
-                /en-GB/i.test(voice.lang)
+        showToast(
+            "This asset only has one image."
         );
 
+        return;
+    }
 
-    if(preferred)
-        utterance.voice=preferred;
+    selectedImageIndex =
+        (
+            selectedImageIndex +
+            direction +
+            images.length
+        ) %
+        images.length;
 
+    renderSelectedSuit();
 
-    status.textContent="SPEAKING";
-
-
-    utterance.onend=()=>{
-        status.textContent="STANDBY";
-    };
-
-
-    utterance.onerror=()=>{
-        status.textContent="STANDBY";
-    };
-
-
-    speechSynthesis.speak(utterance);
+    showToast(
+        "IMAGE " +
+        (selectedImageIndex + 1) +
+        " / " +
+        images.length
+    );
 }
 
 
-/* ============================================================
-   SPEAK BUTTON
-============================================================ */
-
-speakButton.addEventListener(
+imagePrevButton.addEventListener(
     "click",
     ()=>{
-
-        const messages=
-            chat.querySelectorAll(".chat-alex");
-
-        if(!messages.length){
-
-            speakText("A.L.E.X online.");
-
-            return;
-        }
-
-        speakText(
-            messages[messages.length-1].textContent
-        );
+        moveImage(-1);
     }
 );
 
 
-/* ============================================================
-   MICROPHONE
-============================================================ */
-
-function setupMicrophone(){
-
-    const SpeechRecognition=
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-
-    if(!SpeechRecognition){
-
-        recognition=null;
-
-        return;
-    }
-
-
-    recognition=new SpeechRecognition();
-
-    recognition.lang="en-GB";
-
-    recognition.continuous=false;
-
-    recognition.interimResults=false;
-
-    recognition.maxAlternatives=1;
-
-
-    recognition.onstart=()=>{
-
-        micActive=true;
-
-        micButton.textContent="MIC ON";
-
-        micButton.classList.add("mic-active");
-
-        status.textContent="LISTENING";
-    };
-
-
-    recognition.onresult=event=>{
-
-        const transcript=
-            event.results[0][0].transcript.trim();
-
-        textInput.value=transcript;
-
-        processMessage(
-            transcript,
-            true
-        );
-    };
-
-
-    recognition.onerror=event=>{
-
-        console.log(
-            "Speech recognition:",
-            event.error
-        );
-
-        showToast(
-            "Microphone: "+event.error
-        );
-
-        status.textContent="STANDBY";
-    };
-
-
-    recognition.onend=()=>{
-
-        micActive=false;
-
-        micButton.textContent="MIC OFF";
-
-        micButton.classList.remove("mic-active");
-
-        if(status.textContent==="LISTENING")
-            status.textContent="STANDBY";
-    };
-}
-
-
-function toggleMicrophone(){
-
-    if(!recognition){
-
-        showToast(
-            "Speech recognition is not supported here."
-        );
-
-        return;
-    }
-
-
-    if(micActive){
-
-        recognition.stop();
-
-    }else{
-
-        try{
-
-            recognition.start();
-
-        }catch(error){
-
-            console.log(error);
-        }
-    }
-}
-
-
-micButton.addEventListener(
+imageNextButton.addEventListener(
     "click",
-    toggleMicrophone
+    ()=>{
+        moveImage(1);
+    }
 );
 
 
-/* ============================================================
+/* =========================================================
+   ARCHIVE NAVIGATION
+========================================================= */
+
+function openArchive(){
+
+    home.classList.add("hidden");
+
+    tools.classList.remove("visible");
+
+    archive.classList.add("visible");
+
+    renderCarousel();
+    renderSelectedSuit();
+}
+
+
+function closeArchive(){
+
+    archive.classList.remove(
+        "visible"
+    );
+
+    home.classList.remove(
+        "hidden"
+    );
+
+    setStatus("STANDBY");
+}
+
+
+archiveButton.addEventListener(
+    "click",
+    openArchive
+);
+
+
+backButton.addEventListener(
+    "click",
+    closeArchive
+);
+
+
+/* =========================================================
+   TOOLS
+========================================================= */
+
+function openTools(){
+
+    home.classList.add("hidden");
+
+    archive.classList.remove(
+        "visible"
+    );
+
+    tools.classList.add(
+        "visible"
+    );
+}
+
+
+function closeTools(){
+
+    tools.classList.remove(
+        "visible"
+    );
+
+    home.classList.remove(
+        "hidden"
+    );
+}
+
+
+toolsButton.addEventListener(
+    "click",
+    openTools
+);
+
+
+toolsBack.addEventListener(
+    "click",
+    closeTools
+);
+
+
+/* =========================================================
    KEYBOARD
-============================================================ */
+========================================================= */
 
 document.addEventListener(
     "keydown",
     event=>{
 
         if(
-            event.key.toLowerCase()==="m" &&
-            document.activeElement!==textInput &&
+            event.key.toLowerCase() === "m" &&
+            document.activeElement !== textInput &&
             !addModal.classList.contains("visible")
         ){
 
             toggleMicrophone();
         }
 
+        if(event.key === "Escape"){
 
-        if(
-            event.key==="Escape" &&
-            addModal.classList.contains("visible")
-        ){
+            if(addModal.classList.contains("visible")){
 
-            closeAddModal();
+                closeAddModal();
+
+                return;
+            }
+
+            if(archive.classList.contains("visible")){
+
+                closeArchive();
+
+                return;
+            }
+
+            if(tools.classList.contains("visible")){
+
+                closeTools();
+            }
         }
 
-
         if(
-            event.key==="Escape" &&
             archive.classList.contains("visible") &&
-            !addModal.classList.contains("visible")
+            event.key === "ArrowLeft"
         ){
 
-            closeArchive();
+            moveCarousel(-1);
+        }
+
+        if(
+            archive.classList.contains("visible") &&
+            event.key === "ArrowRight"
+        ){
+
+            moveCarousel(1);
         }
     }
 );
 
 
-/* ============================================================
+/* =========================================================
    WAVEFORM
-============================================================ */
+========================================================= */
 
-const canvas=
+const canvas =
     document.getElementById("wave");
 
-const ctx=
+const ctx =
     canvas.getContext("2d");
 
-let phase=0;
-
+let phase = 0;
 
 function resizeCanvas(){
 
-    const rect=
+    const rect =
         canvas.getBoundingClientRect();
 
-    const dpr=
-        window.devicePixelRatio||1;
+    const dpr =
+        window.devicePixelRatio || 1;
 
-    canvas.width=
-        rect.width*dpr;
+    canvas.width =
+        rect.width * dpr;
 
-    canvas.height=
-        rect.height*dpr;
+    canvas.height =
+        rect.height * dpr;
 
     ctx.setTransform(
-        dpr,0,0,dpr,0,0
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
     );
 }
 
 
 function drawWave(){
 
-    const rect=
+    const rect =
         canvas.getBoundingClientRect();
 
-    const width=rect.width;
-    const height=rect.height;
+    const width =
+        rect.width;
+
+    const height =
+        rect.height;
 
     ctx.clearRect(
-        0,0,width,height
+        0,
+        0,
+        width,
+        height
     );
 
+    const center =
+        height / 2;
 
-    const center=height/2;
-
-    const bars=61;
-
+    const bars = 61;
 
     for(
         let i=0;
@@ -2413,91 +2920,91 @@ function drawWave(){
         i++
     ){
 
-        const x=
-            width/2-
-            width*.43+
-            i*(width*.86/(bars-1));
-
-
-        const distance=
-            Math.abs(
-                i-(bars-1)/2
+        const x =
+            width / 2 -
+            width * .43 +
+            i *
+            (
+                width * .86 /
+                (bars - 1)
             );
 
+        const distance =
+            Math.abs(
+                i -
+                (bars - 1) / 2
+            );
 
-        const envelope=
+        const envelope =
             Math.max(
                 0,
-                1-
-                distance/
-                ((bars-1)/2)
+                1 -
+                distance /
+                ((bars - 1) / 2)
             );
 
+        const activity =
+            status.textContent === "LISTENING"
+                ? 1.35
+                : status.textContent === "THINKING"
+                    ? 1.1
+                    : status.textContent === "SPEAKING"
+                        ? 1.2
+                        : .7;
 
-        let activity=1;
-
-
-        if(status.textContent==="LISTENING")
-            activity=1.8;
-
-        if(status.textContent==="THINKING")
-            activity=1.5;
-
-        if(status.textContent==="SPEAKING")
-            activity=2;
-
-
-        const movement=
+        const movement =
             Math.abs(
                 Math.sin(
-                    phase+
-                    i*.29
+                    phase +
+                    i * .29
                 )
             );
 
-
-        const heightValue=
-            5+
-            movement*
-            42*
-            envelope*
+        const h =
+            4 +
+            movement *
+            45 *
+            envelope *
             activity;
-
 
         ctx.beginPath();
 
         ctx.moveTo(
             x,
-            center-heightValue
+            center - h
         );
 
         ctx.lineTo(
             x,
-            center+heightValue
+            center + h
         );
 
+        ctx.lineWidth = 2.3;
 
-        ctx.lineWidth=2.5;
+        ctx.strokeStyle =
+            i % 5 === 0
+                ? "rgba(25,230,255,.9)"
+                : "rgba(21,156,255,.82)";
 
-        ctx.strokeStyle=
-            "rgba(57,255,20,.85)";
+        ctx.shadowColor =
+            "rgba(21,156,255,.5)";
 
-        ctx.shadowColor=
-            "rgba(57,255,20,.45)";
-
-        ctx.shadowBlur=8;
+        ctx.shadowBlur = 8;
 
         ctx.stroke();
     }
 
+    ctx.shadowBlur = 0;
 
-    ctx.shadowBlur=0;
-
-    phase+=.055;
+    phase += .055;
 
     requestAnimationFrame(drawWave);
 }
 
+
+/* =========================================================
+   RESIZE
+========================================================= */
 
 window.addEventListener(
     "resize",
@@ -2505,11 +3012,24 @@ window.addEventListener(
 );
 
 
-/* ============================================================
-   STARTUP
-============================================================ */
+/* =========================================================
+   SPEECH VOICES
+========================================================= */
 
-loadEverything();
+if("speechSynthesis" in window){
+
+    speechSynthesis.onvoiceschanged =
+        ()=>{
+            speechSynthesis.getVoices();
+        };
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+loadArchive();
 
 setupMicrophone();
 
@@ -2517,24 +3037,27 @@ resizeCanvas();
 
 drawWave();
 
+addChat(
+    "ALEX",
+    "A.L.E.X online. Field terminal ready."
+);
 
-if(!conversation.length){
+addChat(
+    "ALEX",
+    "Archive systems, voice control and AI link standing by."
+);
 
-    addChat(
-        "ALEX",
-        "A.L.E.X online. Local systems ready."
-    );
+if(
+    !API_KEY ||
+    API_KEY === "PASTE_YOUR_API_KEY_HERE"
+){
 
-    setTimeout(()=>{
+    aiState.textContent =
+        "CONFIG REQUIRED";
 
-        addChat(
-            "ALEX",
-            "No API. No Ollama. No external connection required."
-        );
-
-    },500);
+    connectionState.textContent =
+        "LOCAL";
 }
-
 </script>
 
 </body>
