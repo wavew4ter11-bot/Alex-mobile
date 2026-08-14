@@ -22,6 +22,7 @@ content="#05070a">
 
 <title>Alex Mobile</title>
 
+
 <style>
 
 :root{
@@ -30,6 +31,7 @@ content="#05070a">
   --green:#9cff19;
   --muted:#7f8b98;
   --red:#ff5264;
+  --yellow:#ffd84d;
 }
 
 *{
@@ -41,6 +43,7 @@ body{
   margin:0;
   width:100%;
   height:100%;
+
   background:var(--bg);
   color:#f4f7fa;
 
@@ -97,10 +100,9 @@ header{
 .online{
   font-size:10px;
   letter-spacing:.16em;
-  color:#ffd84d;
+  color:var(--yellow);
 
-  transition:
-    color .3s ease;
+  transition:.3s ease;
 }
 
 .online:before{
@@ -113,16 +115,12 @@ header{
 
   border-radius:50%;
 
-  background:#ffd84d;
+  background:var(--yellow);
 
   box-shadow:
-    0 0 12px #ffd84d;
+    0 0 12px var(--yellow);
 
   margin-right:7px;
-
-  transition:
-    background .3s ease,
-    box-shadow .3s ease;
 }
 
 .online.ready{
@@ -310,6 +308,7 @@ main{
 
 .speaking .bar{
   animation-duration:.25s;
+
 }
 
 
@@ -331,6 +330,8 @@ main{
   line-height:1.45;
 
   min-height:52px;
+
+  max-height:150px;
 
   overflow:auto;
 
@@ -364,7 +365,7 @@ main{
   align-items:center;
   justify-content:center;
 
-  gap:18px;
+  gap:14px;
 }
 
 .mic{
@@ -408,6 +409,15 @@ main{
   opacity:.3;
 }
 
+.mic.active{
+  border-color:
+    rgba(156,255,25,.9);
+
+  box-shadow:
+    0 0 35px
+    rgba(156,255,25,.25);
+}
+
 .hint{
   font-size:10px;
 
@@ -416,9 +426,27 @@ main{
   color:#687580;
 }
 
+.testVoice{
+  background:transparent;
+
+  border:
+    1px solid
+    rgba(25,217,255,.3);
+
+  color:var(--cyan);
+
+  border-radius:10px;
+
+  padding:7px 12px;
+
+  font-size:10px;
+
+  letter-spacing:.08em;
+}
+
 
 /* =========================================================
-   NAVIGATION
+   NAV
 ========================================================= */
 
 nav{
@@ -454,6 +482,29 @@ nav button{
 
 nav button.active{
   color:var(--green);
+}
+
+
+/* =========================================================
+   ATTRIBUTION
+========================================================= */
+
+.attribution{
+  position:fixed;
+
+  bottom:
+    calc(
+      env(safe-area-inset-bottom)
+      + 74px
+    );
+
+  right:8px;
+
+  font-size:8px;
+
+  color:#39434c;
+
+  pointer-events:none;
 }
 
 
@@ -561,16 +612,27 @@ nav button.active{
   <button
     class="mic"
     id="mic"
-    aria-label="Talk to Alex"
+    aria-label="Start continuous voice"
     disabled
   >
     ◉
   </button>
 
 
-  <div class="hint">
-    TAP TO SPEAK
+  <div
+    id="hint"
+    class="hint"
+  >
+    TAP TO START
   </div>
+
+
+  <button
+    class="testVoice"
+    id="testVoice"
+  >
+    TEST ALEX VOICE
+  </button>
 
 
 </section>
@@ -600,14 +662,19 @@ nav button.active{
 </div>
 
 
+<div class="attribution">
+  © OpenStreetMap contributors
+</div>
+
+
 <script type="module">
 
 
 /* ============================================================
    ALEX MOBILE
    LOCAL AI
-   WEBLLM
-   SAFARI VOICE SUPPORT
+   CONTINUOUS VOICE
+   VOICE NAVIGATION
 ============================================================ */
 
 
@@ -639,8 +706,14 @@ const orb =
 const mic =
   $("mic");
 
+const hint =
+  $("hint");
+
 const online =
   $("online");
+
+const testVoiceButton =
+  $("testVoice");
 
 
 /* ============================================================
@@ -653,18 +726,47 @@ let engine =
 let recognition =
   null;
 
-let listening =
-  false;
-
 let aiReady =
   false;
 
-let speechUnlocked =
+let listening =
   false;
+
+let continuousMode =
+  false;
+
+let speaking =
+  false;
+
+let recognitionRestartTimer =
+  null;
 
 
 /* ============================================================
-   CONVERSATION MEMORY
+   NAVIGATION STATE
+============================================================ */
+
+let navigationActive =
+  false;
+
+let navigationWatch =
+  null;
+
+let navigationSteps =
+  [];
+
+let navigationStepIndex =
+  0;
+
+let navigationDestination =
+  null;
+
+let lastNavigationAnnouncement =
+  0;
+
+
+/* ============================================================
+   CONVERSATION
 ============================================================ */
 
 const conversation = [
@@ -690,7 +792,12 @@ Do not call yourself Gemini.
 Do not mention implementation details
 unless specifically asked.
 
+If the user asks for navigation, do not
+invent directions. The navigation system
+handles real road directions separately.
+
 `
+
   }
 
 ];
@@ -706,46 +813,44 @@ function setState(state){
     "orb " + state;
 
 
-  if(
-    state === "loading"
-  ){
+  if(state === "loading"){
 
     status.textContent =
       "LOADING AI";
 
   }
 
-  else if(
-    state === "listening"
-  ){
+  else if(state === "listening"){
 
     status.textContent =
-      "LISTENING";
+      navigationActive
+        ? "NAVIGATING"
+        : "LISTENING";
 
   }
 
-  else if(
-    state === "thinking"
-  ){
+  else if(state === "thinking"){
 
     status.textContent =
       "THINKING";
 
   }
 
-  else if(
-    state === "speaking"
-  ){
+  else if(state === "speaking"){
 
     status.textContent =
-      "SPEAKING";
+      navigationActive
+        ? "NAVIGATING"
+        : "SPEAKING";
 
   }
 
   else{
 
     status.textContent =
-      "READY";
+      navigationActive
+        ? "NAVIGATING"
+        : "READY";
 
   }
 
@@ -753,83 +858,38 @@ function setState(state){
 
 
 /* ============================================================
-   SAFARI SPEECH UNLOCK
+   SPEAK
 ============================================================ */
 
-function unlockSpeech(){
-
-  if(
-    !("speechSynthesis" in window)
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    speechSynthesis.cancel();
-
-
-    const unlock =
-      new SpeechSynthesisUtterance("");
-
-
-    unlock.volume =
-      0;
-
-
-    speechSynthesis.speak(
-      unlock
-    );
-
-
-    speechUnlocked =
-      true;
-
-
-    console.log(
-      "ALEX: speech unlocked"
-    );
-
-  }
-
-  catch(error){
-
-    console.error(
-      "Speech unlock error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   TEXT TO SPEECH
-============================================================ */
-
-function speak(text){
+function speak(
+  text,
+  afterSpeech = null
+){
 
   if(
     !("speechSynthesis" in window)
   ){
 
     console.log(
-      "Speech synthesis unavailable"
+      "Speech synthesis unavailable."
     );
 
-
-    setState(
-      "ready"
-    );
-
+    if(afterSpeech){
+      afterSpeech();
+    }
 
     return;
 
   }
+
+
+  speaking =
+    true;
+
+
+  setState(
+    "speaking"
+  );
 
 
   speechSynthesis.cancel();
@@ -841,50 +901,27 @@ function speak(text){
     );
 
 
+  /*
+     IMPORTANT:
+
+     We deliberately do not select a
+     particular voice.
+
+     Safari chooses the available
+     system voice.
+  */
+
   utterance.lang =
     "en-GB";
 
-
   utterance.rate =
-    0.94;
-
+    .94;
 
   utterance.pitch =
     1.03;
 
-
   utterance.volume =
     1.0;
-
-
-  const voices =
-    speechSynthesis.getVoices();
-
-
-  const voice =
-
-    voices.find(
-      v =>
-        v.lang ===
-        "en-GB"
-    )
-
-    ||
-
-    voices.find(
-      v =>
-        v.lang.startsWith(
-          "en"
-        )
-    );
-
-
-  if(voice){
-
-    utterance.voice =
-      voice;
-
-  }
 
 
   utterance.onstart =
@@ -893,7 +930,6 @@ function speak(text){
       console.log(
         "ALEX: speech started"
       );
-
 
       setState(
         "speaking"
@@ -906,13 +942,32 @@ function speak(text){
     () => {
 
       console.log(
-        "ALEX: speech finished"
+        "ALEX: speech ended"
       );
+
+      speaking =
+        false;
 
 
       setState(
         "ready"
       );
+
+
+      if(afterSpeech){
+
+        afterSpeech();
+
+      }
+
+      else if(
+        continuousMode &&
+        !navigationActive
+      ){
+
+        startListeningSoon();
+
+      }
 
     };
 
@@ -926,9 +981,29 @@ function speak(text){
       );
 
 
+      speaking =
+        false;
+
+
       setState(
         "ready"
       );
+
+
+      if(afterSpeech){
+
+        afterSpeech();
+
+      }
+
+      else if(
+        continuousMode &&
+        !navigationActive
+      ){
+
+        startListeningSoon();
+
+      }
 
     };
 
@@ -950,10 +1025,1973 @@ function speak(text){
       }
 
     },
-    100
+    250
   );
 
 }
+
+
+/* ============================================================
+   TEST VOICE
+============================================================ */
+
+function testVoice(){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    prompt.textContent =
+      "Speech synthesis is unavailable.";
+
+    return;
+
+  }
+
+
+  continuousMode =
+    false;
+
+
+  speechSynthesis.cancel();
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      "Hello. This is Alex's voice test."
+    );
+
+
+  utterance.lang =
+    "en-GB";
+
+  utterance.rate =
+    .9;
+
+  utterance.pitch =
+    1;
+
+  utterance.volume =
+    1;
+
+
+  utterance.onstart =
+    () => {
+
+      setState(
+        "speaking"
+      );
+
+    };
+
+
+  utterance.onend =
+    () => {
+
+      setState(
+        "ready"
+      );
+
+    };
+
+
+  utterance.onerror =
+    event => {
+
+      console.error(
+        "VOICE TEST ERROR:",
+        event
+      );
+
+      setState(
+        "ready"
+      );
+
+      prompt.textContent =
+        "Voice test failed.";
+
+    };
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+
+  setTimeout(
+    () => {
+
+      speechSynthesis.resume();
+
+    },
+    250
+  );
+
+}
+
+
+testVoiceButton.onclick =
+  testVoice;
+
+
+/* ============================================================
+   CONTINUOUS LISTENING
+============================================================ */
+
+function setupRecognition(){
+
+  const SR =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+
+  if(!SR){
+
+    prompt.textContent =
+      "Speech recognition isn't available in Safari.";
+
+    return null;
+
+  }
+
+
+  const r =
+    new SR();
+
+
+  r.lang =
+    "en-GB";
+
+
+  r.interimResults =
+    false;
+
+
+  /*
+     iPhone Safari may stop the recognition
+     session after each phrase.
+
+     We restart it automatically while
+     continuousMode is enabled.
+  */
+
+  r.continuous =
+    false;
+
+
+  r.maxAlternatives =
+    1;
+
+
+  r.onstart =
+    () => {
+
+      listening =
+        true;
+
+
+      mic.classList.add(
+        "active"
+      );
+
+
+      hint.textContent =
+        "TAP TO STOP";
+
+
+      setState(
+        "listening"
+      );
+
+
+      if(!navigationActive){
+
+        prompt.textContent =
+          "I'm listening…";
+
+      }
+
+    };
+
+
+  r.onresult =
+    event => {
+
+      const text =
+
+        event
+          .results
+          [0]
+          [0]
+          .transcript
+          .trim();
+
+
+      listening =
+        false;
+
+
+      console.log(
+        "USER:",
+        text
+      );
+
+
+      prompt.textContent =
+        "“" +
+        text +
+        "”";
+
+
+      /*
+         Check navigation first.
+      */
+
+      if(
+        isNavigationRequest(text)
+      ){
+
+        stopListening();
+
+
+        startNavigationFromSpeech(
+          text
+        );
+
+        return;
+
+      }
+
+
+      /*
+         Normal AI conversation.
+      */
+
+      askAlex(
+        text
+      );
+
+    };
+
+
+  r.onerror =
+    event => {
+
+      console.error(
+        "ALEX SPEECH ERROR:",
+        event
+      );
+
+
+      listening =
+        false;
+
+
+      if(
+        continuousMode &&
+        event.error !==
+        "not-allowed"
+      ){
+
+        startListeningSoon();
+
+      }
+
+      else{
+
+        setState(
+          "ready"
+        );
+
+      }
+
+    };
+
+
+  r.onend =
+    () => {
+
+      listening =
+        false;
+
+
+      mic.classList.remove(
+        "active"
+      );
+
+
+      /*
+         Keep listening until the user
+         taps the microphone again.
+      */
+
+      if(
+        continuousMode &&
+        !speaking
+      ){
+
+        startListeningSoon();
+
+      }
+
+      else if(
+        !continuousMode
+      ){
+
+        setState(
+          "ready"
+        );
+
+      }
+
+    };
+
+
+  return r;
+
+}
+
+
+/* ============================================================
+   START LISTENING
+============================================================ */
+
+function startListening(){
+
+  if(
+    !aiReady
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !recognition
+  ){
+
+    recognition =
+      setupRecognition();
+
+  }
+
+
+  if(
+    !recognition
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    listening
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    recognition.start();
+
+  }
+
+  catch(error){
+
+    console.log(
+      "Recognition start:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   RESTART LISTENING
+============================================================ */
+
+function startListeningSoon(){
+
+  if(
+    !continuousMode ||
+    speaking ||
+    navigationActive
+  ){
+
+    return;
+
+  }
+
+
+  clearTimeout(
+    recognitionRestartTimer
+  );
+
+
+  recognitionRestartTimer =
+
+    setTimeout(
+      () => {
+
+        if(
+          continuousMode &&
+          !speaking &&
+          !listening
+        ){
+
+          startListening();
+
+        }
+
+      },
+      350
+    );
+
+}
+
+
+/* ============================================================
+   STOP LISTENING
+============================================================ */
+
+function stopListening(){
+
+  continuousMode =
+    false;
+
+
+  clearTimeout(
+    recognitionRestartTimer
+  );
+
+
+  if(
+    recognition &&
+    listening
+  ){
+
+    try{
+
+      recognition.stop();
+
+    }
+
+    catch(error){
+
+      console.log(
+        error
+      );
+
+    }
+
+  }
+
+
+  listening =
+    false;
+
+
+  mic.classList.remove(
+    "active"
+  );
+
+
+  hint.textContent =
+    "TAP TO START";
+
+
+  setState(
+    "ready"
+  );
+
+}
+
+
+/* ============================================================
+   MICROPHONE BUTTON
+============================================================ */
+
+mic.onclick =
+  () => {
+
+    if(
+      !aiReady
+    ){
+
+      return;
+
+    }
+
+
+    /*
+       First tap:
+
+       unlock speech and begin
+       continuous listening.
+    */
+
+    if(
+      !continuousMode
+    ){
+
+      continuousMode =
+        true;
+
+
+      /*
+         This is a user gesture,
+         which is important for
+         Safari speech output.
+      */
+
+      if(
+        "speechSynthesis"
+        in window
+      ){
+
+        speechSynthesis.cancel();
+
+      }
+
+
+      hint.textContent =
+        "TAP TO STOP";
+
+
+      startListening();
+
+      return;
+
+    }
+
+
+    /*
+       Second tap:
+
+       completely stop voice mode.
+    */
+
+    stopListening();
+
+  };
+
+
+/* ============================================================
+   ASK LOCAL ALEX
+============================================================ */
+
+async function askAlex(text){
+
+  if(
+    !aiReady ||
+    !engine
+  ){
+
+    return;
+
+  }
+
+
+  setState(
+    "thinking"
+  );
+
+
+  conversation.push({
+
+    role:
+      "user",
+
+    content:
+      text
+
+  });
+
+
+  try{
+
+    const result =
+
+      await engine
+        .chat
+        .completions
+        .create({
+
+          messages:
+            conversation,
+
+          temperature:
+            .7,
+
+          max_tokens:
+            200
+
+        });
+
+
+    const answer =
+
+      result
+        ?.choices
+        ?.[0]
+        ?.message
+        ?.content
+        ?.trim();
+
+
+    if(!answer){
+
+      throw new Error(
+        "Alex returned no response."
+      );
+
+    }
+
+
+    conversation.push({
+
+      role:
+        "assistant",
+
+      content:
+        answer
+
+    });
+
+
+    prompt.textContent =
+      answer;
+
+
+    /*
+       Voice response.
+
+       When speech finishes,
+       continuous mode automatically
+       starts listening again.
+    */
+
+    speak(
+      answer
+    );
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "ALEX CHAT ERROR:",
+      error
+    );
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "I couldn't process that.";
+
+
+    if(
+      continuousMode
+    ){
+
+      startListeningSoon();
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   NAVIGATION REQUEST DETECTION
+============================================================ */
+
+function isNavigationRequest(
+  text
+){
+
+  const lower =
+    text.toLowerCase();
+
+
+  return (
+
+    lower.includes(
+      "take me to"
+    )
+
+    ||
+
+    lower.includes(
+      "navigate to"
+    )
+
+    ||
+
+    lower.includes(
+      "directions to"
+    )
+
+    ||
+
+    lower.includes(
+      "get me to"
+    )
+
+  );
+
+}
+
+
+/* ============================================================
+   EXTRACT DESTINATION
+============================================================ */
+
+function extractDestination(
+  text
+){
+
+  let destination =
+    text.trim();
+
+
+  destination =
+    destination.replace(
+      /^.*?take me to\s+/i,
+      ""
+    );
+
+
+  destination =
+    destination.replace(
+      /^.*?navigate to\s+/i,
+      ""
+    );
+
+
+  destination =
+    destination.replace(
+      /^.*?directions to\s+/i,
+      ""
+    );
+
+
+  destination =
+    destination.replace(
+      /^.*?get me to\s+/i,
+      ""
+    );
+
+
+  destination =
+    destination.trim();
+
+
+  return destination;
+
+}
+
+
+/* ============================================================
+   LOCATION
+============================================================ */
+
+function getCurrentLocation(){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      if(
+        !navigator.geolocation
+      ){
+
+        reject(
+          new Error(
+            "Location is not available on this device."
+          )
+        );
+
+        return;
+
+      }
+
+
+      navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+          resolve({
+            lat:
+              position.coords.latitude,
+
+            lon:
+              position.coords.longitude
+          });
+
+        },
+
+        error => {
+
+          reject(
+            new Error(
+              "I couldn't access your location."
+            )
+          );
+
+        },
+
+        {
+
+          enableHighAccuracy:
+            true,
+
+          timeout:
+            15000,
+
+          maximumAge:
+            5000
+
+        }
+
+      );
+
+    }
+
+  );
+
+}
+
+
+/* ============================================================
+   DISTANCE
+============================================================ */
+
+function distanceMeters(
+  lat1,
+  lon1,
+  lat2,
+  lon2
+){
+
+  const R =
+    6371000;
+
+
+  const p1 =
+    lat1 *
+    Math.PI /
+    180;
+
+
+  const p2 =
+    lat2 *
+    Math.PI /
+    180;
+
+
+  const dp =
+    (
+      lat2 -
+      lat1
+    ) *
+    Math.PI /
+    180;
+
+
+  const dl =
+    (
+      lon2 -
+      lon1
+    ) *
+    Math.PI /
+    180;
+
+
+  const a =
+
+    Math.sin(dp / 2) *
+    Math.sin(dp / 2)
+
+    +
+
+    Math.cos(p1) *
+    Math.cos(p2) *
+    Math.sin(dl / 2) *
+    Math.sin(dl / 2);
+
+
+  return (
+    2 *
+    R *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1-a)
+    )
+  );
+
+}
+
+
+/* ============================================================
+   FIND PLACE
+============================================================ */
+
+async function findDestination(
+  query,
+  location
+){
+
+  /*
+     Nominatim is only called after
+     the user explicitly asks for a
+     destination.
+  */
+
+  const delta =
+    0.08;
+
+
+  const left =
+    location.lon - delta;
+
+  const right =
+    location.lon + delta;
+
+  const top =
+    location.lat + delta;
+
+  const bottom =
+    location.lat - delta;
+
+
+  const params =
+    new URLSearchParams({
+
+      q:
+        query,
+
+      format:
+        "jsonv2",
+
+      limit:
+        "10",
+
+      addressdetails:
+        "1",
+
+      viewbox:
+        `${left},${top},${right},${bottom}`
+
+    });
+
+
+  const url =
+    "https://nominatim.openstreetmap.org/search?"
+    +
+    params.toString();
+
+
+  const response =
+    await fetch(
+      url
+    );
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      "Place search failed."
+    );
+
+  }
+
+
+  const places =
+    await response.json();
+
+
+  if(
+    !places.length
+  ){
+
+    throw new Error(
+      "I couldn't find that place nearby."
+    );
+
+  }
+
+
+  /*
+     Sort the results by actual
+     straight-line distance.
+  */
+
+  places.sort(
+    (
+      a,
+      b
+    ) => {
+
+      const da =
+        distanceMeters(
+
+          location.lat,
+          location.lon,
+
+          Number(a.lat),
+          Number(a.lon)
+
+        );
+
+
+      const db =
+        distanceMeters(
+
+          location.lat,
+          location.lon,
+
+          Number(b.lat),
+          Number(b.lon)
+
+        );
+
+
+      return da - db;
+
+    }
+  );
+
+
+  return places[0];
+
+}
+
+
+/* ============================================================
+   START NAVIGATION
+============================================================ */
+
+async function startNavigationFromSpeech(
+  text
+){
+
+  const destinationQuery =
+    extractDestination(
+      text
+    );
+
+
+  if(
+    !destinationQuery
+  ){
+
+    speak(
+      "Where would you like me to take you?"
+    );
+
+    return;
+
+  }
+
+
+  navigationActive =
+    false;
+
+
+  setState(
+    "thinking"
+  );
+
+
+  prompt.textContent =
+    "Finding " +
+    destinationQuery +
+    "…";
+
+
+  sub.textContent =
+    "Getting your location";
+
+
+  try{
+
+
+    const location =
+      await getCurrentLocation();
+
+
+    prompt.textContent =
+      "Finding the nearest " +
+      destinationQuery +
+      "…";
+
+
+    const place =
+      await findDestination(
+        destinationQuery,
+        location
+      );
+
+
+    navigationDestination = {
+
+      name:
+        place.display_name,
+
+      lat:
+        Number(place.lat),
+
+      lon:
+        Number(place.lon)
+
+    };
+
+
+    await buildRoute(
+      location,
+      navigationDestination
+    );
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "NAVIGATION ERROR:",
+      error
+    );
+
+
+    navigationActive =
+      false;
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      error.message;
+
+
+    speak(
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   BUILD ROUTE
+============================================================ */
+
+async function buildRoute(
+  start,
+  destination
+){
+
+  prompt.textContent =
+    "Calculating walking route…";
+
+
+  sub.textContent =
+    "Voice navigation";
+
+
+  const coordinates =
+
+    `${start.lon},${start.lat};`
+    +
+    `${destination.lon},${destination.lat}`;
+
+
+  const url =
+
+    "https://router.project-osrm.org/route/v1/foot/"
+    +
+    coordinates
+    +
+    "?steps=true"
+    +
+    "&overview=false"
+    +
+    "&alternatives=false";
+
+
+  const response =
+    await fetch(
+      url
+    );
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      "The routing service isn't available."
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  if(
+    data.code !==
+    "Ok"
+  ){
+
+    throw new Error(
+      "I couldn't find a walking route."
+    );
+
+  }
+
+
+  const route =
+    data.routes?.[0];
+
+
+  if(
+    !route
+  ){
+
+    throw new Error(
+      "No walking route was found."
+    );
+
+  }
+
+
+  navigationSteps =
+    route.legs
+      .flatMap(
+        leg =>
+          leg.steps
+      )
+      .filter(
+        step =>
+          step.distance > 1
+      );
+
+
+  navigationStepIndex =
+    0;
+
+
+  navigationActive =
+    true;
+
+
+  lastNavigationAnnouncement =
+    Date.now();
+
+
+  const distance =
+    Math.round(
+      route.distance
+    );
+
+
+  const minutes =
+    Math.max(
+      1,
+      Math.round(
+        route.duration / 60
+      )
+    );
+
+
+  /*
+     Start watching the phone.
+  */
+
+  startNavigationTracking();
+
+
+  /*
+     Stop the normal continuous
+     voice recognition while
+     navigation speaks.
+  */
+
+  continuousMode =
+    false;
+
+
+  if(
+    recognition &&
+    listening
+  ){
+
+    try{
+
+      recognition.stop();
+
+    }
+
+    catch(e){}
+
+  }
+
+
+  mic.classList.add(
+    "active"
+  );
+
+
+  hint.textContent =
+    "TAP TO STOP NAVIGATION";
+
+
+  prompt.textContent =
+    "Navigating to " +
+    destination.name
+      .split(",")[0];
+
+
+  sub.textContent =
+    `${distance} metres • about ${minutes} minutes`;
+
+
+  speak(
+    `Navigation started. `
+    +
+    `The destination is about `
+    +
+    formatDistance(distance)
+    +
+    ` away. `
+    +
+    getStepInstruction(
+      navigationSteps[0]
+    ),
+    () => {
+
+      navigationActive =
+        true;
+
+      setState(
+        "ready"
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   FORMAT DISTANCE
+============================================================ */
+
+function formatDistance(
+  meters
+){
+
+  if(
+    meters < 1000
+  ){
+
+    return (
+      Math.round(meters)
+      +
+      " metres"
+    );
+
+  }
+
+
+  return (
+    (meters / 1000)
+      .toFixed(1)
+    +
+    " kilometres"
+  );
+
+}
+
+
+/* ============================================================
+   STEP INSTRUCTION
+============================================================ */
+
+function getStepInstruction(
+  step
+){
+
+  if(
+    !step
+  ){
+
+    return "Continue ahead.";
+
+  }
+
+
+  const distance =
+    Math.round(
+      step.distance
+    );
+
+
+  const maneuver =
+    step.maneuver
+      ?.type;
+
+
+  const modifier =
+    step.maneuver
+      ?.modifier;
+
+
+  let action =
+    "Continue";
+
+
+  if(
+    maneuver === "turn"
+  ){
+
+    if(
+      modifier === "left"
+    ){
+
+      action =
+        "turn left";
+
+    }
+
+    else if(
+      modifier === "right"
+    ){
+
+      action =
+        "turn right";
+
+    }
+
+    else if(
+      modifier === "slight left"
+    ){
+
+      action =
+        "bear left";
+
+    }
+
+    else if(
+      modifier === "slight right"
+    ){
+
+      action =
+        "bear right";
+
+    }
+
+    else{
+
+      action =
+        "turn";
+
+    }
+
+  }
+
+  else if(
+    maneuver === "roundabout"
+    ||
+    maneuver === "rotary"
+  ){
+
+    action =
+      "enter the roundabout";
+
+  }
+
+  else if(
+    maneuver === "depart"
+  ){
+
+    action =
+      "start by continuing";
+
+  }
+
+  else if(
+    maneuver === "arrive"
+  ){
+
+    return "You have arrived.";
+
+  }
+
+
+  if(
+    distance < 10
+  ){
+
+    return (
+      action +
+      " shortly."
+    );
+
+  }
+
+
+  return (
+    "In "
+    +
+    formatDistance(distance)
+    +
+    ", "
+    +
+    action
+    +
+    "."
+  );
+
+}
+
+
+/* ============================================================
+   NAVIGATION TRACKING
+============================================================ */
+
+function startNavigationTracking(){
+
+  if(
+    !navigator.geolocation
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    navigationWatch !== null
+  ){
+
+    navigator.geolocation.clearWatch(
+      navigationWatch
+    );
+
+  }
+
+
+  navigationWatch =
+
+    navigator.geolocation.watchPosition(
+
+      position => {
+
+        if(
+          !navigationActive ||
+          !navigationDestination
+        ){
+
+          return;
+
+        }
+
+
+        const current = {
+
+          lat:
+            position.coords.latitude,
+
+          lon:
+            position.coords.longitude
+
+        };
+
+
+        checkNavigationProgress(
+          current
+        );
+
+      },
+
+      error => {
+
+        console.log(
+          "Navigation GPS:",
+          error
+        );
+
+      },
+
+      {
+
+        enableHighAccuracy:
+          true,
+
+        maximumAge:
+          2000,
+
+        timeout:
+          10000
+
+      }
+
+    );
+
+}
+
+
+/* ============================================================
+   CHECK NAVIGATION
+============================================================ */
+
+function checkNavigationProgress(
+  current
+){
+
+  if(
+    !navigationSteps.length
+  ){
+
+    return;
+
+  }
+
+
+  const step =
+    navigationSteps[
+      navigationStepIndex
+    ];
+
+
+  if(
+    !step
+  ){
+
+    finishNavigation();
+
+    return;
+
+  }
+
+
+  const target =
+    step.maneuver
+      ?.location;
+
+
+  if(
+    !target ||
+    target.length < 2
+  ){
+
+    return;
+
+  }
+
+
+  const distanceToManeuver =
+
+    distanceMeters(
+
+      current.lat,
+      current.lon,
+
+      Number(target[1]),
+      Number(target[0])
+
+    );
+
+
+  /*
+     When we're close to the next
+     maneuver, announce it.
+  */
+
+  if(
+    distanceToManeuver <= 18
+  ){
+
+    navigationStepIndex++;
+
+
+    const nextStep =
+      navigationSteps[
+        navigationStepIndex
+      ];
+
+
+    if(!nextStep){
+
+      finishNavigation();
+
+      return;
+
+    }
+
+
+    const now =
+      Date.now();
+
+
+    if(
+      now -
+      lastNavigationAnnouncement
+      >
+      3000
+    ){
+
+      lastNavigationAnnouncement =
+        now;
+
+
+      const instruction =
+        getStepInstruction(
+          nextStep
+        );
+
+
+      prompt.textContent =
+        instruction;
+
+
+      speak(
+        instruction
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  /*
+     Give an advance warning roughly
+     100 metres before the maneuver.
+  */
+
+  if(
+    distanceToManeuver <= 110
+    &&
+    distanceToManeuver >= 80
+  ){
+
+    const now =
+      Date.now();
+
+
+    if(
+      now -
+      lastNavigationAnnouncement
+      >
+      15000
+    ){
+
+      lastNavigationAnnouncement =
+        now;
+
+
+      const instruction =
+        getStepInstruction(
+          step
+        );
+
+
+      prompt.textContent =
+        instruction;
+
+
+      speak(
+        instruction
+      );
+
+    }
+
+  }
+
+
+  /*
+     Display distance only; don't
+     constantly speak it.
+  */
+
+  sub.textContent =
+    `${Math.round(
+      distanceToManeuver
+    )} m to next turn`;
+
+}
+
+
+/* ============================================================
+   FINISH NAVIGATION
+============================================================ */
+
+function finishNavigation(){
+
+  navigationActive =
+    false;
+
+
+  if(
+    navigationWatch !== null
+  ){
+
+    navigator.geolocation.clearWatch(
+      navigationWatch
+    );
+
+    navigationWatch =
+      null;
+
+  }
+
+
+  navigationSteps =
+    [];
+
+  navigationStepIndex =
+    0;
+
+
+  mic.classList.remove(
+    "active"
+  );
+
+
+  hint.textContent =
+    "TAP TO START";
+
+
+  prompt.textContent =
+    "You have arrived.";
+
+
+  sub.textContent =
+    "Navigation complete";
+
+
+  speak(
+    "You have arrived at your destination.",
+    () => {
+
+      setState(
+        "ready"
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   STOP NAVIGATION
+============================================================ */
+
+function stopNavigation(){
+
+  navigationActive =
+    false;
+
+
+  if(
+    navigationWatch !== null
+  ){
+
+    navigator.geolocation.clearWatch(
+      navigationWatch
+    );
+
+    navigationWatch =
+      null;
+
+  }
+
+
+  navigationSteps =
+    [];
+
+  navigationStepIndex =
+    0;
+
+
+  if(
+    "speechSynthesis"
+    in window
+  ){
+
+    speechSynthesis.cancel();
+
+  }
+
+
+  mic.classList.remove(
+    "active"
+  );
+
+
+  hint.textContent =
+    "TAP TO START";
+
+
+  setState(
+    "ready"
+  );
+
+
+  prompt.textContent =
+    "Navigation stopped.";
+
+}
+
+
+/* ============================================================
+   SECOND TAP WHILE NAVIGATING
+============================================================ */
+
+mic.addEventListener(
+  "click",
+  () => {
+
+    if(
+      navigationActive
+    ){
+
+      stopNavigation();
+
+    }
+
+  }
+);
 
 
 /* ============================================================
@@ -982,11 +3020,6 @@ async function loadAI(){
       "Preparing neural core";
 
 
-    console.log(
-      "ALEX: WebLLM starting"
-    );
-
-
     const config =
       webllm.prebuiltAppConfig;
 
@@ -1011,12 +3044,6 @@ async function loadAI(){
       );
 
     }
-
-
-    console.log(
-      "ALEX MODEL:",
-      model.model_id
-    );
 
 
     online.textContent =
@@ -1068,8 +3095,10 @@ async function loadAI(){
 
 
                 sub.textContent =
-                  "Local AI • " +
-                  percent +
+                  "Local AI • "
+                  +
+                  percent
+                  +
                   "%";
 
 
@@ -1117,12 +3146,8 @@ async function loadAI(){
 
 
     sub.textContent =
-      "Local AI • No API • Voice enabled";
+      "Local AI • Voice • Navigation";
 
-
-    console.log(
-      "ALEX: AI READY"
-    );
 
   }
 
@@ -1170,321 +3195,7 @@ async function loadAI(){
 
 
 /* ============================================================
-   ASK ALEX
-============================================================ */
-
-async function askAlex(text){
-
-  if(
-    !aiReady ||
-    !engine
-  ){
-
-    return;
-
-  }
-
-
-  setState(
-    "thinking"
-  );
-
-
-  prompt.textContent =
-    "Thinking…";
-
-
-  conversation.push({
-
-    role:
-      "user",
-
-    content:
-      text
-
-  });
-
-
-  try{
-
-
-    const result =
-
-      await engine
-        .chat
-        .completions
-        .create({
-
-          messages:
-            conversation,
-
-          temperature:
-            0.7,
-
-          max_tokens:
-            200
-
-        });
-
-
-    const answer =
-
-      result
-        ?.choices
-        ?.[0]
-        ?.message
-        ?.content
-        ?.trim();
-
-
-    if(!answer){
-
-      throw new Error(
-        "Alex returned no response."
-      );
-
-    }
-
-
-    conversation.push({
-
-      role:
-        "assistant",
-
-      content:
-        answer
-
-    });
-
-
-    prompt.textContent =
-      answer;
-
-
-    speak(
-      answer
-    );
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX CHAT ERROR:",
-      error
-    );
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "I couldn't process that.";
-
-  }
-
-}
-
-
-/* ============================================================
-   SPEECH RECOGNITION
-============================================================ */
-
-function setupRecognition(){
-
-  const SR =
-
-    window.SpeechRecognition ||
-
-    window.webkitSpeechRecognition;
-
-
-  if(!SR){
-
-    prompt.textContent =
-      "Speech recognition isn't available.";
-
-    return null;
-
-  }
-
-
-  const r =
-    new SR();
-
-
-  r.lang =
-    "en-GB";
-
-
-  r.interimResults =
-    false;
-
-
-  r.continuous =
-    false;
-
-
-  r.maxAlternatives =
-    1;
-
-
-  r.onstart =
-    () => {
-
-      listening =
-        true;
-
-
-      setState(
-        "listening"
-      );
-
-
-      prompt.textContent =
-        "I'm listening…";
-
-    };
-
-
-  r.onresult =
-    event => {
-
-      const text =
-
-        event
-          .results
-          [0]
-          [0]
-          .transcript
-          .trim();
-
-
-      listening =
-        false;
-
-
-      prompt.textContent =
-        "“" +
-        text +
-        "”";
-
-
-      askAlex(
-        text
-      );
-
-    };
-
-
-  r.onerror =
-    event => {
-
-      console.error(
-        "Speech recognition:",
-        event
-      );
-
-
-      listening =
-        false;
-
-
-      setState(
-        "ready"
-      );
-
-
-      prompt.textContent =
-        "I couldn't hear that.";
-
-    };
-
-
-  r.onend =
-    () => {
-
-      listening =
-        false;
-
-    };
-
-
-  return r;
-
-}
-
-
-/* ============================================================
-   MICROPHONE
-============================================================ */
-
-mic.onclick =
-  () => {
-
-
-    /*
-       IMPORTANT:
-
-       This happens directly from
-       the physical iPhone tap.
-
-       Safari therefore considers
-       the speech system user-activated.
-    */
-
-    unlockSpeech();
-
-
-    if(!aiReady){
-
-      return;
-
-    }
-
-
-    if(listening){
-
-      recognition?.stop();
-
-      return;
-
-    }
-
-
-    recognition =
-      recognition ||
-
-      setupRecognition();
-
-
-    if(recognition){
-
-      try{
-
-        recognition.start();
-
-      }
-
-      catch(error){
-
-        console.log(
-          "Recognition start:",
-          error
-        );
-
-      }
-
-    }
-
-  };
-
-
-/* ============================================================
-   LOAD VOICES
+   LOAD SAFARI VOICES
 ============================================================ */
 
 if(
@@ -1506,13 +3217,14 @@ if(
 
 
 /* ============================================================
-   START
+   START ALEX
 ============================================================ */
 
 loadAI();
 
 
 </script>
+
 
 </body>
 
