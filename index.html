@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
 <meta charset="utf-8">
 
 <meta name="viewport"
@@ -19,7 +20,7 @@
 <meta name="theme-color"
       content="#05070a">
 
-<title>Alex Mobile v0.3</title>
+<title>Alex Mobile v0.4</title>
 
 
 <style>
@@ -42,6 +43,7 @@ body{
   height:100%;
   background:var(--bg);
   color:#f4f7fa;
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -74,9 +76,9 @@ body{
 }
 
 
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 header{
   height:74px;
@@ -96,6 +98,8 @@ header{
   font-size:10px;
   letter-spacing:.16em;
   color:var(--green);
+
+  transition:.3s;
 }
 
 .online:before{
@@ -116,10 +120,28 @@ header{
   margin-right:7px;
 }
 
+.online.loading{
+  color:#ffd84d;
+}
 
-/* =========================
+.online.loading:before{
+  background:#ffd84d;
+  box-shadow:0 0 12px #ffd84d;
+}
+
+.online.error{
+  color:#ff5264;
+}
+
+.online.error:before{
+  background:#ff5264;
+  box-shadow:0 0 12px #ff5264;
+}
+
+
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 main{
   flex:1;
@@ -135,17 +157,20 @@ main{
 
 .status{
   font-size:11px;
+
   letter-spacing:.22em;
 
   color:var(--muted);
 
   margin-bottom:26px;
+
+  transition:.3s;
 }
 
 
-/* =========================
-   ALEX ORB
-========================= */
+/* =========================================================
+   ORB
+========================================================= */
 
 .orb{
   width:min(62vw,260px);
@@ -158,6 +183,8 @@ main{
 
   display:grid;
   place-items:center;
+
+  transition:.4s;
 }
 
 .orb:before,
@@ -165,11 +192,14 @@ main{
   content:"";
 
   position:absolute;
+
   inset:0;
 
   border-radius:50%;
 
-  border:1px solid rgba(25,217,255,.35);
+  border:
+    1px solid
+    rgba(25,217,255,.35);
 
   box-shadow:
     0 0 35px rgba(25,217,255,.08),
@@ -187,9 +217,9 @@ main{
 }
 
 
-/* =========================
+/* =========================================================
    WAVEFORM
-========================= */
+========================================================= */
 
 .wave{
   width:72%;
@@ -262,10 +292,14 @@ main{
   animation-duration:.25s;
 }
 
+.loading-ai .bar{
+  animation-duration:1.4s;
+}
 
-/* =========================
+
+/* =========================================================
    TEXT
-========================= */
+========================================================= */
 
 .prompt{
   margin-top:34px;
@@ -281,6 +315,8 @@ main{
   line-height:1.45;
 
   min-height:52px;
+
+  overflow:auto;
 }
 
 .sub{
@@ -289,12 +325,16 @@ main{
   color:#65717d;
 
   font-size:12px;
+
+  text-align:center;
+
+  max-width:330px;
 }
 
 
-/* =========================
+/* =========================================================
    CONTROLS
-========================= */
+========================================================= */
 
 .controls{
   height:190px;
@@ -315,7 +355,9 @@ main{
 
   border-radius:50%;
 
-  border:1px solid rgba(156,255,25,.5);
+  border:
+    1px solid
+    rgba(156,255,25,.5);
 
   background:
     linear-gradient(
@@ -331,11 +373,18 @@ main{
   box-shadow:
     0 0 30px rgba(25,217,255,.12);
 
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:.2s;
 }
 
 .mic:active{
   transform:scale(.95);
+}
+
+.mic.disabled{
+  opacity:.35;
 }
 
 .hint{
@@ -347,9 +396,9 @@ main{
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* =========================================================
+   NAV
+========================================================= */
 
 nav{
   height:72px;
@@ -360,7 +409,8 @@ nav{
   justify-content:space-around;
 
   border-top:
-    1px solid rgba(255,255,255,.06);
+    1px solid
+    rgba(255,255,255,.06);
 }
 
 nav button{
@@ -386,9 +436,9 @@ nav button.active{
 }
 
 
-/* =========================
+/* =========================================================
    ANIMATIONS
-========================= */
+========================================================= */
 
 @keyframes breathe{
 
@@ -424,8 +474,11 @@ nav button.active{
     ALEX
   </div>
 
-  <div class="online">
-    ONLINE
+  <div
+    id="online"
+    class="online"
+  >
+    AI LOADING
   </div>
 
 </header>
@@ -438,13 +491,13 @@ nav button.active{
     id="status"
     class="status"
   >
-    READY
+    INITIALISING
   </div>
 
 
   <div
     id="orb"
-    class="orb"
+    class="orb loading-ai"
   >
 
     <div class="wave">
@@ -466,7 +519,7 @@ nav button.active{
     id="prompt"
     class="prompt"
   >
-    Tap the microphone and talk to Alex.
+    Loading Alex's neural core…
   </div>
 
 
@@ -474,7 +527,7 @@ nav button.active{
     id="sub"
     class="sub"
   >
-    Voice input • Gemini AI • iPhone speaker
+    First launch downloads the local AI model.
   </div>
 
 
@@ -485,9 +538,10 @@ nav button.active{
 
 
   <button
-    class="mic"
+    class="mic disabled"
     id="mic"
     aria-label="Talk to Alex"
+    disabled
   >
     ◉
   </button>
@@ -526,35 +580,41 @@ nav button.active{
 
 
 
-<script>
+<script type="module">
 
 
 /* ============================================================
-   ALEX MOBILE v0.3
+   ALEX MOBILE v0.4
 
-   Speech recognition
-   Gemini AI
-   Conversation memory
-   iPhone speech synthesis
+   LOCAL AI EDITION
+
+   - WebLLM
+   - WebGPU
+   - SmolLM2 1.7B
+   - No Gemini
+   - No API key
+   - No PC
+   - Browser-local inference
+   - Speech recognition
+   - Speech synthesis
+   - Conversation memory
 ============================================================ */
 
 
 /* ============================================================
-   1. GEMINI API KEY
-
-   PUT YOUR NEW / REGENERATED KEY HERE.
+   1. WEBLLM
 ============================================================ */
 
-const GEMINI_API_KEY =
-  "AIzaSyDaIT4WYnZxM7ftoLawa5CYXNMgfniXMuM";
+import * as webllm
+  from "https://esm.run/@mlc-ai/web-llm";
 
 
 /* ============================================================
-   2. GEMINI MODEL
+   2. MODEL
 ============================================================ */
 
-const GEMINI_MODEL =
-  "gemini-2.5-flash-lite";
+const MODEL =
+  "SmolLM2-1.7B-Instruct-q4f16_1-MLC";
 
 
 /* ============================================================
@@ -565,32 +625,44 @@ const ALEX_SYSTEM_PROMPT = `
 
 You are ALEX, a personal mobile AI assistant.
 
-Your responses are spoken aloud,
-so keep them natural and conversational.
+Your name is ALEX.
 
-Be helpful, intelligent, friendly and concise.
+You are intelligent, calm, friendly and
+helpful.
 
-Do not introduce yourself as Gemini
-unless specifically asked.
+You are running locally on the user's
+mobile device.
 
-When a question needs a detailed answer,
-explain it clearly but avoid unnecessary filler.
+Your responses will usually be spoken aloud,
+so make them natural and conversational.
 
-The user is speaking to you through
-a voice assistant.
+Keep normal answers concise.
 
-Do not use markdown formatting unless
-it is genuinely useful.
+When the user asks for something complicated,
+give a clear useful explanation.
+
+Do not call yourself Gemini.
+
+Do not mention WebLLM, model weights,
+WebGPU, APIs or implementation details
+unless the user specifically asks.
+
+Do not use markdown unless it genuinely
+helps.
+
+Speak naturally like an advanced personal
+assistant.
 
 `;
 
 
 /* ============================================================
-   4. PAGE ELEMENTS
+   4. ELEMENTS
 ============================================================ */
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id => document.getElementById(id);
+
 
 const status =
   $("status");
@@ -598,16 +670,25 @@ const status =
 const prompt =
   $("prompt");
 
+const sub =
+  $("sub");
+
 const orb =
   $("orb");
 
 const mic =
   $("mic");
 
+const online =
+  $("online");
+
 
 /* ============================================================
    5. VARIABLES
 ============================================================ */
+
+let engine =
+  null;
 
 let recognition =
   null;
@@ -615,17 +696,26 @@ let recognition =
 let listening =
   false;
 
+let aiReady =
+  false;
+
 
 /* ============================================================
-   6. CONVERSATION MEMORY
+   6. CONVERSATION
 ============================================================ */
 
-const conversation =
-  [];
+const conversation = [
+
+  {
+    role:"system",
+    content:ALEX_SYSTEM_PROMPT
+  }
+
+];
 
 
 /* ============================================================
-   7. STATE CONTROL
+   7. STATE
 ============================================================ */
 
 function setState(state){
@@ -633,30 +723,226 @@ function setState(state){
   orb.className =
     "orb " + state;
 
-  status.textContent =
 
-    state === "listening"
-      ? "LISTENING"
+  if(state === "listening"){
 
-    :
+    status.textContent =
+      "LISTENING";
 
-    state === "thinking"
-      ? "THINKING"
+  }
 
-    :
+  else if(state === "thinking"){
 
-    state === "speaking"
-      ? "SPEAKING"
+    status.textContent =
+      "THINKING";
 
-    :
+  }
 
+  else if(state === "speaking"){
+
+    status.textContent =
+      "SPEAKING";
+
+  }
+
+  else if(state === "loading-ai"){
+
+    status.textContent =
+      "LOADING AI";
+
+  }
+
+  else{
+
+    status.textContent =
       "READY";
+
+  }
 
 }
 
 
 /* ============================================================
-   8. TEXT TO SPEECH
+   8. WEBGPU CHECK
+============================================================ */
+
+function checkWebGPU(){
+
+  if(!navigator.gpu){
+
+    throw new Error(
+      "WebGPU is not available in this browser."
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   9. LOAD LOCAL AI
+============================================================ */
+
+async function loadAI(){
+
+  try{
+
+    checkWebGPU();
+
+
+    setState(
+      "loading-ai"
+    );
+
+
+    online.textContent =
+      "AI LOADING";
+
+    online.className =
+      "online loading";
+
+
+    prompt.textContent =
+      "Loading Alex's neural core…";
+
+
+    sub.textContent =
+      "Preparing local AI model…";
+
+
+    engine =
+      await webllm.CreateMLCEngine(
+
+        MODEL,
+
+        {
+
+          initProgressCallback:
+            progress => {
+
+              const text =
+                progress?.text || "";
+
+              console.log(
+                "Alex AI:",
+                text
+              );
+
+
+              if(text){
+
+                prompt.textContent =
+                  text;
+              }
+
+            }
+
+        }
+
+      );
+
+
+    aiReady =
+      true;
+
+
+    mic.disabled =
+      false;
+
+
+    mic.classList.remove(
+      "disabled"
+    );
+
+
+    online.textContent =
+      "AI ONLINE";
+
+    online.className =
+      "online";
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "Alex is ready.";
+
+    sub.textContent =
+      "Local AI • Voice input • iPhone speaker";
+
+
+    console.log(
+      "ALEX LOCAL AI READY"
+    );
+
+
+  }
+
+  catch(error){
+
+    console.error(
+      "ALEX AI LOAD ERROR:",
+      error
+    );
+
+
+    aiReady =
+      false;
+
+
+    mic.disabled =
+      true;
+
+
+    mic.classList.add(
+      "disabled"
+    );
+
+
+    online.textContent =
+      "AI ERROR";
+
+    online.className =
+      "online error";
+
+
+    setState(
+      "ready"
+    );
+
+
+    if(
+      !navigator.gpu
+    ){
+
+      prompt.textContent =
+        "This browser does not support WebGPU.";
+
+      sub.textContent =
+        "Try a recent browser with WebGPU enabled.";
+
+    }
+
+    else{
+
+      prompt.textContent =
+        "Alex's local AI could not be loaded.";
+
+      sub.textContent =
+        "Check the browser console for details.";
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   10. TEXT TO SPEECH
 ============================================================ */
 
 function speak(text){
@@ -665,7 +951,9 @@ function speak(text){
     !("speechSynthesis" in window)
   ){
 
-    setState("ready");
+    setState(
+      "ready"
+    );
 
     return;
 
@@ -676,7 +964,9 @@ function speak(text){
 
 
   const utterance =
-    new SpeechSynthesisUtterance(text);
+    new SpeechSynthesisUtterance(
+      text
+    );
 
 
   utterance.lang =
@@ -725,25 +1015,34 @@ function speak(text){
   }
 
 
-  utterance.onstart = () => {
+  utterance.onstart =
+    () => {
 
-    setState("speaking");
+      setState(
+        "speaking"
+      );
 
-  };
-
-
-  utterance.onend = () => {
-
-    setState("ready");
-
-  };
+    };
 
 
-  utterance.onerror = () => {
+  utterance.onend =
+    () => {
 
-    setState("ready");
+      setState(
+        "ready"
+      );
 
-  };
+    };
+
+
+  utterance.onerror =
+    () => {
+
+      setState(
+        "ready"
+      );
+
+    };
 
 
   speechSynthesis.speak(
@@ -754,205 +1053,116 @@ function speak(text){
 
 
 /* ============================================================
-   9. GEMINI AI
+   11. LOCAL AI CHAT
 ============================================================ */
 
-async function askGemini(text){
+async function askAlex(text){
 
-  setState("thinking");
+  if(!aiReady || !engine){
+
+    prompt.textContent =
+      "Alex's AI isn't ready yet.";
+
+    return;
+
+  }
+
+
+  setState(
+    "thinking"
+  );
+
 
   prompt.textContent =
     "Thinking…";
 
 
+  conversation.push({
+
+    role:"user",
+
+    content:text
+
+  });
+
+
   try{
 
 
-    if(
-      !GEMINI_API_KEY ||
-
-      GEMINI_API_KEY ===
-      "PASTE_YOUR_NEW_KEY_HERE"
-    ){
-
-      throw new Error(
-        "Gemini API key has not been added."
-      );
-
-    }
-
-
-    /* Add user message */
-
-    conversation.push({
-
-      role:"user",
-
-      parts:[
-        {
-          text:text
-        }
-      ]
-
-    });
-
-
-    /* Gemini request */
-
     const response =
-      await fetch(
 
-        "https://generativelanguage.googleapis.com/v1beta/models/"
-        +
-        GEMINI_MODEL
-        +
-        ":generateContent",
+      await engine.chat.completions.create({
 
-        {
+        messages:
+          conversation,
 
-          method:"POST",
+        temperature:
+          0.7,
 
+        max_tokens:
+          300
 
-          headers:{
+      });
 
-            "Content-Type":
-              "application/json",
-
-            "x-goog-api-key":
-              GEMINI_API_KEY
-
-          },
-
-
-          body:
-            JSON.stringify({
-
-              systemInstruction:{
-
-                parts:[
-
-                  {
-                    text:
-                      ALEX_SYSTEM_PROMPT
-                  }
-
-                ]
-
-              },
-
-
-              contents:
-                conversation,
-
-
-              generationConfig:{
-
-                temperature:
-                  0.7,
-
-                maxOutputTokens:
-                  300
-
-              }
-
-            })
-
-        }
-
-      );
-
-
-    const data =
-      await response.json();
-
-
-    /* Check API response */
-
-    if(!response.ok){
-
-      console.error(
-        "Gemini error:",
-        data
-      );
-
-
-      throw new Error(
-
-        data?.error?.message ||
-
-        "Gemini returned an error."
-
-      );
-
-    }
-
-
-    /* Get answer */
 
     const answer =
 
-      data
-        ?.candidates
+      response
+        ?.choices
         ?.[0]
+        ?.message
         ?.content
-        ?.parts
-        ?.[0]
-        ?.text;
+        ?.trim();
 
 
     if(!answer){
 
       throw new Error(
-        "Gemini returned no response."
+        "Alex returned an empty response."
       );
 
     }
 
 
-    /* Save response */
-
     conversation.push({
 
-      role:"model",
+      role:"assistant",
 
-      parts:[
-
-        {
-          text:answer
-        }
-
-      ]
+      content:answer
 
     });
 
-
-    /* Display */
 
     prompt.textContent =
       answer;
 
 
-    /* Speak */
-
-    speak(answer);
+    speak(
+      answer
+    );
 
 
   }
 
-
   catch(error){
 
     console.error(
-      "Alex AI error:",
+      "ALEX LOCAL AI ERROR:",
       error
     );
 
 
-    setState("ready");
+    setState(
+      "ready"
+    );
 
 
     prompt.textContent =
-      "Sorry, I couldn't connect to my AI right now.";
+      "I hit a problem while thinking.";
+
+
+    sub.textContent =
+      "Try asking me again.";
 
   }
 
@@ -960,7 +1170,7 @@ async function askGemini(text){
 
 
 /* ============================================================
-   10. SPEECH RECOGNITION
+   12. SPEECH RECOGNITION
 ============================================================ */
 
 function setupRecognition(){
@@ -976,7 +1186,10 @@ function setupRecognition(){
   if(!SR){
 
     prompt.textContent =
-      "Voice recognition isn't available in this browser. Try Safari.";
+      "Voice recognition isn't available here.";
+
+    sub.textContent =
+      "Try Safari or another supported browser.";
 
     return null;
 
@@ -1003,87 +1216,111 @@ function setupRecognition(){
     1;
 
 
-  r.onstart = () => {
+  r.onstart =
+    () => {
 
-    listening =
-      true;
-
-    setState(
-      "listening"
-    );
-
-    prompt.textContent =
-      "I'm listening…";
-
-  };
+      listening =
+        true;
 
 
-  r.onresult = e => {
+      setState(
+        "listening"
+      );
 
 
-    const text =
-      e.results
-       [0]
-       [0]
-       .transcript;
+      prompt.textContent =
+        "I'm listening…";
+
+    };
 
 
-    listening =
-      false;
+  r.onresult =
+    event => {
 
 
-    prompt.textContent =
-      "“" + text + "”";
+      const text =
+
+        event
+          .results
+          [0]
+          [0]
+          .transcript
+          .trim();
 
 
-    askGemini(text);
-
-  };
-
-
-  r.onerror = e => {
+      listening =
+        false;
 
 
-    console.error(
-      "Speech recognition error:",
-      e
-    );
+      if(!text){
+
+        setState(
+          "ready"
+        );
+
+        return;
+
+      }
 
 
-    listening =
-      false;
+      prompt.textContent =
+        "“" + text + "”";
 
 
-    setState(
-      "ready"
-    );
+      askAlex(
+        text
+      );
+
+    };
 
 
-    prompt.textContent =
-      "I couldn't hear that. Tap the microphone and try again.";
+  r.onerror =
+    event => {
 
-  };
-
-
-  r.onend = () => {
-
-
-    listening =
-      false;
+      console.error(
+        "Speech recognition error:",
+        event
+      );
 
 
-    if(
-      orb.className ===
-      "orb listening"
-    ){
+      listening =
+        false;
+
 
       setState(
         "ready"
       );
 
-    }
 
-  };
+      prompt.textContent =
+        "I couldn't hear that.";
+
+
+      sub.textContent =
+        "Tap the microphone and try again.";
+
+    };
+
+
+  r.onend =
+    () => {
+
+      listening =
+        false;
+
+
+      if(
+        orb.className ===
+        "orb listening"
+      ){
+
+        setState(
+          "ready"
+        );
+
+      }
+
+    };
 
 
   return r;
@@ -1092,49 +1329,59 @@ function setupRecognition(){
 
 
 /* ============================================================
-   11. MICROPHONE BUTTON
+   13. MICROPHONE
 ============================================================ */
 
-mic.onclick = () => {
+mic.onclick =
+  () => {
 
 
-  if(listening){
+    if(!aiReady){
 
-    recognition?.stop();
-
-    return;
-
-  }
-
-
-  recognition =
-
-    recognition ||
-
-    setupRecognition();
-
-
-  if(recognition){
-
-    try{
-
-      recognition.start();
+      return;
 
     }
 
-    catch(e){
 
-      console.log(e);
+    if(listening){
+
+      recognition?.stop();
+
+      return;
 
     }
 
-  }
 
-};
+    recognition =
+
+      recognition ||
+
+      setupRecognition();
+
+
+    if(recognition){
+
+      try{
+
+        recognition.start();
+
+      }
+
+      catch(error){
+
+        console.log(
+          error
+        );
+
+      }
+
+    }
+
+  };
 
 
 /* ============================================================
-   12. LOAD SPEECH VOICES
+   14. SPEECH VOICES
 ============================================================ */
 
 if(
@@ -1153,6 +1400,13 @@ if(
     };
 
 }
+
+
+/* ============================================================
+   15. START ALEX
+============================================================ */
+
+loadAI();
 
 
 </script>
