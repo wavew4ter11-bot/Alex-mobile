@@ -43,6 +43,7 @@ body{
   height:100%;
   background:var(--bg);
   color:#f4f7fa;
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -75,7 +76,9 @@ body{
 }
 
 
-/* HEADER */
+/* =========================================================
+   HEADER
+========================================================= */
 
 header{
   height:74px;
@@ -95,6 +98,9 @@ header{
   font-size:10px;
   letter-spacing:.16em;
   color:#ffd84d;
+
+  transition:
+    color .3s ease;
 }
 
 .online:before{
@@ -109,9 +115,14 @@ header{
 
   background:#ffd84d;
 
-  box-shadow:0 0 12px #ffd84d;
+  box-shadow:
+    0 0 12px #ffd84d;
 
   margin-right:7px;
+
+  transition:
+    background .3s ease,
+    box-shadow .3s ease;
 }
 
 .online.ready{
@@ -120,7 +131,9 @@ header{
 
 .online.ready:before{
   background:var(--green);
-  box-shadow:0 0 12px var(--green);
+
+  box-shadow:
+    0 0 12px var(--green);
 }
 
 .online.error{
@@ -129,11 +142,15 @@ header{
 
 .online.error:before{
   background:var(--red);
-  box-shadow:0 0 12px var(--red);
+
+  box-shadow:
+    0 0 12px var(--red);
 }
 
 
-/* MAIN */
+/* =========================================================
+   MAIN
+========================================================= */
 
 main{
   flex:1;
@@ -149,6 +166,7 @@ main{
 
 .status{
   font-size:11px;
+
   letter-spacing:.22em;
 
   color:var(--muted);
@@ -159,7 +177,9 @@ main{
 }
 
 
-/* ORB */
+/* =========================================================
+   ORB
+========================================================= */
 
 .orb{
   width:min(62vw,260px);
@@ -179,6 +199,7 @@ main{
   content:"";
 
   position:absolute;
+
   inset:0;
 
   border-radius:50%;
@@ -188,8 +209,11 @@ main{
     rgba(25,217,255,.35);
 
   box-shadow:
-    0 0 35px rgba(25,217,255,.08),
-    inset 0 0 35px rgba(156,255,25,.05);
+    0 0 35px
+    rgba(25,217,255,.08),
+
+    inset 0 0 35px
+    rgba(156,255,25,.05);
 }
 
 .orb:after{
@@ -199,11 +223,16 @@ main{
     rgba(156,255,25,.35);
 
   animation:
-    pulse 2.6s ease-in-out infinite;
+    pulse
+    2.6s
+    ease-in-out
+    infinite;
 }
 
 
-/* WAVE */
+/* =========================================================
+   WAVEFORM
+========================================================= */
 
 .wave{
   width:72%;
@@ -284,7 +313,9 @@ main{
 }
 
 
-/* TEXT */
+/* =========================================================
+   TEXT
+========================================================= */
 
 .prompt{
   margin-top:34px;
@@ -319,7 +350,9 @@ main{
 }
 
 
-/* CONTROLS */
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
   height:190px;
@@ -361,6 +394,10 @@ main{
 
   -webkit-tap-highlight-color:
     transparent;
+
+  transition:
+    transform .1s ease,
+    opacity .2s ease;
 }
 
 .mic:active{
@@ -380,7 +417,9 @@ main{
 }
 
 
-/* NAV */
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 nav{
   height:72px;
@@ -418,7 +457,9 @@ nav button.active{
 }
 
 
-/* ANIMATIONS */
+/* =========================================================
+   ANIMATIONS
+========================================================= */
 
 @keyframes breathe{
 
@@ -516,6 +557,7 @@ nav button.active{
 
 <section class="controls">
 
+
   <button
     class="mic"
     id="mic"
@@ -525,9 +567,11 @@ nav button.active{
     ◉
   </button>
 
+
   <div class="hint">
     TAP TO SPEAK
   </div>
+
 
 </section>
 
@@ -562,11 +606,13 @@ nav button.active{
 /* ============================================================
    ALEX MOBILE
    LOCAL AI
+   WEBLLM
+   SAFARI VOICE SUPPORT
 ============================================================ */
 
 
-import * as webllm
-from "https://esm.run/@mlc-ai/web-llm";
+import * as webllm from
+  "https://esm.run/@mlc-ai/web-llm";
 
 
 /* ============================================================
@@ -613,9 +659,12 @@ let listening =
 let aiReady =
   false;
 
+let speechUnlocked =
+  false;
+
 
 /* ============================================================
-   MEMORY
+   CONVERSATION MEMORY
 ============================================================ */
 
 const conversation = [
@@ -657,28 +706,36 @@ function setState(state){
     "orb " + state;
 
 
-  if(state === "loading"){
+  if(
+    state === "loading"
+  ){
 
     status.textContent =
       "LOADING AI";
 
   }
 
-  else if(state === "listening"){
+  else if(
+    state === "listening"
+  ){
 
     status.textContent =
       "LISTENING";
 
   }
 
-  else if(state === "thinking"){
+  else if(
+    state === "thinking"
+  ){
 
     status.textContent =
       "THINKING";
 
   }
 
-  else if(state === "speaking"){
+  else if(
+    state === "speaking"
+  ){
 
     status.textContent =
       "SPEAKING";
@@ -696,7 +753,211 @@ function setState(state){
 
 
 /* ============================================================
-   LOAD MODEL
+   SAFARI SPEECH UNLOCK
+============================================================ */
+
+function unlockSpeech(){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    speechSynthesis.cancel();
+
+
+    const unlock =
+      new SpeechSynthesisUtterance("");
+
+
+    unlock.volume =
+      0;
+
+
+    speechSynthesis.speak(
+      unlock
+    );
+
+
+    speechUnlocked =
+      true;
+
+
+    console.log(
+      "ALEX: speech unlocked"
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Speech unlock error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   TEXT TO SPEECH
+============================================================ */
+
+function speak(text){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    console.log(
+      "Speech synthesis unavailable"
+    );
+
+
+    setState(
+      "ready"
+    );
+
+
+    return;
+
+  }
+
+
+  speechSynthesis.cancel();
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  utterance.lang =
+    "en-GB";
+
+
+  utterance.rate =
+    0.94;
+
+
+  utterance.pitch =
+    1.03;
+
+
+  utterance.volume =
+    1.0;
+
+
+  const voices =
+    speechSynthesis.getVoices();
+
+
+  const voice =
+
+    voices.find(
+      v =>
+        v.lang ===
+        "en-GB"
+    )
+
+    ||
+
+    voices.find(
+      v =>
+        v.lang.startsWith(
+          "en"
+        )
+    );
+
+
+  if(voice){
+
+    utterance.voice =
+      voice;
+
+  }
+
+
+  utterance.onstart =
+    () => {
+
+      console.log(
+        "ALEX: speech started"
+      );
+
+
+      setState(
+        "speaking"
+      );
+
+    };
+
+
+  utterance.onend =
+    () => {
+
+      console.log(
+        "ALEX: speech finished"
+      );
+
+
+      setState(
+        "ready"
+      );
+
+    };
+
+
+  utterance.onerror =
+    event => {
+
+      console.error(
+        "ALEX TTS ERROR:",
+        event
+      );
+
+
+      setState(
+        "ready"
+      );
+
+    };
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+
+  setTimeout(
+    () => {
+
+      if(
+        speechSynthesis.paused
+      ){
+
+        speechSynthesis.resume();
+
+      }
+
+    },
+    100
+  );
+
+}
+
+
+/* ============================================================
+   LOAD LOCAL AI
 ============================================================ */
 
 async function loadAI(){
@@ -722,13 +983,9 @@ async function loadAI(){
 
 
     console.log(
-      "ALEX: WebLLM loaded"
+      "ALEX: WebLLM starting"
     );
 
-
-    /* ==========================================
-       FIND A SMALL REGISTERED MODEL
-    ========================================== */
 
     const config =
       webllm.prebuiltAppConfig;
@@ -750,7 +1007,7 @@ async function loadAI(){
     if(!model){
 
       throw new Error(
-        "Small SmolLM2 model was not found in the WebLLM registry."
+        "Small Alex model was not found."
       );
 
     }
@@ -774,10 +1031,6 @@ async function loadAI(){
       "First launch only";
 
 
-    /* ==========================================
-       CREATE ENGINE
-    ========================================== */
-
     engine =
 
       await webllm.CreateMLCEngine(
@@ -797,14 +1050,16 @@ async function loadAI(){
 
               if(
                 progress &&
-                typeof progress.progress
+                typeof
+                progress.progress
                 ===
                 "number"
               ){
 
                 const percent =
                   Math.round(
-                    progress.progress * 100
+                    progress.progress *
+                    100
                   );
 
 
@@ -834,15 +1089,6 @@ async function loadAI(){
         }
 
       );
-
-
-    /* ==========================================
-       READY
-    ========================================== */
-
-    engine.setInitProgressCallback?.(
-      () => {}
-    );
 
 
     aiReady =
@@ -875,9 +1121,8 @@ async function loadAI(){
 
 
     console.log(
-      "ALEX: READY"
+      "ALEX: AI READY"
     );
-
 
   }
 
@@ -885,9 +1130,17 @@ async function loadAI(){
   catch(error){
 
     console.error(
-      "ALEX ERROR:",
+      "ALEX AI ERROR:",
       error
     );
+
+
+    aiReady =
+      false;
+
+
+    mic.disabled =
+      true;
 
 
     online.textContent =
@@ -957,18 +1210,21 @@ async function askAlex(text){
 
     const result =
 
-      await engine.chat.completions.create({
+      await engine
+        .chat
+        .completions
+        .create({
 
-        messages:
-          conversation,
+          messages:
+            conversation,
 
-        temperature:
-          .7,
+          temperature:
+            0.7,
 
-        max_tokens:
-          200
+          max_tokens:
+            200
 
-      });
+        });
 
 
     const answer =
@@ -1009,14 +1265,13 @@ async function askAlex(text){
       answer
     );
 
-
   }
 
 
   catch(error){
 
     console.error(
-      "CHAT ERROR:",
+      "ALEX CHAT ERROR:",
       error
     );
 
@@ -1035,109 +1290,15 @@ async function askAlex(text){
 
 
 /* ============================================================
-   TEXT TO SPEECH
-============================================================ */
-
-function speak(text){
-
-  if(
-    !("speechSynthesis" in window)
-  ){
-
-    setState(
-      "ready"
-    );
-
-    return;
-
-  }
-
-
-  speechSynthesis.cancel();
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-
-  utterance.lang =
-    "en-GB";
-
-
-  utterance.rate =
-    .94;
-
-
-  utterance.pitch =
-    1.03;
-
-
-  const voices =
-    speechSynthesis.getVoices();
-
-
-  const voice =
-    voices.find(
-      v =>
-        v.lang === "en-GB"
-    );
-
-
-  if(voice){
-
-    utterance.voice =
-      voice;
-
-  }
-
-
-  utterance.onstart =
-    () => {
-
-      setState(
-        "speaking"
-      );
-
-    };
-
-
-  utterance.onend =
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    };
-
-
-  utterance.onerror =
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    };
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-}
-
-
-/* ============================================================
    SPEECH RECOGNITION
 ============================================================ */
 
 function setupRecognition(){
 
   const SR =
+
     window.SpeechRecognition ||
+
     window.webkitSpeechRecognition;
 
 
@@ -1193,8 +1354,11 @@ function setupRecognition(){
     event => {
 
       const text =
+
         event
-          .results[0][0]
+          .results
+          [0]
+          [0]
           .transcript
           .trim();
 
@@ -1204,7 +1368,9 @@ function setupRecognition(){
 
 
       prompt.textContent =
-        "“" + text + "”";
+        "“" +
+        text +
+        "”";
 
 
       askAlex(
@@ -1215,7 +1381,13 @@ function setupRecognition(){
 
 
   r.onerror =
-    () => {
+    event => {
+
+      console.error(
+        "Speech recognition:",
+        event
+      );
+
 
       listening =
         false;
@@ -1253,6 +1425,20 @@ function setupRecognition(){
 mic.onclick =
   () => {
 
+
+    /*
+       IMPORTANT:
+
+       This happens directly from
+       the physical iPhone tap.
+
+       Safari therefore considers
+       the speech system user-activated.
+    */
+
+    unlockSpeech();
+
+
     if(!aiReady){
 
       return;
@@ -1271,6 +1457,7 @@ mic.onclick =
 
     recognition =
       recognition ||
+
       setupRecognition();
 
 
@@ -1285,6 +1472,7 @@ mic.onclick =
       catch(error){
 
         console.log(
+          "Recognition start:",
           error
         );
 
@@ -1296,7 +1484,7 @@ mic.onclick =
 
 
 /* ============================================================
-   VOICES
+   LOAD VOICES
 ============================================================ */
 
 if(
@@ -1325,7 +1513,6 @@ loadAI();
 
 
 </script>
-
 
 </body>
 
