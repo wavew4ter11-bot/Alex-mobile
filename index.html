@@ -3,583 +3,576 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      content="width=device-width, initial-scale=1.0,
+               viewport-fit=cover">
 
-<meta name="theme-color" content="#020604">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <title>A.L.E.X</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-    }
 
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #020604;
-        color: #39ff14;
-        font-family: "Courier New", monospace;
-    }
+:root {
+    --bg: #020606;
+    --panel: #061010;
+    --panel2: #081717;
+    --green: #39ff14;
+    --cyan: #19d9ff;
+    --dim: #147a24;
+    --white: #d9ffe0;
+    --red: #ff3030;
+    --border: rgba(57,255,20,.28);
+}
 
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    /* =====================================================
-       MAIN PORTRAIT INTERFACE
-       ===================================================== */
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--white);
+    font-family: "Courier New", monospace;
+    overflow: hidden;
+}
 
-    #app {
-        position: relative;
-        width: 100%;
-        max-width: 520px;
-        height: 100dvh;
-        min-height: 620px;
-        overflow: hidden;
-        background:
-            radial-gradient(
-                circle at 50% 35%,
-                rgba(0, 255, 100, 0.055),
-                transparent 35%
-            ),
-            #020604;
-    }
+button,
+input {
+    font-family: inherit;
+}
 
-    /* subtle scanlines */
+button {
+    cursor: pointer;
+}
 
-    #app::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background:
-            repeating-linear-gradient(
-                to bottom,
-                rgba(255,255,255,0.012) 0px,
-                rgba(255,255,255,0.012) 1px,
-                transparent 1px,
-                transparent 4px
-            );
-        opacity: .35;
-        z-index: 20;
-    }
+/* =========================================================
+   APP
+   ========================================================= */
 
-    /* =====================================================
-       HEADER
-       ===================================================== */
+#app {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
 
-    #header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 82px;
+/* =========================================================
+   HOME
+   ========================================================= */
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+#home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
 
-        padding: 0 18px;
+.header {
+    height: 70px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid rgba(57,255,20,.12);
+}
 
-        border-bottom: 1px solid rgba(57,255,20,.16);
-        background: rgba(2,6,4,.78);
+.logo {
+    color: var(--green);
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-shadow:
+        0 0 8px rgba(57,255,20,.8),
+        0 0 22px rgba(57,255,20,.3);
+}
 
-        z-index: 10;
-    }
+.status {
+    position: absolute;
+    right: 18px;
+    top: 26px;
+    color: var(--dim);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
 
-    #logo {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
+.status.active {
+    color: var(--green);
+}
 
-    #logo-main {
-        font-size: 24px;
-        font-weight: bold;
-        letter-spacing: 4px;
-        text-shadow:
-            0 0 5px #39ff14,
-            0 0 14px rgba(57,255,20,.55);
-    }
+/* =========================================================
+   WAVE
+   ========================================================= */
 
-    #logo-sub {
+.wave-area {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#wave {
+    width: 94%;
+    max-width: 900px;
+    height: 260px;
+}
+
+.core {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow:
+        0 0 12px var(--cyan),
+        0 0 30px rgba(25,217,255,.8);
+}
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+.chat-panel {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 122px;
+    max-width: 700px;
+    margin: auto;
+    height: 115px;
+
+    background: rgba(3,12,12,.86);
+    border: 1px solid var(--border);
+    box-shadow:
+        0 0 20px rgba(57,255,20,.05),
+        inset 0 0 20px rgba(0,0,0,.5);
+
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 11px;
+}
+
+.chat-line {
+    margin-bottom: 9px;
+    line-height: 1.4;
+}
+
+.user {
+    color: var(--cyan);
+}
+
+.alex {
+    color: var(--green);
+}
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.controls {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    height: 90px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+}
+
+#textInput {
+    flex: 1;
+    height: 43px;
+
+    background: #030909;
+    border: 1px solid rgba(57,255,20,.35);
+    color: var(--green);
+
+    outline: none;
+    padding: 0 13px;
+
+    font-size: 12px;
+}
+
+#textInput:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 10px rgba(57,255,20,.12);
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.alex-button {
+    background: #06100c;
+    border: 1px solid rgba(57,255,20,.38);
+    color: var(--green);
+
+    height: 34px;
+    padding: 0 17px;
+
+    font-size: 10px;
+    letter-spacing: 1px;
+
+    transition:
+        .15s ease;
+}
+
+.alex-button:hover {
+    border-color: var(--green);
+    box-shadow:
+        0 0 12px rgba(57,255,20,.18);
+}
+
+.alex-button:active {
+    transform: scale(.97);
+}
+
+.mic-button {
+    color: var(--cyan);
+    border-color: rgba(25,217,255,.4);
+}
+
+.mic-button.listening {
+    color: #fff;
+    border-color: var(--cyan);
+    background: rgba(25,217,255,.12);
+    box-shadow:
+        0 0 18px rgba(25,217,255,.3);
+}
+
+.archive-button {
+    color: var(--green);
+}
+
+/* =========================================================
+   SCREENS
+   ========================================================= */
+
+.screen {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* =========================================================
+   ARCHIVE
+   LANDSCAPE
+   ========================================================= */
+
+#archiveScreen {
+    overflow: hidden;
+}
+
+.archive-layout {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+
+.archive-list {
+    border-right: 1px solid rgba(57,255,20,.2);
+    padding: 25px;
+
+    overflow-y: auto;
+}
+
+.archive-title {
+    color: var(--green);
+    font-size: 17px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.archive-subtitle {
+    color: var(--dim);
+    font-size: 9px;
+    margin-bottom: 20px;
+}
+
+.suit-card {
+    border: 1px solid rgba(57,255,20,.18);
+    background: rgba(4,15,15,.7);
+
+    padding: 12px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    transition: .15s ease;
+}
+
+.suit-card:hover {
+    border-color: var(--green);
+    background: rgba(57,255,20,.05);
+}
+
+.suit-card.selected {
+    border-color: var(--cyan);
+    box-shadow:
+        0 0 12px rgba(25,217,255,.12);
+}
+
+.suit-thumb {
+    width: 55px;
+    height: 70px;
+    object-fit: cover;
+
+    background: #010404;
+    border: 1px solid rgba(57,255,20,.18);
+}
+
+.suit-info {
+    min-width: 0;
+}
+
+.suit-name {
+    color: var(--green);
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+
+.suit-era {
+    color: var(--dim);
+    font-size: 8px;
+}
+
+.archive-preview {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+.preview-title {
+    color: var(--cyan);
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+#selectedImage {
+    max-width: 75%;
+    max-height: 68%;
+
+    object-fit: contain;
+
+    border: 1px solid rgba(57,255,20,.25);
+
+    box-shadow:
+        0 0 25px rgba(57,255,20,.06);
+}
+
+.preview-name {
+    color: var(--green);
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.preview-description {
+    max-width: 650px;
+    text-align: center;
+    color: #83ad89;
+    font-size: 9px;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+.archive-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* =========================================================
+   ADD SUIT
+   ========================================================= */
+
+#suitFile {
+    display: none;
+}
+
+/* =========================================================
+   PORTRAIT SUIT VIEW
+   ========================================================= */
+
+#suitScreen {
+    overflow: hidden;
+}
+
+.suit-view {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.suit-header {
+    height: 65px;
+    min-height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: 1px solid rgba(57,255,20,.12);
+}
+
+.suit-image-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+}
+
+#suitLargeImage {
+    max-width: 92%;
+    max-height: 76%;
+
+    object-fit: contain;
+
+    box-shadow:
+        0 0 30px rgba(57,255,20,.08);
+}
+
+.suit-details {
+    text-align: center;
+    padding: 5px 25px 95px;
+}
+
+#suitLargeName {
+    color: var(--green);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+#suitLargeDescription {
+    color: #83ad89;
+    font-size: 9px;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+.suit-bottom {
+    position: absolute;
+    bottom: 14px;
+    left: 12px;
+    right: 12px;
+
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+#toast {
+    position: fixed;
+    left: 50%;
+    bottom: 110px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    background: #061010;
+    border: 1px solid var(--green);
+    color: var(--green);
+
+    padding: 10px 15px;
+
+    font-size: 10px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: .25s ease;
+    z-index: 100;
+}
+
+#toast.show {
+    opacity: 1;
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (orientation: portrait) {
+
+    .status {
         font-size: 8px;
-        letter-spacing: 2px;
-        color: #0f8c28;
+        right: 10px;
     }
 
-    /* =====================================================
-       ARCHIVES
-       ===================================================== */
-
-    #archiveButton {
-        border: 1px solid #39ff14;
-        background: rgba(57,255,20,.035);
-        color: #39ff14;
-
-        font-family: inherit;
-        font-size: 10px;
-        letter-spacing: 1.5px;
-
-        padding: 10px 13px;
-
-        cursor: pointer;
-
-        box-shadow:
-            inset 0 0 12px rgba(57,255,20,.025),
-            0 0 8px rgba(57,255,20,.12);
-
-        transition: .15s;
+    .logo {
+        font-size: 20px;
     }
 
-    #archiveButton:active {
-        transform: scale(.96);
-        background: rgba(57,255,20,.12);
+    .chat-panel {
+        bottom: 128px;
+        height: 100px;
     }
 
-    /* =====================================================
-       CENTRAL CORE
-       ===================================================== */
+    #wave {
+        height: 230px;
+    }
+}
 
-    #coreArea {
-        position: absolute;
+@media (orientation: landscape) {
 
-        top: 92px;
-        left: 0;
-        width: 100%;
-
-        height: 350px;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    #home {
+        max-width: 900px;
+        margin: auto;
     }
 
-    #core {
-        position: relative;
-
-        width: 145px;
-        height: 145px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .chat-panel {
+        max-width: 750px;
     }
-
-    #core-ring-1,
-    #core-ring-2,
-    #core-ring-3 {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-    }
-
-    #core-ring-1 {
-        inset: 12px;
-        border: 1px solid rgba(57,255,20,.75);
-        box-shadow:
-            0 0 15px rgba(57,255,20,.35);
-        animation: rotate 12s linear infinite;
-    }
-
-    #core-ring-2 {
-        inset: 27px;
-        border: 1px dashed rgba(25,217,255,.65);
-        animation: rotateReverse 8s linear infinite;
-    }
-
-    #core-ring-3 {
-        inset: 42px;
-        border: 1px solid rgba(57,255,20,.45);
-        box-shadow:
-            inset 0 0 18px rgba(57,255,20,.2);
-        animation: pulse 2s ease-in-out infinite;
-    }
-
-    #core-dot {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-
-        background: #39ff14;
-
-        box-shadow:
-            0 0 8px #39ff14,
-            0 0 22px #39ff14,
-            0 0 45px rgba(57,255,20,.5);
-
-        animation: corePulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes rotateReverse {
-        from {
-            transform: rotate(360deg);
-        }
-        to {
-            transform: rotate(0deg);
-        }
-    }
-
-    @keyframes pulse {
-        0%,100% {
-            opacity: .35;
-        }
-        50% {
-            opacity: 1;
-        }
-    }
-
-    @keyframes corePulse {
-        0%,100% {
-            transform: scale(.8);
-        }
-        50% {
-            transform: scale(1.15);
-        }
-    }
-
-    /* =====================================================
-       WAVEFORM
-       ===================================================== */
-
-    #waveCanvas {
-        position: absolute;
-
-        left: 8%;
-        width: 84%;
-
-        bottom: 20px;
-        height: 105px;
-
-        opacity: .9;
-    }
-
-    /* =====================================================
-       STATUS
-       ===================================================== */
-
-    #status {
-        position: absolute;
-
-        top: 425px;
-        left: 0;
-        width: 100%;
-
-        text-align: center;
-
-        font-size: 10px;
-        letter-spacing: 2px;
-
-        color: #39ff14;
-
-        text-shadow:
-            0 0 8px rgba(57,255,20,.45);
-    }
-
-    #statusDetail {
-        margin-top: 7px;
-
-        font-size: 8px;
-        letter-spacing: 1px;
-
-        color: #0f8c28;
-    }
-
-    /* =====================================================
-       CHAT
-       ===================================================== */
-
-    #chat {
-        position: absolute;
-
-        left: 6%;
-        width: 88%;
-
-        top: 470px;
-        bottom: 145px;
-
-        border: 1px solid rgba(57,255,20,.18);
-
-        background: rgba(0,8,4,.55);
-
-        overflow-y: auto;
-
-        padding: 12px;
-
-        font-size: 11px;
-        line-height: 1.55;
-
-        scrollbar-width: thin;
-        scrollbar-color: #145c19 transparent;
-    }
-
-    .message {
-        margin-bottom: 15px;
-        white-space: pre-wrap;
-        word-break: break-word;
-    }
-
-    .message-user {
-        color: #19d9ff;
-    }
-
-    .message-alex {
-        color: #39ff14;
-    }
-
-    .message-label {
-        display: block;
-
-        margin-bottom: 3px;
-
-        font-size: 8px;
-        letter-spacing: 1px;
-
-        opacity: .55;
-    }
-
-    /* =====================================================
-       INPUT
-       ===================================================== */
-
-    #controls {
-        position: absolute;
-
-        left: 6%;
-        width: 88%;
-
-        bottom: 18px;
-        height: 112px;
-
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-
-        z-index: 10;
-    }
-
-    #inputRow {
-        display: flex;
-        width: 100%;
-        height: 46px;
-    }
-
-    #input {
-        flex: 1;
-
-        min-width: 0;
-
-        border: 1px solid #176b20;
-        border-right: none;
-
-        outline: none;
-
-        background: #030a05;
-        color: #39ff14;
-
-        padding: 0 12px;
-
-        font-family: inherit;
-        font-size: 11px;
-
-        box-shadow:
-            inset 0 0 15px rgba(57,255,20,.025);
-    }
-
-    #input::placeholder {
-        color: #28652e;
-    }
-
-    #send {
-        width: 65px;
-
-        border: 1px solid #39ff14;
-
-        background: rgba(57,255,20,.04);
-        color: #39ff14;
-
-        font-family: inherit;
-        font-size: 9px;
-        letter-spacing: 1px;
-
-        cursor: pointer;
-    }
-
-    #buttonRow {
-        display: flex;
-        gap: 9px;
-        height: 48px;
-    }
-
-    .controlButton {
-        flex: 1;
-
-        border: 1px solid #176b20;
-
-        background: rgba(57,255,20,.025);
-        color: #39ff14;
-
-        font-family: inherit;
-        font-size: 9px;
-        letter-spacing: 1.5px;
-
-        cursor: pointer;
-
-        transition: .15s;
-    }
-
-    .controlButton:active,
-    #send:active {
-        background: rgba(57,255,20,.12);
-        transform: scale(.98);
-    }
-
-    #speak {
-        border-color: #19d9ff;
-        color: #19d9ff;
-    }
-
-    /* =====================================================
-       ARCHIVE SCREEN
-       ===================================================== */
-
-    #archives {
-        position: absolute;
-        inset: 0;
-
-        background: #020604;
-
-        z-index: 30;
-
-        display: none;
-
-        flex-direction: column;
-    }
-
-    #archiveHeader {
-        height: 82px;
-
-        flex-shrink: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        padding: 0 18px;
-
-        border-bottom: 1px solid rgba(57,255,20,.16);
-    }
-
-    #archiveTitle {
-        font-size: 15px;
-        letter-spacing: 3px;
-    }
-
-    #closeArchive {
-        border: 1px solid #39ff14;
-        background: transparent;
-        color: #39ff14;
-
-        font-family: inherit;
-        padding: 9px 12px;
-        font-size: 9px;
-    }
-
-    #archiveList {
-        flex: 1;
-
-        overflow-y: auto;
-
-        padding: 18px;
-    }
-
-    .archiveCard {
-        border: 1px solid #145c19;
-
-        padding: 16px;
-        margin-bottom: 12px;
-
-        background: rgba(57,255,20,.025);
-
-        cursor: pointer;
-    }
-
-    .archiveCard:active {
-        background: rgba(57,255,20,.08);
-    }
-
-    .archiveName {
-        color: #39ff14;
-        font-size: 12px;
-        letter-spacing: 1px;
-    }
-
-    .archiveInfo {
-        margin-top: 7px;
-
-        color: #3a8f45;
-
-        font-size: 9px;
-        line-height: 1.5;
-    }
-
-    /* =====================================================
-       RESPONSIVE PORTRAIT
-       ===================================================== */
-
-    @media (max-height: 700px) {
-
-        #coreArea {
-            top: 80px;
-            height: 280px;
-        }
-
-        #core {
-            transform: scale(.82);
-        }
-
-        #status {
-            top: 345px;
-        }
-
-        #chat {
-            top: 385px;
-            bottom: 140px;
-        }
-    }
-
-    @media (min-height: 850px) {
-
-        #coreArea {
-            height: 390px;
-        }
-
-        #status {
-            top: 455px;
-        }
-
-        #chat {
-            top: 505px;
-        }
-    }
+}
 
 </style>
 </head>
@@ -588,182 +581,267 @@
 
 <div id="app">
 
-    <!-- HEADER -->
+    <!-- =====================================================
+         HOME
+         ===================================================== -->
 
-    <header id="header">
+    <section id="home">
 
-        <div id="logo">
+        <div class="header">
 
-            <div id="logo-main">
+            <div class="logo">
                 A.L.E.X
             </div>
 
-            <div id="logo-sub">
-                PERSONAL SYSTEM
-            </div>
-
-        </div>
-
-        <button id="archiveButton">
-            ARCHIVES
-        </button>
-
-    </header>
-
-
-    <!-- CORE -->
-
-    <section id="coreArea">
-
-        <div id="core">
-
-            <div id="core-ring-1"></div>
-            <div id="core-ring-2"></div>
-            <div id="core-ring-3"></div>
-
-            <div id="core-dot"></div>
-
-        </div>
-
-        <canvas id="waveCanvas"></canvas>
-
-    </section>
-
-
-    <!-- STATUS -->
-
-    <div id="status">
-
-        A.L.E.X // <span id="statusText">STANDBY</span>
-
-        <div id="statusDetail">
-            SYSTEM ONLINE
-        </div>
-
-    </div>
-
-
-    <!-- CHAT -->
-
-    <main id="chat">
-
-        <div class="message message-alex">
-
-            <span class="message-label">
-                A.L.E.X // SYSTEM
-            </span>
-
-            System online.
-            Ready for your command.
-
-        </div>
-
-    </main>
-
-
-    <!-- CONTROLS -->
-
-    <section id="controls">
-
-        <div id="inputRow">
-
-            <input
-                id="input"
-                type="text"
-                autocomplete="off"
-                placeholder="Ask A.L.E.X..."
+            <div
+                id="status"
+                class="status"
             >
-
-            <button id="send">
-                SEND
-            </button>
+                STANDBY
+            </div>
 
         </div>
 
-        <div id="buttonRow">
+        <div class="wave-area">
 
-            <button
-                class="controlButton"
-                id="speak">
-                SPEAK
-            </button>
+            <canvas id="wave"></canvas>
 
-            <button
-                class="controlButton"
-                id="clear">
-                CLEAR
-            </button>
+            <div class="core"></div>
+
+        </div>
+
+        <div
+            id="chat"
+            class="chat-panel"
+        >
+        </div>
+
+        <div class="controls">
+
+            <div class="input-row">
+
+                <input
+                    id="textInput"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="ENTER COMMAND..."
+                >
+
+                <button
+                    class="alex-button"
+                    onclick="sendText()"
+                >
+                    SEND
+                </button>
+
+            </div>
+
+            <div class="control-row">
+
+                <button
+                    class="alex-button mic-button"
+                    id="micButton"
+                    onclick="toggleMic()"
+                >
+                    MIC OFF
+                </button>
+
+                <button
+                    class="alex-button archive-button"
+                    onclick="openArchive()"
+                >
+                    ARCHIVES
+                </button>
+
+                <button
+                    class="alex-button"
+                    onclick="speakLast()"
+                >
+                    SPEAK
+                </button>
+
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- ARCHIVES -->
+    <!-- =====================================================
+         ARCHIVE
+         ===================================================== -->
 
-    <section id="archives">
+    <section
+        id="archiveScreen"
+        class="screen"
+    >
 
-        <div id="archiveHeader">
+        <div class="archive-layout">
 
-            <div id="archiveTitle">
-                A.L.E.X // ARCHIVES
+            <div class="archive-list">
+
+                <div class="archive-title">
+                    A.L.E.X // ARCHIVE
+                </div>
+
+                <div class="archive-subtitle">
+                    SPIDER-MAN SUIT DATABASE
+                </div>
+
+                <div id="suitList"></div>
+
             </div>
 
-            <button id="closeArchive">
-                CLOSE
-            </button>
+
+            <div class="archive-preview">
+
+                <div class="preview-title">
+                    SELECTED SUIT
+                </div>
+
+                <img
+                    id="selectedImage"
+                    alt="Selected suit"
+                >
+
+                <div
+                    id="selectedName"
+                    class="preview-name"
+                >
+                </div>
+
+                <div
+                    id="selectedDescription"
+                    class="preview-description"
+                >
+                </div>
+
+                <div class="archive-controls">
+
+                    <button
+                        class="alex-button"
+                        onclick="previousSuit()"
+                    >
+                        &lt; PREVIOUS
+                    </button>
+
+                    <button
+                        class="alex-button"
+                        onclick="showSelectedSuit()"
+                    >
+                        OPEN
+                    </button>
+
+                    <button
+                        class="alex-button"
+                        onclick="nextSuit()"
+                    >
+                        NEXT &gt;
+                    </button>
+
+                    <button
+                        class="alex-button"
+                        onclick="document.getElementById('suitFile').click()"
+                    >
+                        ADD SUIT
+                    </button>
+
+                    <button
+                        class="alex-button"
+                        onclick="closeArchive()"
+                    >
+                        HOME
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div id="archiveList">
+        <input
+            id="suitFile"
+            type="file"
+            accept="image/*"
+            multiple
+        >
 
-            <div class="archiveCard">
+    </section>
 
-                <div class="archiveName">
-                    SPIDER-MAN
-                </div>
 
-                <div class="archiveInfo">
-                    Suit archive module
-                </div>
+    <!-- =====================================================
+         PORTRAIT SUIT VIEW
+         ===================================================== -->
 
-            </div>
+    <section
+        id="suitScreen"
+        class="screen"
+    >
 
-            <div class="archiveCard">
+        <div class="suit-view">
 
-                <div class="archiveName">
-                    IRON SPIDER
-                </div>
+            <div class="suit-header">
 
-                <div class="archiveInfo">
-                    Advanced suit archive
-                </div>
-
-            </div>
-
-            <div class="archiveCard">
-
-                <div class="archiveName">
-                    INTEGRATED SUIT
-                </div>
-
-                <div class="archiveInfo">
-                    Integrated technology archive
+                <div class="logo">
+                    A.L.E.X // SUIT
                 </div>
 
             </div>
 
-            <div class="archiveCard">
+            <div class="suit-image-area">
 
-                <div class="archiveName">
-                    STEALTH SUIT
+                <img
+                    id="suitLargeImage"
+                    alt="Suit"
+                >
+
+            </div>
+
+            <div class="suit-details">
+
+                <div
+                    id="suitLargeName"
+                >
                 </div>
 
-                <div class="archiveInfo">
-                    Stealth configuration archive
+                <div
+                    id="suitLargeDescription"
+                >
                 </div>
 
             </div>
+
+        </div>
+
+        <div class="suit-bottom">
+
+            <button
+                class="alex-button"
+                onclick="previousSuitFromView()"
+            >
+                &lt;
+            </button>
+
+            <button
+                class="alex-button"
+                onclick="openArchive()"
+            >
+                ARCHIVE
+            </button>
+
+            <button
+                class="alex-button"
+                onclick="closeSuitView()"
+            >
+                HOME
+            </button>
+
+            <button
+                class="alex-button"
+                onclick="nextSuitFromView()"
+            >
+                &gt;
+            </button>
 
         </div>
 
@@ -771,305 +849,211 @@
 
 </div>
 
+<div id="toast"></div>
+
 
 <script>
 
 /* =========================================================
-   A.L.E.X CONFIGURATION
+   A.L.E.X
    ========================================================= */
 
-const CONFIG = {
+const home =
+    document.getElementById("home");
 
-    /*
-       If Ollama is running on the SAME computer:
+const archiveScreen =
+    document.getElementById("archiveScreen");
 
-       http://127.0.0.1:11434/api/chat
-
-       If the webpage is on your phone and Ollama is
-       running on your PC, replace this with your PC's
-       LAN address, for example:
-
-       http://192.168.1.100:11434/api/chat
-    */
-
-    OLLAMA_URL:
-        "http://127.0.0.1:11434/api/chat",
-
-    MODEL:
-        "qwen3:14b"
-
-};
-
-
-/* =========================================================
-   ELEMENTS
-   ========================================================= */
-
-const input =
-    document.getElementById("input");
-
-const send =
-    document.getElementById("send");
-
-const speak =
-    document.getElementById("speak");
-
-const clearButton =
-    document.getElementById("clear");
+const suitScreen =
+    document.getElementById("suitScreen");
 
 const chat =
     document.getElementById("chat");
 
-const statusText =
-    document.getElementById("statusText");
+const input =
+    document.getElementById("textInput");
 
-const statusDetail =
-    document.getElementById("statusDetail");
+const status =
+    document.getElementById("status");
 
-const archiveButton =
-    document.getElementById("archiveButton");
+const micButton =
+    document.getElementById("micButton");
 
-const archives =
-    document.getElementById("archives");
+const wave =
+    document.getElementById("wave");
 
-const closeArchive =
-    document.getElementById("closeArchive");
+const ctx =
+    wave.getContext("2d");
+
+
+/* =========================================================
+   SUIT DATABASE
+   ========================================================= */
+
+let suits = [
+
+    {
+        name: "CLASSIC RED & BLUE",
+        era: "CLASSIC",
+        image:
+            "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=800&q=80",
+        description:
+            "Classic red and blue Spider-Man-inspired suit concept."
+    },
+
+    {
+        name: "BLACK SUIT",
+        era: "BLACK SUIT",
+        image:
+            "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+        description:
+            "Dark Spider-Man-inspired suit concept with a stealth-oriented appearance."
+    },
+
+    {
+        name: "IRON SPIDER",
+        era: "ADVANCED",
+        image:
+            "https://images.unsplash.com/photo-1594736797933-d0e501ba2fe6?auto=format&fit=crop&w=800&q=80",
+        description:
+            "Advanced metallic Spider-Man-inspired suit concept."
+    }
+
+];
+
+let selectedIndex = 0;
+
+
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
+
+try {
+
+    const saved =
+        localStorage.getItem("alex_suits");
+
+    if (saved) {
+
+        const parsed =
+            JSON.parse(saved);
+
+        if (
+            Array.isArray(parsed) &&
+            parsed.length
+        ) {
+
+            suits = parsed;
+
+        }
+
+    }
+
+} catch (error) {
+
+    console.log(
+        "Could not load saved archive.",
+        error
+    );
+
+}
+
+
+function saveSuits() {
+
+    try {
+
+        localStorage.setItem(
+            "alex_suits",
+            JSON.stringify(suits)
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Could not save archive.",
+            error
+        );
+
+    }
+
+}
 
 
 /* =========================================================
    CHAT
    ========================================================= */
 
-function addMessage(
+function addChat(
     speaker,
     text
 ) {
 
-    const message =
+    const line =
         document.createElement("div");
 
-    message.className =
-        "message " +
+    line.className =
+        "chat-line " +
         (
             speaker === "USER"
-                ? "message-user"
-                : "message-alex"
+                ? "user"
+                : "alex"
         );
 
-    const label =
-        document.createElement("span");
+    const now =
+        new Date().toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        );
 
-    label.className =
-        "message-label";
+    line.innerHTML =
+        `<b>${speaker} // ${now}</b><br>` +
+        escapeHTML(text);
 
-    label.textContent =
-        speaker === "USER"
-            ? "USER"
-            : "A.L.E.X";
-
-    message.appendChild(label);
-
-    message.appendChild(
-        document.createTextNode(text)
-    );
-
-    chat.appendChild(message);
+    chat.appendChild(line);
 
     chat.scrollTop =
         chat.scrollHeight;
-}
-
-
-/* =========================================================
-   STATUS
-   ========================================================= */
-
-function setStatus(
-    status,
-    detail
-) {
-
-    statusText.textContent =
-        status;
-
-    statusDetail.textContent =
-        detail || "";
-}
-
-
-/* =========================================================
-   OLLAMA
-   ========================================================= */
-
-async function askAlex(
-    text
-) {
-
-    setStatus(
-        "THINKING",
-        "PROCESSING REQUEST"
-    );
-
-    try {
-
-        const response =
-            await fetch(
-                CONFIG.OLLAMA_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        model:
-                            CONFIG.MODEL,
-
-                        messages: [
-
-                            {
-                                role: "system",
-
-                                content:
-                                    "You are A.L.E.X, a highly capable personal AI assistant. Be intelligent, natural, concise and helpful. Do not use emojis."
-                            },
-
-                            {
-                                role: "user",
-
-                                content:
-                                    text
-                            }
-
-                        ],
-
-                        stream: false,
-
-                        think: false,
-
-                        keep_alive:
-                            "10m",
-
-                        options: {
-
-                            temperature:
-                                0.7,
-
-                            num_ctx:
-                                4096
-
-                        }
-
-                    })
-                }
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Ollama returned HTTP " +
-                response.status
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        const answer =
-            data.message &&
-            data.message.content
-                ? data.message.content.trim()
-                : "";
-
-        if (!answer) {
-
-            throw new Error(
-                "A.L.E.X returned no response."
-            );
-
-        }
-
-        addMessage(
-            "ALEX",
-            answer
-        );
-
-        setStatus(
-            "STANDBY",
-            "SYSTEM ONLINE"
-        );
-
-        speakText(
-            answer
-        );
-
-    }
-    catch (error) {
-
-        console.error(error);
-
-        addMessage(
-            "ALEX",
-            "Ollama connection error:\n" +
-            error.message
-        );
-
-        setStatus(
-            "ERROR",
-            "CHECK OLLAMA CONNECTION"
-        );
-
-    }
 
 }
 
 
 /* =========================================================
-   SEND
+   TEXT COMMANDS
    ========================================================= */
 
-async function sendMessage() {
+function sendText() {
 
     const text =
         input.value.trim();
 
-    if (!text)
-        return;
+    if (!text) return;
 
     input.value = "";
 
-    addMessage(
+    addChat(
         "USER",
         text
     );
 
-    await askAlex(
-        text
-    );
+    processCommand(text);
 
 }
 
 
-/* =========================================================
-   ENTER
-   ========================================================= */
-
 input.addEventListener(
     "keydown",
-    event => {
+    function(event) {
 
         if (
             event.key === "Enter"
-            && !event.shiftKey
         ) {
 
-            event.preventDefault();
-
-            sendMessage();
+            sendText();
 
         }
 
@@ -1077,96 +1061,197 @@ input.addEventListener(
 );
 
 
-send.addEventListener(
-    "click",
-    sendMessage
-);
-
-
 /* =========================================================
-   CLEAR
+   COMMAND ENGINE
    ========================================================= */
 
-clearButton.addEventListener(
-    "click",
-    () => {
-
-        chat.innerHTML = "";
-
-        addMessage(
-            "ALEX",
-            "Conversation cleared."
-        );
-
-    }
-);
-
-
-/* =========================================================
-   SPEECH
-   ========================================================= */
-
-function speakText(
+function processCommand(
     text
 ) {
 
+    const low =
+        text.toLowerCase();
+
+
     if (
-        !("speechSynthesis" in window)
-    )
+        low.includes("archive") ||
+        low.includes("archives") ||
+        low.includes("suits")
+    ) {
+
+        openArchive();
+
+        alex(
+            "Opening the Spider-Man archive."
+        );
+
         return;
-
-    window.speechSynthesis.cancel();
-
-    const utterance =
-        new SpeechSynthesisUtterance(
-            text
-        );
-
-    utterance.rate =
-        0.95;
-
-    utterance.pitch =
-        1.0;
-
-    utterance.volume =
-        1.0;
-
-    const voices =
-        speechSynthesis.getVoices();
-
-    const englishVoice =
-        voices.find(
-            voice =>
-                voice.lang &&
-                voice.lang
-                    .toLowerCase()
-                    .startsWith("en")
-        );
-
-    if (englishVoice) {
-
-        utterance.voice =
-            englishVoice;
 
     }
 
-    setStatus(
-        "SPEAKING",
-        "AUDIO OUTPUT ACTIVE"
+
+    if (
+        low.includes("add suit")
+    ) {
+
+        document
+            .getElementById("suitFile")
+            .click();
+
+        return;
+
+    }
+
+
+    if (
+        low.includes("next suit")
+    ) {
+
+        nextSuit();
+
+        return;
+
+    }
+
+
+    if (
+        low.includes("previous suit")
+    ) {
+
+        previousSuit();
+
+        return;
+
+    }
+
+
+    if (
+        low.includes("close archive") ||
+        low.includes("go home")
+    ) {
+
+        closeArchive();
+
+        alex(
+            "Returning home."
+        );
+
+        return;
+
+    }
+
+
+    for (
+        let i = 0;
+        i < suits.length;
+        i++
+    ) {
+
+        const name =
+            suits[i].name.toLowerCase();
+
+        if (
+            low.includes(name)
+        ) {
+
+            selectedIndex = i;
+
+            showSelectedSuit();
+
+            return;
+
+        }
+
+    }
+
+
+    if (
+        low.includes("hello") ||
+        low.includes("hey") ||
+        low.includes("hi alex")
+    ) {
+
+        alex(
+            "Good to hear from you. Systems are standing by."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        low.includes("who are you")
+    ) {
+
+        alex(
+            "I am A.L.E.X. Your personal browser-based assistant interface."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        low.includes("status")
+    ) {
+
+        alex(
+            "A.L.E.X is online. Archive, voice input and interface systems are ready."
+        );
+
+        return;
+
+    }
+
+
+    alex(
+        "I heard you. I can control the archive, open suits, navigate suits and respond to basic commands. This version does not require an external AI API."
     );
 
-    utterance.onend =
-        () => {
+}
 
-            setStatus(
-                "STANDBY",
-                "SYSTEM ONLINE"
-            );
 
-        };
+/* =========================================================
+   ALEX RESPONSE
+   ========================================================= */
 
-    speechSynthesis.speak(
-        utterance
+let lastSpeech = "";
+
+function alex(
+    text
+) {
+
+    lastSpeech = text;
+
+    addChat(
+        "ALEX",
+        text
+    );
+
+    setStatus(
+        "RESPONDING"
+    );
+
+    setTimeout(
+        () => setStatus("STANDBY"),
+        900
+    );
+
+}
+
+
+function setStatus(
+    text
+) {
+
+    status.textContent =
+        text;
+
+    status.classList.toggle(
+        "active",
+        text !== "STANDBY"
     );
 
 }
@@ -1176,109 +1261,549 @@ function speakText(
    SPEAK BUTTON
    ========================================================= */
 
-speak.addEventListener(
-    "click",
-    () => {
+function speakLast() {
 
-        if (
-            speechSynthesis.speaking
-        ) {
+    if (!lastSpeech) {
 
-            speechSynthesis.cancel();
-
-            setStatus(
-                "STANDBY",
-                "SYSTEM ONLINE"
-            );
-
-            return;
-
-        }
-
-        speakText(
-            "A.L.E.X voice system online."
+        alex(
+            "There is nothing in my speech queue yet."
         );
 
+        return;
+
     }
-);
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        alex(
+            "Browser speech synthesis is not available."
+        );
+
+        return;
+
+    }
+
+    speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            lastSpeech
+        );
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
 
 
 /* =========================================================
-   ARCHIVES
+   MICROPHONE
    ========================================================= */
 
-archiveButton.addEventListener(
-    "click",
-    () => {
+let recognition = null;
+let listening = false;
 
-        archives.style.display =
-            "flex";
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.lang = "en-GB";
+
+    recognition.onstart =
+        function() {
+
+            listening = true;
+
+            micButton.textContent =
+                "MIC ON";
+
+            micButton.classList.add(
+                "listening"
+            );
+
+            setStatus(
+                "LISTENING"
+            );
+
+        };
+
+
+    recognition.onresult =
+        function(event) {
+
+            const text =
+                event.results[0][0].transcript;
+
+            input.value = text;
+
+            addChat(
+                "USER",
+                text
+            );
+
+            processCommand(text);
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            console.log(
+                "Speech recognition error:",
+                event.error
+            );
+
+            if (
+                event.error ===
+                "not-allowed"
+            ) {
+
+                alex(
+                    "Microphone permission was denied. Allow microphone access in your browser settings and try again."
+                );
+
+            }
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            listening = false;
+
+            micButton.textContent =
+                "MIC OFF";
+
+            micButton.classList.remove(
+                "listening"
+            );
+
+            setStatus(
+                "STANDBY"
+            );
+
+        };
+
+}
+
+
+function toggleMic() {
+
+    if (!recognition) {
+
+        alex(
+            "Your browser does not support built-in speech recognition. Try Microsoft Edge or Google Chrome."
+        );
+
+        return;
 
     }
-);
 
 
-closeArchive.addEventListener(
-    "click",
-    () => {
+    if (listening) {
 
-        archives.style.display =
-            "none";
+        recognition.stop();
+
+        return;
 
     }
-);
+
+
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   ARCHIVE
+   ========================================================= */
+
+function openArchive() {
+
+    home.style.display =
+        "none";
+
+    suitScreen.classList.remove(
+        "active"
+    );
+
+    archiveScreen.classList.add(
+        "active"
+    );
+
+    renderArchive();
+
+}
+
+
+function closeArchive() {
+
+    archiveScreen.classList.remove(
+        "active"
+    );
+
+    suitScreen.classList.remove(
+        "active"
+    );
+
+    home.style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   RENDER ARCHIVE
+   ========================================================= */
+
+function renderArchive() {
+
+    const list =
+        document.getElementById(
+            "suitList"
+        );
+
+    list.innerHTML = "";
+
+    suits.forEach(
+        (suit, index) => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "suit-card" +
+                (
+                    index === selectedIndex
+                        ? " selected"
+                        : ""
+                );
+
+            card.onclick =
+                function() {
+
+                    selectedIndex =
+                        index;
+
+                    renderArchive();
+
+                };
+
+
+            card.innerHTML =
+
+                `<img
+                    class="suit-thumb"
+                    src="${escapeAttribute(suit.image)}"
+                    alt=""
+                >
+
+                <div class="suit-info">
+
+                    <div class="suit-name">
+                        ${escapeHTML(suit.name)}
+                    </div>
+
+                    <div class="suit-era">
+                        ${escapeHTML(suit.era)}
+                    </div>
+
+                </div>`;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    if (suits.length) {
+
+        const suit =
+            suits[selectedIndex];
+
+        document
+            .getElementById(
+                "selectedImage"
+            )
+            .src =
+            suit.image;
+
+        document
+            .getElementById(
+                "selectedName"
+            )
+            .textContent =
+            suit.name;
+
+        document
+            .getElementById(
+                "selectedDescription"
+            )
+            .textContent =
+            suit.description;
+
+    }
+
+}
+
+
+/* =========================================================
+   SUIT NAVIGATION
+   ========================================================= */
+
+function nextSuit() {
+
+    if (!suits.length)
+        return;
+
+    selectedIndex =
+        (
+            selectedIndex + 1
+        ) % suits.length;
+
+    renderArchive();
+
+}
+
+
+function previousSuit() {
+
+    if (!suits.length)
+        return;
+
+    selectedIndex =
+        (
+            selectedIndex - 1 +
+            suits.length
+        ) % suits.length;
+
+    renderArchive();
+
+}
+
+
+/* =========================================================
+   OPEN SELECTED SUIT
+   ========================================================= */
+
+function showSelectedSuit() {
+
+    if (!suits.length)
+        return;
+
+    const suit =
+        suits[selectedIndex];
+
+    document
+        .getElementById(
+            "suitLargeImage"
+        )
+        .src =
+        suit.image;
+
+    document
+        .getElementById(
+            "suitLargeName"
+        )
+        .textContent =
+        suit.name;
+
+    document
+        .getElementById(
+            "suitLargeDescription"
+        )
+        .textContent =
+        suit.description;
+
+    archiveScreen.classList.remove(
+        "active"
+    );
+
+    suitScreen.classList.add(
+        "active"
+    );
+
+}
+
+
+function closeSuitView() {
+
+    suitScreen.classList.remove(
+        "active"
+    );
+
+    home.style.display =
+        "flex";
+
+}
+
+
+function previousSuitFromView() {
+
+    previousSuit();
+
+    showSelectedSuit();
+
+}
+
+
+function nextSuitFromView() {
+
+    nextSuit();
+
+    showSelectedSuit();
+
+}
+
+
+/* =========================================================
+   ADD SUITS
+   ========================================================= */
+
+document
+    .getElementById("suitFile")
+    .addEventListener(
+        "change",
+        function(event) {
+
+            const files =
+                Array.from(
+                    event.target.files
+                );
+
+            if (!files.length)
+                return;
+
+            files.forEach(
+                file => {
+
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        function(e) {
+
+                            const name =
+                                file.name
+                                    .replace(
+                                        /\.[^/.]+$/,
+                                        ""
+                                    )
+                                    .replace(
+                                        /[_-]/g,
+                                        " "
+                                    )
+                                    .toUpperCase();
+
+                            suits.push({
+
+                                name:
+                                    name ||
+                                    "CUSTOM SUIT",
+
+                                era:
+                                    "CUSTOM",
+
+                                image:
+                                    e.target.result,
+
+                                description:
+                                    "Custom suit image added to the A.L.E.X archive."
+
+                            });
+
+                            selectedIndex =
+                                suits.length - 1;
+
+                            saveSuits();
+
+                            renderArchive();
+
+                            toast(
+                                "SUIT ADDED TO ARCHIVE"
+                            );
+
+                        };
+
+                    reader.readAsDataURL(
+                        file
+                    );
+
+                }
+            );
+
+            event.target.value = "";
+
+        }
+    );
 
 
 /* =========================================================
    WAVEFORM
    ========================================================= */
 
-const canvas =
-    document.getElementById(
-        "waveCanvas"
-    );
-
-const ctx =
-    canvas.getContext("2d");
-
-let phase = 0;
-
-function resizeCanvas() {
+function resizeWave() {
 
     const rect =
-        canvas.getBoundingClientRect();
+        wave.getBoundingClientRect();
 
-    const dpr =
-        window.devicePixelRatio || 1;
+    wave.width =
+        rect.width *
+        window.devicePixelRatio;
 
-    canvas.width =
-        rect.width * dpr;
+    wave.height =
+        rect.height *
+        window.devicePixelRatio;
 
-    canvas.height =
-        rect.height * dpr;
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
+    ctx.scale(
+        window.devicePixelRatio,
+        window.devicePixelRatio
     );
 
 }
 
 
+let waveTime = 0;
+
+
 function drawWave() {
 
-    const rect =
-        canvas.getBoundingClientRect();
-
     const width =
-        rect.width;
+        wave.clientWidth;
 
     const height =
-        rect.height;
+        wave.clientHeight;
 
     ctx.clearRect(
         0,
@@ -1287,16 +1812,18 @@ function drawWave() {
         height
     );
 
-    phase += 0.045;
+
+    waveTime +=
+        listening
+            ? 0.09
+            : 0.045;
+
+
+    const bars = 65;
 
     const center =
         height / 2;
 
-    const bars =
-        55;
-
-    const gap =
-        width / bars;
 
     for (
         let i = 0;
@@ -1305,40 +1832,62 @@ function drawWave() {
     ) {
 
         const x =
-            i * gap;
+            (
+                i /
+                (bars - 1)
+            ) * width;
+
 
         const distance =
             Math.abs(
-                i - bars / 2
-            ) / (bars / 2);
+                i -
+                (bars - 1) / 2
+            );
+
 
         const envelope =
-            1 - distance * .75;
-
-        const wave =
-            Math.abs(
-                Math.sin(
-                    i * .31 +
-                    phase
-                )
+            Math.max(
+                0,
+                1 -
+                distance /
+                (bars * .58)
             );
 
-        const secondary =
-            Math.abs(
-                Math.sin(
-                    i * .13 -
-                    phase * 1.4
-                )
+
+        const wave1 =
+            Math.sin(
+                i * .28 +
+                waveTime
             );
 
-        const amount =
+
+        const wave2 =
+            Math.sin(
+                i * .11 -
+                waveTime * 1.7
+            );
+
+
+        const movement =
             (
-                wave * .65 +
-                secondary * .35
-            ) * envelope;
+                Math.abs(wave1) * .7 +
+                Math.abs(wave2) * .3
+            );
+
+
+        const listeningBoost =
+            listening
+                ? 1.8
+                : 1;
+
 
         const barHeight =
-            8 + amount * 58;
+            8 +
+            movement *
+            80 *
+            envelope *
+            listeningBoost;
+
 
         ctx.beginPath();
 
@@ -1352,22 +1901,24 @@ function drawWave() {
             center + barHeight
         );
 
+        ctx.strokeStyle =
+            i % 2
+                ? "#39ff14"
+                : "#19d9ff";
+
         ctx.lineWidth = 2;
 
-        ctx.strokeStyle =
-            i % 4 === 0
-                ? "#19d9ff"
-                : "#39ff14";
-
-        ctx.shadowBlur =
-            8;
+        ctx.shadowBlur = 8;
 
         ctx.shadowColor =
-            ctx.strokeStyle;
+            i % 2
+                ? "#39ff14"
+                : "#19d9ff";
 
         ctx.stroke();
 
     }
+
 
     ctx.shadowBlur = 0;
 
@@ -1380,20 +1931,105 @@ function drawWave() {
 
 window.addEventListener(
     "resize",
-    resizeCanvas
+    resizeWave
 );
-
-resizeCanvas();
-drawWave();
 
 
 /* =========================================================
-   INITIALISE
+   TOAST
    ========================================================= */
 
-setStatus(
-    "STANDBY",
-    "SYSTEM ONLINE"
+let toastTimer = null;
+
+
+function toast(
+    text
+) {
+
+    const element =
+        document.getElementById(
+            "toast"
+        );
+
+    element.textContent =
+        text;
+
+    element.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        toastTimer
+    );
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                element.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(
+    text
+) {
+
+    return String(text)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(
+    text
+) {
+
+    return escapeHTML(text);
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+resizeWave();
+
+drawWave();
+
+addChat(
+    "ALEX",
+    "Systems online. A.L.E.X is standing by."
 );
 
 </script>
