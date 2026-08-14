@@ -2,1457 +2,409 @@
 <html lang="en">
 
 <head>
-
 <meta charset="utf-8">
 
 <meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<meta name="apple-mobile-web-app-capable"
-      content="yes">
-
-<meta name="mobile-web-app-capable"
-      content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent">
+content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <meta name="theme-color"
-      content="#05070a">
+content="#05070a">
 
-<title>Alex Mobile v0.6</title>
-
+<title>Alex Neural Core Test</title>
 
 <style>
 
-:root{
-  --bg:#05070a;
-  --cyan:#19d9ff;
-  --green:#9cff19;
-  --muted:#7f8b98;
-  --red:#ff5264;
-  --yellow:#ffd84d;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
+html,body{
   margin:0;
   width:100%;
   height:100%;
-  background:var(--bg);
+  background:#05070a;
   color:#f4f7fa;
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 body{
-  overflow:hidden;
+  padding:28px;
+  box-sizing:border-box;
 }
 
-.app{
-  height:100dvh;
-
-  display:flex;
-  flex-direction:column;
-
-  padding:
-    env(safe-area-inset-top)
-    18px
-    env(safe-area-inset-bottom);
-
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      rgba(25,217,255,.08),
-      transparent 30%
-    ),
-    #05070a;
+h1{
+  color:#9cff19;
+  letter-spacing:.12em;
+  font-size:22px;
 }
 
-
-/* =========================
-   HEADER
-========================= */
-
-header{
-  height:74px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.test{
+  margin:12px 0;
+  padding:16px;
+  border:1px solid #26313a;
+  border-radius:14px;
+  line-height:1.5;
 }
 
-.brand{
-  font-weight:700;
-  letter-spacing:.24em;
-  font-size:18px;
+.ok{
+  color:#9cff19;
 }
 
-.online{
-  font-size:10px;
-  letter-spacing:.16em;
-  color:var(--yellow);
-
-  transition:
-    color .3s ease;
+.bad{
+  color:#ff5264;
 }
 
-.online:before{
-  content:"";
-
-  display:inline-block;
-
-  width:7px;
-  height:7px;
-
-  border-radius:50%;
-
-  background:var(--yellow);
-
-  box-shadow:
-    0 0 12px var(--yellow);
-
-  margin-right:7px;
-
-  transition:
-    background .3s ease,
-    box-shadow .3s ease;
+.info{
+  color:#19d9ff;
 }
 
-.online.ready{
-  color:var(--green);
-}
-
-.online.ready:before{
-  background:var(--green);
-
-  box-shadow:
-    0 0 12px var(--green);
-}
-
-.online.error{
-  color:var(--red);
-}
-
-.online.error:before{
-  background:var(--red);
-
-  box-shadow:
-    0 0 12px var(--red);
-}
-
-
-/* =========================
-   MAIN
-========================= */
-
-main{
-  flex:1;
-
-  display:flex;
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  min-height:0;
-}
-
-.status{
-  font-size:11px;
-  letter-spacing:.22em;
-
-  color:var(--muted);
-
-  margin-bottom:26px;
-
-  text-align:center;
-}
-
-
-/* =========================
-   ORB
-========================= */
-
-.orb{
-  width:min(62vw,260px);
-
-  aspect-ratio:1;
-
-  border-radius:50%;
-
-  position:relative;
-
-  display:grid;
-  place-items:center;
-}
-
-.orb:before,
-.orb:after{
-  content:"";
-
-  position:absolute;
-  inset:0;
-
-  border-radius:50%;
-
-  border:
-    1px solid
-    rgba(25,217,255,.35);
-
-  box-shadow:
-    0 0 35px
-    rgba(25,217,255,.08),
-
-    inset 0 0 35px
-    rgba(156,255,25,.05);
-}
-
-.orb:after{
-  inset:13%;
-
-  border-color:
-    rgba(156,255,25,.35);
-
-  animation:
-    pulse
-    2.6s
-    ease-in-out
-    infinite;
-}
-
-
-/* =========================
-   WAVEFORM
-========================= */
-
-.wave{
-  width:72%;
-  height:72%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:4px;
-}
-
-.bar{
-  width:3px;
-
-  border-radius:4px;
-
-  height:22%;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan),
-      var(--green)
-    );
-
-  box-shadow:
-    0 0 10px
-    rgba(25,217,255,.5);
-
-  animation:
-    breathe
-    1.05s
-    ease-in-out
-    infinite
-    alternate;
-}
-
-.bar:nth-child(2){
-  animation-delay:.08s;
-}
-
-.bar:nth-child(3){
-  animation-delay:.16s;
-}
-
-.bar:nth-child(4){
-  animation-delay:.24s;
-}
-
-.bar:nth-child(5){
-  animation-delay:.32s;
-}
-
-.bar:nth-child(6){
-  animation-delay:.40s;
-}
-
-.bar:nth-child(7){
-  animation-delay:.48s;
-}
-
-.loading .bar{
-  animation-duration:1.3s;
-}
-
-.listening .bar{
-  animation-duration:.42s;
-}
-
-.thinking .bar{
-  animation-duration:.75s;
-}
-
-.speaking .bar{
-  animation-duration:.25s;
-}
-
-
-/* =========================
-   TEXT
-========================= */
-
-.prompt{
-  margin-top:34px;
-
-  text-align:center;
-
-  color:#d9e0e7;
-
-  font-size:17px;
-
-  max-width:340px;
-
-  line-height:1.45;
-
-  min-height:52px;
-
-  overflow:auto;
-
-  word-wrap:break-word;
-}
-
-.sub{
-  margin-top:8px;
-
-  color:#65717d;
-
+#log{
+  white-space:pre-wrap;
+  word-break:break-word;
   font-size:12px;
-
-  text-align:center;
-
-  max-width:340px;
-}
-
-
-/* =========================
-   CONTROLS
-========================= */
-
-.controls{
-  height:190px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:18px;
-}
-
-.mic{
-  width:76px;
-  height:76px;
-
-  border-radius:50%;
-
-  border:
-    1px solid
-    rgba(156,255,25,.5);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(25,217,255,.12),
-      rgba(156,255,25,.08)
-    );
-
-  color:white;
-
-  font-size:28px;
-
-  box-shadow:
-    0 0 30px
-    rgba(25,217,255,.12);
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-  transition:
-    transform .1s ease,
-    opacity .2s ease;
-}
-
-.mic:active{
-  transform:scale(.95);
-}
-
-.mic:disabled{
-  opacity:.3;
-}
-
-.hint{
-  font-size:10px;
-
-  letter-spacing:.2em;
-
-  color:#687580;
-}
-
-
-/* =========================
-   NAV
-========================= */
-
-nav{
-  height:72px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:space-around;
-
-  border-top:
-    1px solid
-    rgba(255,255,255,.06);
-}
-
-nav button{
-  background:none;
-
-  border:0;
-
-  color:#6d7882;
-
-  font:
-    11px
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
-  letter-spacing:.08em;
-
-  padding:10px;
-}
-
-nav button.active{
-  color:var(--green);
-}
-
-
-/* =========================
-   ANIMATIONS
-========================= */
-
-@keyframes breathe{
-
-  to{
-    height:65%;
-  }
-
-}
-
-@keyframes pulse{
-
-  50%{
-    transform:scale(1.06);
-    opacity:.55;
-  }
-
+  color:#9aa7b3;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
+<h1>ALEX NEURAL CORE TEST</h1>
 
-<div class="app">
+<div id="results">
 
+<div class="test info">
+Running diagnostics…
+</div>
 
-<header>
+</div>
 
-  <div class="brand">
-    ALEX
-  </div>
-
-  <div
-    id="online"
-    class="online"
-  >
-    AI LOADING
-  </div>
-
-</header>
-
-
-<main>
-
-
-  <div
-    id="status"
-    class="status"
-  >
-    STARTING
-  </div>
-
-
-  <div
-    id="orb"
-    class="orb loading"
-  >
-
-    <div class="wave">
-
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="prompt"
-    class="prompt"
-  >
-    Starting Alex's neural core…
-  </div>
-
-
-  <div
-    id="sub"
-    class="sub"
-  >
-    Local AI • No API key
-  </div>
-
-
-</main>
-
-
-<section class="controls">
-
-
-  <button
-    class="mic"
-    id="mic"
-    aria-label="Talk to Alex"
-    disabled
-  >
-    ◉
-  </button>
-
-
-  <div class="hint">
-    TAP TO SPEAK
-  </div>
-
-
-</section>
-
-
-<nav>
-
-  <button class="active">
-    CHAT
-  </button>
-
-  <button>
-    VOICE
-  </button>
-
-  <button>
-    NAVIGATE
-  </button>
-
-  <button>
-    MORE
-  </button>
-
-</nav>
-
-
+<div class="test">
+<div id="log"></div>
 </div>
 
 
 <script type="module">
 
+const results =
+document.getElementById("results");
 
-/* ============================================================
-   ALEX MOBILE v0.6
+const log =
+document.getElementById("log");
 
-   LOCAL AI
-   WebLLM
-   WebGPU
-   SmolLM2 360M
-   Speech recognition
-   Speech synthesis
 
-   NO API KEY
-============================================================ */
-
-
-/* ============================================================
-   WEBLLM
-============================================================ */
-
-import {
-  CreateMLCEngine
-} from
-  "https://esm.run/@mlc-ai/web-llm";
-
-
-/* ============================================================
-   MODEL
-============================================================ */
-
-/*
-   Small local model.
-
-   q4f32 version:
-   - about 580 MB VRAM
-   - does NOT require shader-f16
-   - 4096 token context
-*/
-
-const MODEL =
-  "SmolLM2-360M-Instruct-q4f32_1-MLC";
-
-
-/* ============================================================
-   ALEX PERSONALITY
-============================================================ */
-
-const ALEX_SYSTEM_PROMPT = `
-
-You are ALEX, a personal mobile AI assistant.
-
-You are intelligent, friendly, helpful and
-conversational.
-
-You are being used through a phone.
-
-Keep normal answers concise and natural.
-
-Your responses may be spoken aloud.
-
-Do not call yourself Gemini.
-
-Do not mention WebLLM, WebGPU, models,
-APIs or implementation details unless
-the user specifically asks.
-
-`;
-
-
-
-/* ============================================================
-   ELEMENTS
-============================================================ */
-
-const $ =
-  id =>
-    document.getElementById(id);
-
-
-const status =
-  $("status");
-
-const prompt =
-  $("prompt");
-
-const sub =
-  $("sub");
-
-const orb =
-  $("orb");
-
-const mic =
-  $("mic");
-
-const online =
-  $("online");
-
-
-
-/* ============================================================
-   VARIABLES
-============================================================ */
-
-let engine =
-  null;
-
-let recognition =
-  null;
-
-let listening =
-  false;
-
-let aiReady =
-  false;
-
-
-
-/* ============================================================
-   CONVERSATION
-============================================================ */
-
-const conversation = [
-
-  {
-    role:"system",
-
-    content:
-      ALEX_SYSTEM_PROMPT
-  }
-
-];
-
-
-
-/* ============================================================
-   STATE
-============================================================ */
-
-function setState(state){
-
-  orb.className =
-    "orb " + state;
-
-
-  if(state === "loading"){
-
-    status.textContent =
-      "LOADING AI";
-
-  }
-
-  else if(state === "listening"){
-
-    status.textContent =
-      "LISTENING";
-
-  }
-
-  else if(state === "thinking"){
-
-    status.textContent =
-      "THINKING";
-
-  }
-
-  else if(state === "speaking"){
-
-    status.textContent =
-      "SPEAKING";
-
-  }
-
-  else{
-
-    status.textContent =
-      "READY";
-
-  }
-
-}
-
-
-
-/* ============================================================
-   FORMAT ERROR
-============================================================ */
-
-function getErrorMessage(error){
-
-  if(!error){
-
-    return "Unknown error.";
-
-  }
-
-
-  if(
-    error.message
-  ){
-
-    return error.message;
-
-  }
-
-
-  return String(error);
-
-}
-
-
-
-/* ============================================================
-   LOAD LOCAL AI
-============================================================ */
-
-async function loadAI(){
-
-  try{
-
-
-    setState(
-      "loading"
-    );
-
-
-    online.textContent =
-      "AI LOADING";
-
-
-    online.className =
-      "online";
-
-
-    prompt.textContent =
-      "Starting local AI…";
-
-
-    sub.textContent =
-      "No API key required";
-
-
-    console.log(
-      "ALEX: starting WebLLM"
-    );
-
-
-    console.log(
-      "ALEX MODEL:",
-      MODEL
-    );
-
-
-    /* =========================
-       CREATE ENGINE
-    ========================= */
-
-    engine =
-
-      await CreateMLCEngine(
-
-        MODEL,
-
-        {
-
-          initProgressCallback:
-            progress => {
-
-              console.log(
-                "ALEX LOAD:",
-                progress
-              );
-
-
-              if(
-                progress &&
-                typeof progress.progress ===
-                "number"
-              ){
-
-                const percent =
-                  Math.round(
-                    progress.progress * 100
-                  );
-
-
-                online.textContent =
-                  percent + "%";
-
-
-                if(
-                  progress.text
-                ){
-
-                  prompt.textContent =
-                    progress.text;
-
-                }
-
-                else{
-
-                  prompt.textContent =
-                    "Loading Alex's neural core…";
-
-                }
-
-
-                sub.textContent =
-                  "Local AI • " +
-                  percent +
-                  "%";
-
-              }
-
-            }
-
-        }
-
-      );
-
-
-    /* =========================
-       SUCCESS
-    ========================= */
-
-    aiReady =
-      true;
-
-
-    mic.disabled =
-      false;
-
-
-    online.textContent =
-      "AI ONLINE";
-
-
-    online.className =
-      "online ready";
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "Alex is ready.";
-
-
-    sub.textContent =
-      "Local AI • No API • Voice enabled";
-
-
-    console.log(
-      "ALEX: AI READY"
-    );
-
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX LOAD ERROR:",
-      error
-    );
-
-
-    aiReady =
-      false;
-
-
-    mic.disabled =
-      true;
-
-
-    online.textContent =
-      "AI ERROR";
-
-
-    online.className =
-      "online error";
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "Alex couldn't load the local AI.";
-
-
-    sub.textContent =
-      getErrorMessage(
-        error
-      );
-
-
-  }
-
-}
-
-
-
-/* ============================================================
-   ASK ALEX
-============================================================ */
-
-async function askAlex(text){
-
-  if(
-    !aiReady ||
-    !engine
-  ){
-
-    return;
-
-  }
-
-
-  setState(
-    "thinking"
-  );
-
-
-  prompt.textContent =
-    "Thinking…";
-
-
-  conversation.push({
-
-    role:
-      "user",
-
-    content:
-      text
-
-  });
-
-
-  try{
-
-
-    const result =
-
-      await engine.chat.completions.create({
-
-        messages:
-          conversation,
-
-        temperature:
-          0.7,
-
-        max_tokens:
-          200
-
-      });
-
-
-    const answer =
-
-      result
-        ?.choices
-        ?.[0]
-        ?.message
-        ?.content
-        ?.trim();
-
-
-    if(!answer){
-
-      throw new Error(
-        "Alex returned an empty response."
-      );
-
-    }
-
-
-    conversation.push({
-
-      role:
-        "assistant",
-
-      content:
-        answer
-
-    });
-
-
-    prompt.textContent =
-      answer;
-
-
-    speak(
-      answer
-    );
-
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX CHAT ERROR:",
-      error
-    );
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "I couldn't process that.";
-
-    sub.textContent =
-      getErrorMessage(
-        error
-      );
-
-  }
-
-}
-
-
-
-/* ============================================================
-   TEXT TO SPEECH
-============================================================ */
-
-function speak(text){
-
-  if(
-    !("speechSynthesis" in window)
-  ){
-
-    setState(
-      "ready"
-    );
-
-    return;
-
-  }
-
-
-  speechSynthesis.cancel();
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-
-  utterance.lang =
-    "en-GB";
-
-
-  utterance.rate =
-    0.94;
-
-
-  utterance.pitch =
-    1.03;
-
-
-  const voices =
-    speechSynthesis.getVoices();
-
-
-  const voice =
-
-    voices.find(
-      v =>
-        v.lang === "en-GB" &&
-        /Samantha|
-         Karen|
-         Martha|
-         Google UK English Female/i
-         .test(v.name)
-    )
-
-    ||
-
-    voices.find(
-      v =>
-        v.lang === "en-GB"
-    );
-
-
-  if(voice){
-
-    utterance.voice =
-      voice;
-
-  }
-
-
-  utterance.onstart =
-    () => {
-
-      setState(
-        "speaking"
-      );
-
-    };
-
-
-  utterance.onend =
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    };
-
-
-  utterance.onerror =
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    };
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-}
-
-
-
-/* ============================================================
-   SPEECH RECOGNITION
-============================================================ */
-
-function setupRecognition(){
-
-  const SR =
-
-    window.SpeechRecognition ||
-
-    window.webkitSpeechRecognition;
-
-
-  if(!SR){
-
-    prompt.textContent =
-      "Speech recognition isn't available in this browser.";
-
-    return null;
-
-  }
-
-
-  const r =
-    new SR();
-
-
-  r.lang =
-    "en-GB";
-
-
-  r.interimResults =
-    false;
-
-
-  r.continuous =
-    false;
-
-
-  r.maxAlternatives =
-    1;
-
-
-  r.onstart =
-    () => {
-
-      listening =
-        true;
-
-
-      setState(
-        "listening"
-      );
-
-
-      prompt.textContent =
-        "I'm listening…";
-
-    };
-
-
-  r.onresult =
-    event => {
-
-
-      const text =
-
-        event
-          .results
-          [0]
-          [0]
-          .transcript
-          .trim();
-
-
-      listening =
-        false;
-
-
-      prompt.textContent =
-        "“" + text + "”";
-
-
-      askAlex(
-        text
-      );
-
-    };
-
-
-  r.onerror =
-    event => {
-
-      console.error(
-        "Speech recognition error:",
-        event
-      );
-
-
-      listening =
-        false;
-
-
-      setState(
-        "ready"
-      );
-
-
-      prompt.textContent =
-        "I couldn't hear that. Try again.";
-
-    };
-
-
-  r.onend =
-    () => {
-
-      listening =
-        false;
-
-    };
-
-
-  return r;
-
-}
-
-
-
-/* ============================================================
-   MICROPHONE
-============================================================ */
-
-mic.onclick =
-  () => {
-
-
-    if(!aiReady){
-
-      return;
-
-    }
-
-
-    if(listening){
-
-      recognition?.stop();
-
-      return;
-
-    }
-
-
-    recognition =
-      recognition ||
-      setupRecognition();
-
-
-    if(recognition){
-
-      try{
-
-        recognition.start();
-
-      }
-
-      catch(error){
-
-        console.log(
-          "Recognition start:",
-          error
-        );
-
-      }
-
-    }
-
-  };
-
-
-
-/* ============================================================
-   SPEECH VOICES
-============================================================ */
-
-if(
-  "speechSynthesis"
-  in window
+function add(
+  text,
+  type="info"
 ){
 
-  speechSynthesis.getVoices();
+  const div =
+  document.createElement("div");
 
+  div.className =
+  "test " + type;
 
-  speechSynthesis.onvoiceschanged =
-    () => {
+  div.textContent =
+  text;
 
-      speechSynthesis.getVoices();
-
-    };
+  results.appendChild(div);
 
 }
 
 
+function writeLog(text){
 
-/* ============================================================
-   START ALEX
-============================================================ */
+  log.textContent +=
+    text + "\n";
 
-loadAI();
+}
+
+
+async function run(){
+
+  try{
+
+    writeLog("1. JavaScript module system: OK");
+
+
+    /* =========================
+       WEBGPU
+    ========================= */
+
+    if(!navigator.gpu){
+
+      add(
+        "❌ WebGPU is unavailable.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+    add(
+      "✅ WebGPU API available.",
+      "ok"
+    );
+
+
+    const adapter =
+    await navigator.gpu.requestAdapter();
+
+
+    if(!adapter){
+
+      add(
+        "❌ Safari could not provide a GPU adapter.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+
+    add(
+      "✅ GPU adapter available.",
+      "ok"
+    );
+
+
+    writeLog(
+      "WebGPU adapter obtained."
+    );
+
+
+    /* =========================
+       GPU DEVICE
+    ========================= */
+
+    const device =
+    await adapter.requestDevice();
+
+
+    if(!device){
+
+      add(
+        "❌ Could not create GPU device.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+
+    add(
+      "✅ GPU device created.",
+      "ok"
+    );
+
+
+    writeLog(
+      "GPU device created successfully."
+    );
+
+
+    /* =========================
+       WEBLLM IMPORT
+    ========================= */
+
+    writeLog(
+      "2. Loading WebLLM JavaScript package…"
+    );
+
+
+    const webllm =
+    await import(
+      "https://esm.run/@mlc-ai/web-llm"
+    );
+
+
+    if(!webllm){
+
+      add(
+        "❌ WebLLM package failed to load.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+
+    add(
+      "✅ WebLLM package loaded.",
+      "ok"
+    );
+
+
+    writeLog(
+      "WebLLM module imported."
+    );
+
+
+    /* =========================
+       ENGINE FUNCTION
+    ========================= */
+
+    if(
+      typeof webllm.CreateMLCEngine
+      !== "function"
+    ){
+
+      add(
+        "❌ CreateMLCEngine was not found.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+
+    add(
+      "✅ CreateMLCEngine found.",
+      "ok"
+    );
+
+
+    /* =========================
+       MODEL REGISTRY
+    ========================= */
+
+    const config =
+    webllm.prebuiltAppConfig;
+
+
+    if(!config){
+
+      add(
+        "❌ WebLLM model registry unavailable.",
+        "bad"
+      );
+
+      return;
+
+    }
+
+
+    add(
+      "✅ WebLLM model registry available.",
+      "ok"
+    );
+
+
+    const models =
+    config.model_list || [];
+
+
+    writeLog(
+      "Registered models: "
+      + models.length
+    );
+
+
+    /* =========================
+       FIND SMALL MODEL
+    ========================= */
+
+    const smallModel =
+    models.find(
+      model =>
+        model.model_id &&
+        model.model_id
+          .toLowerCase()
+          .includes("smollm")
+    );
+
+
+    if(smallModel){
+
+      add(
+        "✅ Small local model is registered:\n"
+        + smallModel.model_id,
+        "ok"
+      );
+
+
+      writeLog(
+        "Model library: "
+        + smallModel.model_lib
+      );
+
+
+      writeLog(
+        "VRAM requirement: "
+        + (
+          smallModel.vram_required_MB
+          || "unknown"
+        )
+        + " MB"
+      );
+
+    }
+
+    else{
+
+      add(
+        "⚠️ WebLLM loaded, but the expected small model isn't in this version's registry.",
+        "info"
+      );
+
+    }
+
+
+    /* =========================
+       FINAL
+    ========================= */
+
+    add(
+      "🚀 WebLLM itself is working. No model was downloaded.",
+      "ok"
+    );
+
+
+    writeLog(
+      "DIAGNOSTIC COMPLETE."
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    add(
+      "❌ DIAGNOSTIC FAILED",
+      "bad"
+    );
+
+
+    add(
+      error?.message ||
+      String(error),
+      "bad"
+    );
+
+
+    writeLog(
+      "\nFULL ERROR:\n" +
+      (
+        error?.stack ||
+        String(error)
+      )
+    );
+
+  }
+
+}
+
+
+run();
 
 </script>
-
 
 </body>
 
