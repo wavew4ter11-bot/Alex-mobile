@@ -1,225 +1,1344 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alex WebGPU Test</title>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="apple-mobile-web-app-capable"
+      content="yes">
+
+<meta name="mobile-web-app-capable"
+      content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
+
+<meta name="theme-color"
+      content="#05070a">
+
+<title>Alex Mobile v0.5</title>
+
 
 <style>
+
+:root{
+  --bg:#05070a;
+  --cyan:#19d9ff;
+  --green:#9cff19;
+  --muted:#7f8b98;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
 body{
-  background:#05070a;
+  margin:0;
+  width:100%;
+  height:100%;
+  background:var(--bg);
   color:#f4f7fa;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  padding:30px;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    sans-serif;
 }
 
-h1{
-  color:#9cff19;
+body{
+  overflow:hidden;
 }
 
-.test{
-  padding:15px;
-  margin:12px 0;
-  border:1px solid #26313a;
-  border-radius:12px;
+.app{
+  height:100dvh;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:
+    env(safe-area-inset-top)
+    18px
+    env(safe-area-inset-bottom);
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(25,217,255,.08),
+      transparent 30%
+    ),
+    #05070a;
 }
 
-.ok{
-  color:#9cff19;
+
+/* HEADER */
+
+header{
+  height:74px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-.bad{
+.brand{
+  font-weight:700;
+  letter-spacing:.24em;
+  font-size:18px;
+}
+
+.online{
+  font-size:10px;
+  letter-spacing:.16em;
+  color:#ffd84d;
+}
+
+.online:before{
+  content:"";
+
+  display:inline-block;
+
+  width:7px;
+  height:7px;
+
+  border-radius:50%;
+
+  background:#ffd84d;
+
+  box-shadow:
+    0 0 12px #ffd84d;
+
+  margin-right:7px;
+}
+
+.online.ready{
+  color:var(--green);
+}
+
+.online.ready:before{
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.online.error{
   color:#ff5264;
 }
 
-.info{
-  color:#19d9ff;
+.online.error:before{
+  background:#ff5264;
+  box-shadow:0 0 12px #ff5264;
 }
+
+
+/* MAIN */
+
+main{
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  min-height:0;
+}
+
+.status{
+  font-size:11px;
+  letter-spacing:.22em;
+
+  color:var(--muted);
+
+  margin-bottom:26px;
+
+  text-align:center;
+}
+
+
+/* ORB */
+
+.orb{
+  width:min(62vw,260px);
+
+  aspect-ratio:1;
+
+  border-radius:50%;
+
+  position:relative;
+
+  display:grid;
+  place-items:center;
+}
+
+.orb:before,
+.orb:after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  border-radius:50%;
+
+  border:1px solid
+    rgba(25,217,255,.35);
+
+  box-shadow:
+    0 0 35px rgba(25,217,255,.08),
+    inset 0 0 35px rgba(156,255,25,.05);
+}
+
+.orb:after{
+  inset:13%;
+
+  border-color:
+    rgba(156,255,25,.35);
+
+  animation:
+    pulse 2.6s ease-in-out infinite;
+}
+
+
+/* WAVE */
+
+.wave{
+  width:72%;
+  height:72%;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:4px;
+}
+
+.bar{
+  width:3px;
+
+  border-radius:4px;
+
+  height:22%;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan),
+      var(--green)
+    );
+
+  box-shadow:
+    0 0 10px
+    rgba(25,217,255,.5);
+
+  animation:
+    breathe 1.05s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+.bar:nth-child(2){
+  animation-delay:.08s;
+}
+
+.bar:nth-child(3){
+  animation-delay:.16s;
+}
+
+.bar:nth-child(4){
+  animation-delay:.24s;
+}
+
+.bar:nth-child(5){
+  animation-delay:.32s;
+}
+
+.bar:nth-child(6){
+  animation-delay:.40s;
+}
+
+.bar:nth-child(7){
+  animation-delay:.48s;
+}
+
+.listening .bar{
+  animation-duration:.42s;
+}
+
+.thinking .bar{
+  animation-duration:.75s;
+}
+
+.speaking .bar{
+  animation-duration:.25s;
+}
+
+.loading .bar{
+  animation-duration:1.3s;
+}
+
+
+/* TEXT */
+
+.prompt{
+  margin-top:34px;
+
+  text-align:center;
+
+  color:#d9e0e7;
+
+  font-size:17px;
+
+  max-width:330px;
+
+  line-height:1.45;
+
+  min-height:52px;
+
+  overflow:auto;
+}
+
+.sub{
+  margin-top:8px;
+
+  color:#65717d;
+
+  font-size:12px;
+
+  text-align:center;
+
+  max-width:340px;
+}
+
+
+/* CONTROLS */
+
+.controls{
+  height:190px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:18px;
+}
+
+.mic{
+  width:76px;
+  height:76px;
+
+  border-radius:50%;
+
+  border:1px solid
+    rgba(156,255,25,.5);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25,217,255,.12),
+      rgba(156,255,25,.08)
+    );
+
+  color:white;
+
+  font-size:28px;
+
+  box-shadow:
+    0 0 30px
+    rgba(25,217,255,.12);
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+.mic:active{
+  transform:scale(.95);
+}
+
+.mic:disabled{
+  opacity:.3;
+}
+
+.hint{
+  font-size:10px;
+
+  letter-spacing:.2em;
+
+  color:#687580;
+}
+
+
+/* NAV */
+
+nav{
+  height:72px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-around;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.06);
+}
+
+nav button{
+  background:none;
+
+  border:0;
+
+  color:#6d7882;
+
+  font:
+    11px
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  letter-spacing:.08em;
+
+  padding:10px;
+}
+
+nav button.active{
+  color:var(--green);
+}
+
+
+/* ANIMATIONS */
+
+@keyframes breathe{
+
+  to{
+    height:65%;
+  }
+
+}
+
+@keyframes pulse{
+
+  50%{
+    transform:scale(1.06);
+    opacity:.55;
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<h1>ALEX GPU TEST</h1>
 
-<div id="results">
-Running tests…
+<div class="app">
+
+
+<header>
+
+  <div class="brand">
+    ALEX
+  </div>
+
+  <div
+    id="online"
+    class="online"
+  >
+    AI LOADING
+  </div>
+
+</header>
+
+
+<main>
+
+
+  <div
+    id="status"
+    class="status"
+  >
+    INITIALISING
+  </div>
+
+
+  <div
+    id="orb"
+    class="orb loading"
+  >
+
+    <div class="wave">
+
+      <i class="bar"></i>
+      <i class="bar"></i>
+      <i class="bar"></i>
+      <i class="bar"></i>
+      <i class="bar"></i>
+      <i class="bar"></i>
+      <i class="bar"></i>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="prompt"
+    class="prompt"
+  >
+    Checking your device…
+  </div>
+
+
+  <div
+    id="sub"
+    class="sub"
+  >
+    Local AI • No API key
+  </div>
+
+
+</main>
+
+
+<section class="controls">
+
+
+  <button
+    class="mic"
+    id="mic"
+    aria-label="Talk to Alex"
+    disabled
+  >
+    ◉
+  </button>
+
+
+  <div class="hint">
+    TAP TO SPEAK
+  </div>
+
+
+</section>
+
+
+<nav>
+
+  <button class="active">
+    CHAT
+  </button>
+
+  <button>
+    VOICE
+  </button>
+
+  <button>
+    NAVIGATE
+  </button>
+
+  <button>
+    MORE
+  </button>
+
+</nav>
+
+
 </div>
 
-<script>
 
-async function test(){
-
-  const results =
-    document.getElementById("results");
-
-  let html = "";
+<script type="module">
 
 
-  /* WebGPU */
+/* ============================================================
+   ALEX MOBILE v0.5
+
+   LOCAL AI
+
+   WebLLM
+   WebGPU
+   Small model
+   Speech recognition
+   Speech synthesis
+============================================================ */
+
+
+import * as webllm
+from "https://esm.run/@mlc-ai/web-llm";
+
+
+/* ============================================================
+   MODEL
+
+   Smaller model for first test.
+============================================================ */
+
+const MODEL =
+  "SmolLM2-360M-Instruct-q4f16_1-MLC";
+
+
+/* ============================================================
+   ALEX PERSONALITY
+============================================================ */
+
+const ALEX_SYSTEM_PROMPT = `
+
+You are ALEX.
+
+You are a personal mobile AI assistant.
+
+Be intelligent, friendly, useful and
+conversational.
+
+Your responses are normally spoken aloud,
+so keep them natural and reasonably concise.
+
+Do not call yourself Gemini.
+
+Do not mention implementation details
+unless specifically asked.
+
+`;
+
+
+/* ============================================================
+   ELEMENTS
+============================================================ */
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+const status =
+  $("status");
+
+const prompt =
+  $("prompt");
+
+const sub =
+  $("sub");
+
+const orb =
+  $("orb");
+
+const mic =
+  $("mic");
+
+const online =
+  $("online");
+
+
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let engine =
+  null;
+
+let recognition =
+  null;
+
+let listening =
+  false;
+
+let aiReady =
+  false;
+
+
+/* ============================================================
+   MEMORY
+============================================================ */
+
+const conversation = [
+
+  {
+    role:"system",
+
+    content:
+      ALEX_SYSTEM_PROMPT
+
+  }
+
+];
+
+
+/* ============================================================
+   STATE
+============================================================ */
+
+function setState(state){
+
+  orb.className =
+    "orb " + state;
+
+
+  if(state === "listening"){
+
+    status.textContent =
+      "LISTENING";
+
+  }
+
+  else if(state === "thinking"){
+
+    status.textContent =
+      "THINKING";
+
+  }
+
+  else if(state === "speaking"){
+
+    status.textContent =
+      "SPEAKING";
+
+  }
+
+  else if(state === "loading"){
+
+    status.textContent =
+      "LOADING AI";
+
+  }
+
+  else{
+
+    status.textContent =
+      "READY";
+
+  }
+
+}
+
+
+/* ============================================================
+   WEBGPU
+============================================================ */
+
+async function checkGPU(){
 
   if(!navigator.gpu){
 
-    html += `
-      <div class="test bad">
-        ❌ WebGPU NOT AVAILABLE
-      </div>
-    `;
+    throw new Error(
+      "WebGPU is not available."
+    );
 
-    html += `
-      <div class="test info">
-        Safari is not exposing WebGPU to this page.
-      </div>
-    `;
-
-    results.innerHTML = html;
-
-    return;
   }
 
 
-  html += `
-    <div class="test ok">
-      ✅ WebGPU API AVAILABLE
-    </div>
-  `;
+  const adapter =
+    await navigator.gpu.requestAdapter();
 
 
-  /* GPU adapter */
+  if(!adapter){
+
+    throw new Error(
+      "WebGPU GPU adapter unavailable."
+    );
+
+  }
+
+
+  return adapter;
+
+}
+
+
+/* ============================================================
+   LOAD AI
+============================================================ */
+
+async function loadAI(){
 
   try{
 
+
+    setState(
+      "loading"
+    );
+
+
+    online.textContent =
+      "CHECKING GPU";
+
+
+    prompt.textContent =
+      "Checking local graphics hardware…";
+
+
     const adapter =
-      await navigator.gpu.requestAdapter();
+      await checkGPU();
 
 
-    if(!adapter){
+    console.log(
+      "WebGPU adapter:",
+      adapter
+    );
 
-      html += `
-        <div class="test bad">
-          ❌ GPU ADAPTER NOT AVAILABLE
-        </div>
-      `;
 
-      results.innerHTML = html;
+    online.textContent =
+      "DOWNLOADING AI";
+
+
+    prompt.textContent =
+      "Downloading Alex's neural core…";
+
+
+    sub.textContent =
+      "First launch only";
+
+
+    engine =
+
+      await webllm.CreateMLCEngine(
+
+        MODEL,
+
+        {
+
+          initProgressCallback:
+            progress => {
+
+              console.log(
+                "AI progress:",
+                progress
+              );
+
+
+              if(
+                progress &&
+                progress.text
+              ){
+
+                prompt.textContent =
+                  progress.text;
+
+              }
+
+            }
+
+        }
+
+      );
+
+
+    aiReady =
+      true;
+
+
+    mic.disabled =
+      false;
+
+
+    online.textContent =
+      "AI ONLINE";
+
+
+    online.className =
+      "online ready";
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "Alex is ready.";
+
+
+    sub.textContent =
+      "Local AI • No API • Voice enabled";
+
+
+    console.log(
+      "ALEX AI READY"
+    );
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "ALEX LOAD ERROR:",
+      error
+    );
+
+
+    aiReady =
+      false;
+
+
+    online.textContent =
+      "AI ERROR";
+
+
+    online.className =
+      "online error";
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "Alex couldn't load the local AI.";
+
+
+    sub.textContent =
+      error.message ||
+      "Unknown error";
+
+
+  }
+
+}
+
+
+/* ============================================================
+   SPEECH
+============================================================ */
+
+function speak(text){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    setState(
+      "ready"
+    );
+
+    return;
+
+  }
+
+
+  speechSynthesis.cancel();
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  utterance.lang =
+    "en-GB";
+
+
+  utterance.rate =
+    .94;
+
+
+  utterance.pitch =
+    1.03;
+
+
+  const voices =
+    speechSynthesis.getVoices();
+
+
+  const voice =
+
+    voices.find(v =>
+
+      v.lang === "en-GB" &&
+
+      /female|
+       Samantha|
+       Karen|
+       Martha|
+       Google UK English Female/i
+       .test(v.name)
+
+    )
+
+    ||
+
+    voices.find(v =>
+      v.lang === "en-GB"
+    );
+
+
+  if(voice){
+
+    utterance.voice =
+      voice;
+
+  }
+
+
+  utterance.onstart =
+    () => {
+
+      setState(
+        "speaking"
+      );
+
+    };
+
+
+  utterance.onend =
+    () => {
+
+      setState(
+        "ready"
+      );
+
+    };
+
+
+  utterance.onerror =
+    () => {
+
+      setState(
+        "ready"
+      );
+
+    };
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+}
+
+
+/* ============================================================
+   ASK ALEX
+============================================================ */
+
+async function askAlex(text){
+
+  if(
+    !aiReady ||
+    !engine
+  ){
+
+    return;
+
+  }
+
+
+  setState(
+    "thinking"
+  );
+
+
+  prompt.textContent =
+    "Thinking…";
+
+
+  conversation.push({
+
+    role:"user",
+
+    content:text
+
+  });
+
+
+  try{
+
+
+    const result =
+
+      await engine.chat.completions.create({
+
+        messages:
+          conversation,
+
+        temperature:
+          .7,
+
+        max_tokens:
+          200
+
+      });
+
+
+    const answer =
+
+      result
+        ?.choices
+        ?.[0]
+        ?.message
+        ?.content
+        ?.trim();
+
+
+    if(!answer){
+
+      throw new Error(
+        "Empty AI response."
+      );
+
+    }
+
+
+    conversation.push({
+
+      role:"assistant",
+
+      content:answer
+
+    });
+
+
+    prompt.textContent =
+      answer;
+
+
+    speak(
+      answer
+    );
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "ALEX CHAT ERROR:",
+      error
+    );
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "I couldn't process that.";
+
+  }
+
+}
+
+
+/* ============================================================
+   SPEECH RECOGNITION
+============================================================ */
+
+function setupRecognition(){
+
+  const SR =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+
+  if(!SR){
+
+    prompt.textContent =
+      "Speech recognition isn't available.";
+
+    return null;
+
+  }
+
+
+  const r =
+    new SR();
+
+
+  r.lang =
+    "en-GB";
+
+
+  r.interimResults =
+    false;
+
+
+  r.continuous =
+    false;
+
+
+  r.maxAlternatives =
+    1;
+
+
+  r.onstart =
+    () => {
+
+      listening =
+        true;
+
+
+      setState(
+        "listening"
+      );
+
+
+      prompt.textContent =
+        "I'm listening…";
+
+    };
+
+
+  r.onresult =
+    event => {
+
+
+      const text =
+
+        event
+          .results
+          [0]
+          [0]
+          .transcript
+          .trim();
+
+
+      listening =
+        false;
+
+
+      prompt.textContent =
+        "“" + text + "”";
+
+
+      askAlex(
+        text
+      );
+
+    };
+
+
+  r.onerror =
+    event => {
+
+      console.error(
+        "Speech error:",
+        event
+      );
+
+
+      listening =
+        false;
+
+
+      setState(
+        "ready"
+      );
+
+
+      prompt.textContent =
+        "I couldn't hear that.";
+
+    };
+
+
+  r.onend =
+    () => {
+
+      listening =
+        false;
+
+    };
+
+
+  return r;
+
+}
+
+
+/* ============================================================
+   MICROPHONE
+============================================================ */
+
+mic.onclick =
+  () => {
+
+
+    if(!aiReady){
 
       return;
-    }
-
-
-    html += `
-      <div class="test ok">
-        ✅ GPU ADAPTER FOUND
-      </div>
-    `;
-
-
-    /* Adapter information */
-
-    try{
-
-      const info =
-        await adapter.requestAdapterInfo();
-
-      html += `
-        <div class="test info">
-          GPU:<br>
-          ${info.architecture || "Unknown"}<br>
-          ${info.device || "Unknown"}<br>
-          ${info.description || "Unknown"}
-        </div>
-      `;
-
-    }
-
-    catch(e){
-
-      html += `
-        <div class="test info">
-          GPU information unavailable,
-          but the adapter works.
-        </div>
-      `;
 
     }
 
 
-    /* Device */
+    if(listening){
 
-    try{
+      recognition?.stop();
 
-      const device =
-        await adapter.requestDevice();
+      return;
+
+    }
 
 
-      if(device){
+    recognition =
+      recognition ||
+      setupRecognition();
 
-        html += `
-          <div class="test ok">
-            ✅ GPU DEVICE CREATED
-          </div>
-        `;
 
-        html += `
-          <div class="test ok">
-            🚀 WEBGPU IS WORKING
-          </div>
-        `;
+    if(recognition){
 
-        html += `
-          <div class="test info">
-            Your iPhone can expose a
-            WebGPU device to this page.
-          </div>
-        `;
+      try{
+
+        recognition.start();
+
+      }
+
+      catch(error){
+
+        console.log(
+          error
+        );
 
       }
 
     }
 
-    catch(e){
-
-      html += `
-        <div class="test bad">
-          ❌ GPU DEVICE FAILED
-        </div>
-      `;
-
-      html += `
-        <div class="test">
-          ${e.message}
-        </div>
-      `;
-
-    }
-
-  }
-
-  catch(e){
-
-    html += `
-      <div class="test bad">
-        ❌ GPU TEST FAILED
-      </div>
-    `;
-
-    html += `
-      <div class="test">
-        ${e.message}
-      </div>
-    `;
-
-  }
+  };
 
 
-  results.innerHTML =
-    html;
+/* ============================================================
+   VOICES
+============================================================ */
+
+if(
+  "speechSynthesis"
+  in window
+){
+
+  speechSynthesis.getVoices();
+
+
+  speechSynthesis.onvoiceschanged =
+    () => {
+
+      speechSynthesis.getVoices();
+
+    };
 
 }
 
 
-test();
+/* ============================================================
+   START
+============================================================ */
+
+loadAI();
+
 
 </script>
 
 </body>
+
 </html>
