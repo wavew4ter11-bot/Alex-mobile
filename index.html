@@ -1,3231 +1,1402 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8">
-
+<meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1,viewport-fit=cover">
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<meta name="apple-mobile-web-app-capable"
-content="yes">
+<meta name="theme-color" content="#020604">
 
-<meta name="mobile-web-app-capable"
-content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-content="black-translucent">
-
-<meta name="theme-color"
-content="#05070a">
-
-<title>Alex Mobile</title>
-
+<title>A.L.E.X</title>
 
 <style>
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-:root{
-  --bg:#05070a;
-  --cyan:#19d9ff;
-  --green:#9cff19;
-  --muted:#7f8b98;
-  --red:#ff5264;
-  --yellow:#ffd84d;
-}
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #020604;
+        color: #39ff14;
+        font-family: "Courier New", monospace;
+    }
 
-*{
-  box-sizing:border-box;
-}
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-html,
-body{
-  margin:0;
-  width:100%;
-  height:100%;
+    /* =====================================================
+       MAIN PORTRAIT INTERFACE
+       ===================================================== */
 
-  background:var(--bg);
-  color:#f4f7fa;
+    #app {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+        height: 100dvh;
+        min-height: 620px;
+        overflow: hidden;
+        background:
+            radial-gradient(
+                circle at 50% 35%,
+                rgba(0, 255, 100, 0.055),
+                transparent 35%
+            ),
+            #020604;
+    }
 
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    sans-serif;
-}
+    /* subtle scanlines */
 
-body{
-  overflow:hidden;
-}
+    #app::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+            repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.012) 0px,
+                rgba(255,255,255,0.012) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+        opacity: .35;
+        z-index: 20;
+    }
 
-.app{
-  height:100dvh;
+    /* =====================================================
+       HEADER
+       ===================================================== */
 
-  display:flex;
-  flex-direction:column;
+    #header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 82px;
 
-  padding:
-    env(safe-area-inset-top)
-    18px
-    env(safe-area-inset-bottom);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      rgba(25,217,255,.08),
-      transparent 30%
-    ),
-    #05070a;
+        padding: 0 18px;
+
+        border-bottom: 1px solid rgba(57,255,20,.16);
+        background: rgba(2,6,4,.78);
+
+        z-index: 10;
+    }
+
+    #logo {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    #logo-main {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-shadow:
+            0 0 5px #39ff14,
+            0 0 14px rgba(57,255,20,.55);
+    }
+
+    #logo-sub {
+        font-size: 8px;
+        letter-spacing: 2px;
+        color: #0f8c28;
+    }
+
+    /* =====================================================
+       ARCHIVES
+       ===================================================== */
+
+    #archiveButton {
+        border: 1px solid #39ff14;
+        background: rgba(57,255,20,.035);
+        color: #39ff14;
+
+        font-family: inherit;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+
+        padding: 10px 13px;
+
+        cursor: pointer;
+
+        box-shadow:
+            inset 0 0 12px rgba(57,255,20,.025),
+            0 0 8px rgba(57,255,20,.12);
+
+        transition: .15s;
+    }
+
+    #archiveButton:active {
+        transform: scale(.96);
+        background: rgba(57,255,20,.12);
+    }
+
+    /* =====================================================
+       CENTRAL CORE
+       ===================================================== */
+
+    #coreArea {
+        position: absolute;
+
+        top: 92px;
+        left: 0;
+        width: 100%;
+
+        height: 350px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #core {
+        position: relative;
+
+        width: 145px;
+        height: 145px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #core-ring-1,
+    #core-ring-2,
+    #core-ring-3 {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    #core-ring-1 {
+        inset: 12px;
+        border: 1px solid rgba(57,255,20,.75);
+        box-shadow:
+            0 0 15px rgba(57,255,20,.35);
+        animation: rotate 12s linear infinite;
+    }
+
+    #core-ring-2 {
+        inset: 27px;
+        border: 1px dashed rgba(25,217,255,.65);
+        animation: rotateReverse 8s linear infinite;
+    }
+
+    #core-ring-3 {
+        inset: 42px;
+        border: 1px solid rgba(57,255,20,.45);
+        box-shadow:
+            inset 0 0 18px rgba(57,255,20,.2);
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    #core-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+
+        background: #39ff14;
+
+        box-shadow:
+            0 0 8px #39ff14,
+            0 0 22px #39ff14,
+            0 0 45px rgba(57,255,20,.5);
+
+        animation: corePulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes rotateReverse {
+        from {
+            transform: rotate(360deg);
+        }
+        to {
+            transform: rotate(0deg);
+        }
+    }
+
+    @keyframes pulse {
+        0%,100% {
+            opacity: .35;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes corePulse {
+        0%,100% {
+            transform: scale(.8);
+        }
+        50% {
+            transform: scale(1.15);
+        }
+    }
+
+    /* =====================================================
+       WAVEFORM
+       ===================================================== */
+
+    #waveCanvas {
+        position: absolute;
+
+        left: 8%;
+        width: 84%;
+
+        bottom: 20px;
+        height: 105px;
+
+        opacity: .9;
+    }
+
+    /* =====================================================
+       STATUS
+       ===================================================== */
+
+    #status {
+        position: absolute;
+
+        top: 425px;
+        left: 0;
+        width: 100%;
+
+        text-align: center;
+
+        font-size: 10px;
+        letter-spacing: 2px;
+
+        color: #39ff14;
+
+        text-shadow:
+            0 0 8px rgba(57,255,20,.45);
+    }
+
+    #statusDetail {
+        margin-top: 7px;
+
+        font-size: 8px;
+        letter-spacing: 1px;
+
+        color: #0f8c28;
+    }
+
+    /* =====================================================
+       CHAT
+       ===================================================== */
+
+    #chat {
+        position: absolute;
+
+        left: 6%;
+        width: 88%;
+
+        top: 470px;
+        bottom: 145px;
+
+        border: 1px solid rgba(57,255,20,.18);
+
+        background: rgba(0,8,4,.55);
+
+        overflow-y: auto;
+
+        padding: 12px;
+
+        font-size: 11px;
+        line-height: 1.55;
+
+        scrollbar-width: thin;
+        scrollbar-color: #145c19 transparent;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .message-user {
+        color: #19d9ff;
+    }
+
+    .message-alex {
+        color: #39ff14;
+    }
+
+    .message-label {
+        display: block;
+
+        margin-bottom: 3px;
+
+        font-size: 8px;
+        letter-spacing: 1px;
+
+        opacity: .55;
+    }
+
+    /* =====================================================
+       INPUT
+       ===================================================== */
+
+    #controls {
+        position: absolute;
+
+        left: 6%;
+        width: 88%;
+
+        bottom: 18px;
+        height: 112px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+
+        z-index: 10;
+    }
+
+    #inputRow {
+        display: flex;
+        width: 100%;
+        height: 46px;
+    }
+
+    #input {
+        flex: 1;
+
+        min-width: 0;
+
+        border: 1px solid #176b20;
+        border-right: none;
+
+        outline: none;
+
+        background: #030a05;
+        color: #39ff14;
+
+        padding: 0 12px;
+
+        font-family: inherit;
+        font-size: 11px;
+
+        box-shadow:
+            inset 0 0 15px rgba(57,255,20,.025);
+    }
+
+    #input::placeholder {
+        color: #28652e;
+    }
+
+    #send {
+        width: 65px;
+
+        border: 1px solid #39ff14;
+
+        background: rgba(57,255,20,.04);
+        color: #39ff14;
+
+        font-family: inherit;
+        font-size: 9px;
+        letter-spacing: 1px;
+
+        cursor: pointer;
+    }
+
+    #buttonRow {
+        display: flex;
+        gap: 9px;
+        height: 48px;
+    }
+
+    .controlButton {
+        flex: 1;
+
+        border: 1px solid #176b20;
+
+        background: rgba(57,255,20,.025);
+        color: #39ff14;
+
+        font-family: inherit;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+
+        cursor: pointer;
+
+        transition: .15s;
+    }
+
+    .controlButton:active,
+    #send:active {
+        background: rgba(57,255,20,.12);
+        transform: scale(.98);
+    }
+
+    #speak {
+        border-color: #19d9ff;
+        color: #19d9ff;
+    }
+
+    /* =====================================================
+       ARCHIVE SCREEN
+       ===================================================== */
+
+    #archives {
+        position: absolute;
+        inset: 0;
+
+        background: #020604;
+
+        z-index: 30;
+
+        display: none;
+
+        flex-direction: column;
+    }
+
+    #archiveHeader {
+        height: 82px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 18px;
+
+        border-bottom: 1px solid rgba(57,255,20,.16);
+    }
+
+    #archiveTitle {
+        font-size: 15px;
+        letter-spacing: 3px;
+    }
+
+    #closeArchive {
+        border: 1px solid #39ff14;
+        background: transparent;
+        color: #39ff14;
+
+        font-family: inherit;
+        padding: 9px 12px;
+        font-size: 9px;
+    }
+
+    #archiveList {
+        flex: 1;
+
+        overflow-y: auto;
+
+        padding: 18px;
+    }
+
+    .archiveCard {
+        border: 1px solid #145c19;
+
+        padding: 16px;
+        margin-bottom: 12px;
+
+        background: rgba(57,255,20,.025);
+
+        cursor: pointer;
+    }
+
+    .archiveCard:active {
+        background: rgba(57,255,20,.08);
+    }
+
+    .archiveName {
+        color: #39ff14;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .archiveInfo {
+        margin-top: 7px;
+
+        color: #3a8f45;
+
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+    /* =====================================================
+       RESPONSIVE PORTRAIT
+       ===================================================== */
+
+    @media (max-height: 700px) {
+
+        #coreArea {
+            top: 80px;
+            height: 280px;
+        }
+
+        #core {
+            transform: scale(.82);
+        }
+
+        #status {
+            top: 345px;
+        }
+
+        #chat {
+            top: 385px;
+            bottom: 140px;
+        }
+    }
+
+    @media (min-height: 850px) {
+
+        #coreArea {
+            height: 390px;
+        }
+
+        #status {
+            top: 455px;
+        }
+
+        #chat {
+            top: 505px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- HEADER -->
+
+    <header id="header">
+
+        <div id="logo">
+
+            <div id="logo-main">
+                A.L.E.X
+            </div>
+
+            <div id="logo-sub">
+                PERSONAL SYSTEM
+            </div>
+
+        </div>
+
+        <button id="archiveButton">
+            ARCHIVES
+        </button>
+
+    </header>
+
+
+    <!-- CORE -->
+
+    <section id="coreArea">
+
+        <div id="core">
+
+            <div id="core-ring-1"></div>
+            <div id="core-ring-2"></div>
+            <div id="core-ring-3"></div>
+
+            <div id="core-dot"></div>
+
+        </div>
+
+        <canvas id="waveCanvas"></canvas>
+
+    </section>
+
+
+    <!-- STATUS -->
+
+    <div id="status">
+
+        A.L.E.X // <span id="statusText">STANDBY</span>
+
+        <div id="statusDetail">
+            SYSTEM ONLINE
+        </div>
+
+    </div>
+
+
+    <!-- CHAT -->
+
+    <main id="chat">
+
+        <div class="message message-alex">
+
+            <span class="message-label">
+                A.L.E.X // SYSTEM
+            </span>
+
+            System online.
+            Ready for your command.
+
+        </div>
+
+    </main>
+
+
+    <!-- CONTROLS -->
+
+    <section id="controls">
+
+        <div id="inputRow">
+
+            <input
+                id="input"
+                type="text"
+                autocomplete="off"
+                placeholder="Ask A.L.E.X..."
+            >
+
+            <button id="send">
+                SEND
+            </button>
+
+        </div>
+
+        <div id="buttonRow">
+
+            <button
+                class="controlButton"
+                id="speak">
+                SPEAK
+            </button>
+
+            <button
+                class="controlButton"
+                id="clear">
+                CLEAR
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ARCHIVES -->
+
+    <section id="archives">
+
+        <div id="archiveHeader">
+
+            <div id="archiveTitle">
+                A.L.E.X // ARCHIVES
+            </div>
+
+            <button id="closeArchive">
+                CLOSE
+            </button>
+
+        </div>
+
+        <div id="archiveList">
+
+            <div class="archiveCard">
+
+                <div class="archiveName">
+                    SPIDER-MAN
+                </div>
+
+                <div class="archiveInfo">
+                    Suit archive module
+                </div>
+
+            </div>
+
+            <div class="archiveCard">
+
+                <div class="archiveName">
+                    IRON SPIDER
+                </div>
+
+                <div class="archiveInfo">
+                    Advanced suit archive
+                </div>
+
+            </div>
+
+            <div class="archiveCard">
+
+                <div class="archiveName">
+                    INTEGRATED SUIT
+                </div>
+
+                <div class="archiveInfo">
+                    Integrated technology archive
+                </div>
+
+            </div>
+
+            <div class="archiveCard">
+
+                <div class="archiveName">
+                    STEALTH SUIT
+                </div>
+
+                <div class="archiveInfo">
+                    Stealth configuration archive
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   A.L.E.X CONFIGURATION
+   ========================================================= */
+
+const CONFIG = {
+
+    /*
+       If Ollama is running on the SAME computer:
+
+       http://127.0.0.1:11434/api/chat
+
+       If the webpage is on your phone and Ollama is
+       running on your PC, replace this with your PC's
+       LAN address, for example:
+
+       http://192.168.1.100:11434/api/chat
+    */
+
+    OLLAMA_URL:
+        "http://127.0.0.1:11434/api/chat",
+
+    MODEL:
+        "qwen3:14b"
+
+};
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const input =
+    document.getElementById("input");
+
+const send =
+    document.getElementById("send");
+
+const speak =
+    document.getElementById("speak");
+
+const clearButton =
+    document.getElementById("clear");
+
+const chat =
+    document.getElementById("chat");
+
+const statusText =
+    document.getElementById("statusText");
+
+const statusDetail =
+    document.getElementById("statusDetail");
+
+const archiveButton =
+    document.getElementById("archiveButton");
+
+const archives =
+    document.getElementById("archives");
+
+const closeArchive =
+    document.getElementById("closeArchive");
+
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+function addMessage(
+    speaker,
+    text
+) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " +
+        (
+            speaker === "USER"
+                ? "message-user"
+                : "message-alex"
+        );
+
+    const label =
+        document.createElement("span");
+
+    label.className =
+        "message-label";
+
+    label.textContent =
+        speaker === "USER"
+            ? "USER"
+            : "A.L.E.X";
+
+    message.appendChild(label);
+
+    message.appendChild(
+        document.createTextNode(text)
+    );
+
+    chat.appendChild(message);
+
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
 /* =========================================================
-   HEADER
-========================================================= */
+   STATUS
+   ========================================================= */
 
-header{
-  height:74px;
+function setStatus(
+    status,
+    detail
+) {
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
+    statusText.textContent =
+        status;
 
-.brand{
-  font-weight:700;
-  letter-spacing:.24em;
-  font-size:18px;
-}
-
-.online{
-  font-size:10px;
-  letter-spacing:.16em;
-  color:var(--yellow);
-
-  transition:.3s ease;
-}
-
-.online:before{
-  content:"";
-
-  display:inline-block;
-
-  width:7px;
-  height:7px;
-
-  border-radius:50%;
-
-  background:var(--yellow);
-
-  box-shadow:
-    0 0 12px var(--yellow);
-
-  margin-right:7px;
-}
-
-.online.ready{
-  color:var(--green);
-}
-
-.online.ready:before{
-  background:var(--green);
-
-  box-shadow:
-    0 0 12px var(--green);
-}
-
-.online.error{
-  color:var(--red);
-}
-
-.online.error:before{
-  background:var(--red);
-
-  box-shadow:
-    0 0 12px var(--red);
+    statusDetail.textContent =
+        detail || "";
 }
 
 
 /* =========================================================
-   MAIN
-========================================================= */
+   OLLAMA
+   ========================================================= */
 
-main{
-  flex:1;
+async function askAlex(
+    text
+) {
 
-  display:flex;
-  flex-direction:column;
+    setStatus(
+        "THINKING",
+        "PROCESSING REQUEST"
+    );
 
-  align-items:center;
-  justify-content:center;
+    try {
 
-  min-height:0;
-}
+        const response =
+            await fetch(
+                CONFIG.OLLAMA_URL,
+                {
+                    method: "POST",
 
-.status{
-  font-size:11px;
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-  letter-spacing:.22em;
+                    body: JSON.stringify({
 
-  color:var(--muted);
+                        model:
+                            CONFIG.MODEL,
 
-  margin-bottom:26px;
+                        messages: [
 
-  text-align:center;
+                            {
+                                role: "system",
+
+                                content:
+                                    "You are A.L.E.X, a highly capable personal AI assistant. Be intelligent, natural, concise and helpful. Do not use emojis."
+                            },
+
+                            {
+                                role: "user",
+
+                                content:
+                                    text
+                            }
+
+                        ],
+
+                        stream: false,
+
+                        think: false,
+
+                        keep_alive:
+                            "10m",
+
+                        options: {
+
+                            temperature:
+                                0.7,
+
+                            num_ctx:
+                                4096
+
+                        }
+
+                    })
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Ollama returned HTTP " +
+                response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        const answer =
+            data.message &&
+            data.message.content
+                ? data.message.content.trim()
+                : "";
+
+        if (!answer) {
+
+            throw new Error(
+                "A.L.E.X returned no response."
+            );
+
+        }
+
+        addMessage(
+            "ALEX",
+            answer
+        );
+
+        setStatus(
+            "STANDBY",
+            "SYSTEM ONLINE"
+        );
+
+        speakText(
+            answer
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        addMessage(
+            "ALEX",
+            "Ollama connection error:\n" +
+            error.message
+        );
+
+        setStatus(
+            "ERROR",
+            "CHECK OLLAMA CONNECTION"
+        );
+
+    }
+
 }
 
 
 /* =========================================================
-   ORB
-========================================================= */
+   SEND
+   ========================================================= */
 
-.orb{
-  width:min(62vw,260px);
+async function sendMessage() {
 
-  aspect-ratio:1;
+    const text =
+        input.value.trim();
 
-  border-radius:50%;
+    if (!text)
+        return;
 
-  position:relative;
+    input.value = "";
 
-  display:grid;
-  place-items:center;
+    addMessage(
+        "USER",
+        text
+    );
+
+    await askAlex(
+        text
+    );
+
 }
 
-.orb:before,
-.orb:after{
-  content:"";
 
-  position:absolute;
+/* =========================================================
+   ENTER
+   ========================================================= */
 
-  inset:0;
+input.addEventListener(
+    "keydown",
+    event => {
 
-  border-radius:50%;
+        if (
+            event.key === "Enter"
+            && !event.shiftKey
+        ) {
 
-  border:
-    1px solid
-    rgba(25,217,255,.35);
+            event.preventDefault();
 
-  box-shadow:
-    0 0 35px
-    rgba(25,217,255,.08),
+            sendMessage();
 
-    inset 0 0 35px
-    rgba(156,255,25,.05);
+        }
+
+    }
+);
+
+
+send.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+clearButton.addEventListener(
+    "click",
+    () => {
+
+        chat.innerHTML = "";
+
+        addMessage(
+            "ALEX",
+            "Conversation cleared."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SPEECH
+   ========================================================= */
+
+function speakText(
+    text
+) {
+
+    if (
+        !("speechSynthesis" in window)
+    )
+        return;
+
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+    utterance.rate =
+        0.95;
+
+    utterance.pitch =
+        1.0;
+
+    utterance.volume =
+        1.0;
+
+    const voices =
+        speechSynthesis.getVoices();
+
+    const englishVoice =
+        voices.find(
+            voice =>
+                voice.lang &&
+                voice.lang
+                    .toLowerCase()
+                    .startsWith("en")
+        );
+
+    if (englishVoice) {
+
+        utterance.voice =
+            englishVoice;
+
+    }
+
+    setStatus(
+        "SPEAKING",
+        "AUDIO OUTPUT ACTIVE"
+    );
+
+    utterance.onend =
+        () => {
+
+            setStatus(
+                "STANDBY",
+                "SYSTEM ONLINE"
+            );
+
+        };
+
+    speechSynthesis.speak(
+        utterance
+    );
+
 }
 
-.orb:after{
-  inset:13%;
 
-  border-color:
-    rgba(156,255,25,.35);
+/* =========================================================
+   SPEAK BUTTON
+   ========================================================= */
 
-  animation:
-    pulse
-    2.6s
-    ease-in-out
-    infinite;
-}
+speak.addEventListener(
+    "click",
+    () => {
+
+        if (
+            speechSynthesis.speaking
+        ) {
+
+            speechSynthesis.cancel();
+
+            setStatus(
+                "STANDBY",
+                "SYSTEM ONLINE"
+            );
+
+            return;
+
+        }
+
+        speakText(
+            "A.L.E.X voice system online."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ARCHIVES
+   ========================================================= */
+
+archiveButton.addEventListener(
+    "click",
+    () => {
+
+        archives.style.display =
+            "flex";
+
+    }
+);
+
+
+closeArchive.addEventListener(
+    "click",
+    () => {
+
+        archives.style.display =
+            "none";
+
+    }
+);
 
 
 /* =========================================================
    WAVEFORM
-========================================================= */
+   ========================================================= */
 
-.wave{
-  width:72%;
-  height:72%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:4px;
-}
-
-.bar{
-  width:3px;
-
-  border-radius:4px;
-
-  height:22%;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan),
-      var(--green)
+const canvas =
+    document.getElementById(
+        "waveCanvas"
     );
 
-  box-shadow:
-    0 0 10px
-    rgba(25,217,255,.5);
+const ctx =
+    canvas.getContext("2d");
 
-  animation:
-    breathe
-    1.05s
-    ease-in-out
-    infinite
-    alternate;
-}
+let phase = 0;
 
-.bar:nth-child(2){
-  animation-delay:.08s;
-}
+function resizeCanvas() {
 
-.bar:nth-child(3){
-  animation-delay:.16s;
-}
+    const rect =
+        canvas.getBoundingClientRect();
 
-.bar:nth-child(4){
-  animation-delay:.24s;
-}
+    const dpr =
+        window.devicePixelRatio || 1;
 
-.bar:nth-child(5){
-  animation-delay:.32s;
-}
+    canvas.width =
+        rect.width * dpr;
 
-.bar:nth-child(6){
-  animation-delay:.40s;
-}
+    canvas.height =
+        rect.height * dpr;
 
-.bar:nth-child(7){
-  animation-delay:.48s;
-}
-
-.loading .bar{
-  animation-duration:1.3s;
-}
-
-.listening .bar{
-  animation-duration:.42s;
-}
-
-.thinking .bar{
-  animation-duration:.75s;
-}
-
-.speaking .bar{
-  animation-duration:.25s;
-
-}
-
-
-/* =========================================================
-   TEXT
-========================================================= */
-
-.prompt{
-  margin-top:34px;
-
-  text-align:center;
-
-  color:#d9e0e7;
-
-  font-size:17px;
-
-  max-width:340px;
-
-  line-height:1.45;
-
-  min-height:52px;
-
-  max-height:150px;
-
-  overflow:auto;
-
-  word-wrap:break-word;
-}
-
-.sub{
-  margin-top:8px;
-
-  color:#65717d;
-
-  font-size:12px;
-
-  text-align:center;
-
-  max-width:340px;
-}
-
-
-/* =========================================================
-   CONTROLS
-========================================================= */
-
-.controls{
-  height:190px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:14px;
-}
-
-.mic{
-  width:76px;
-  height:76px;
-
-  border-radius:50%;
-
-  border:
-    1px solid
-    rgba(156,255,25,.5);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(25,217,255,.12),
-      rgba(156,255,25,.08)
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
     );
 
-  color:white;
-
-  font-size:28px;
-
-  box-shadow:
-    0 0 30px
-    rgba(25,217,255,.12);
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-  transition:
-    transform .1s ease,
-    opacity .2s ease;
-}
-
-.mic:active{
-  transform:scale(.95);
-}
-
-.mic:disabled{
-  opacity:.3;
-}
-
-.mic.active{
-  border-color:
-    rgba(156,255,25,.9);
-
-  box-shadow:
-    0 0 35px
-    rgba(156,255,25,.25);
-}
-
-.hint{
-  font-size:10px;
-
-  letter-spacing:.2em;
-
-  color:#687580;
-}
-
-.testVoice{
-  background:transparent;
-
-  border:
-    1px solid
-    rgba(25,217,255,.3);
-
-  color:var(--cyan);
-
-  border-radius:10px;
-
-  padding:7px 12px;
-
-  font-size:10px;
-
-  letter-spacing:.08em;
 }
 
 
-/* =========================================================
-   NAV
-========================================================= */
+function drawWave() {
 
-nav{
-  height:72px;
+    const rect =
+        canvas.getBoundingClientRect();
 
-  display:flex;
+    const width =
+        rect.width;
 
-  align-items:center;
-  justify-content:space-around;
+    const height =
+        rect.height;
 
-  border-top:
-    1px solid
-    rgba(255,255,255,.06);
-}
-
-nav button{
-  background:none;
-
-  border:0;
-
-  color:#6d7882;
-
-  font:
-    11px
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
-  letter-spacing:.08em;
-
-  padding:10px;
-}
-
-nav button.active{
-  color:var(--green);
-}
-
-
-/* =========================================================
-   ATTRIBUTION
-========================================================= */
-
-.attribution{
-  position:fixed;
-
-  bottom:
-    calc(
-      env(safe-area-inset-bottom)
-      + 74px
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
     );
 
-  right:8px;
-
-  font-size:8px;
-
-  color:#39434c;
-
-  pointer-events:none;
-}
-
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-@keyframes breathe{
-
-  to{
-    height:65%;
-  }
-
-}
-
-@keyframes pulse{
-
-  50%{
-    transform:scale(1.06);
-    opacity:.55;
-  }
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="app">
-
-
-<header>
-
-  <div class="brand">
-    ALEX
-  </div>
-
-  <div
-    id="online"
-    class="online"
-  >
-    AI LOADING
-  </div>
-
-</header>
-
-
-<main>
-
-
-  <div
-    id="status"
-    class="status"
-  >
-    STARTING
-  </div>
-
-
-  <div
-    id="orb"
-    class="orb loading"
-  >
-
-    <div class="wave">
-
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-      <i class="bar"></i>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="prompt"
-    class="prompt"
-  >
-    Starting Alex's neural core…
-  </div>
-
-
-  <div
-    id="sub"
-    class="sub"
-  >
-    Local AI • No API key
-  </div>
-
-
-</main>
-
-
-<section class="controls">
-
-
-  <button
-    class="mic"
-    id="mic"
-    aria-label="Start continuous voice"
-    disabled
-  >
-    ◉
-  </button>
-
-
-  <div
-    id="hint"
-    class="hint"
-  >
-    TAP TO START
-  </div>
-
-
-  <button
-    class="testVoice"
-    id="testVoice"
-  >
-    TEST ALEX VOICE
-  </button>
-
-
-</section>
-
-
-<nav>
-
-  <button class="active">
-    CHAT
-  </button>
-
-  <button>
-    VOICE
-  </button>
-
-  <button>
-    NAVIGATE
-  </button>
-
-  <button>
-    MORE
-  </button>
-
-</nav>
-
-
-</div>
-
-
-<div class="attribution">
-  © OpenStreetMap contributors
-</div>
-
-
-<script type="module">
-
-
-/* ============================================================
-   ALEX MOBILE
-   LOCAL AI
-   CONTINUOUS VOICE
-   VOICE NAVIGATION
-============================================================ */
-
-
-import * as webllm from
-  "https://esm.run/@mlc-ai/web-llm";
-
-
-/* ============================================================
-   ELEMENTS
-============================================================ */
-
-const $ =
-  id =>
-    document.getElementById(id);
-
-
-const status =
-  $("status");
-
-const prompt =
-  $("prompt");
-
-const sub =
-  $("sub");
-
-const orb =
-  $("orb");
-
-const mic =
-  $("mic");
-
-const hint =
-  $("hint");
-
-const online =
-  $("online");
-
-const testVoiceButton =
-  $("testVoice");
-
-
-/* ============================================================
-   VARIABLES
-============================================================ */
-
-let engine =
-  null;
-
-let recognition =
-  null;
-
-let aiReady =
-  false;
-
-let listening =
-  false;
-
-let continuousMode =
-  false;
-
-let speaking =
-  false;
-
-let recognitionRestartTimer =
-  null;
-
-
-/* ============================================================
-   NAVIGATION STATE
-============================================================ */
-
-let navigationActive =
-  false;
-
-let navigationWatch =
-  null;
-
-let navigationSteps =
-  [];
-
-let navigationStepIndex =
-  0;
-
-let navigationDestination =
-  null;
-
-let lastNavigationAnnouncement =
-  0;
-
-
-/* ============================================================
-   CONVERSATION
-============================================================ */
-
-const conversation = [
-
-  {
-    role:"system",
-
-    content:`
-
-You are ALEX.
-
-You are a personal mobile AI assistant.
-
-Be intelligent, friendly, helpful and
-conversational.
-
-Keep normal answers concise and natural.
-
-Your responses may be spoken aloud.
-
-Do not call yourself Gemini.
-
-Do not mention implementation details
-unless specifically asked.
-
-If the user asks for navigation, do not
-invent directions. The navigation system
-handles real road directions separately.
-
-`
-
-  }
-
-];
-
-
-/* ============================================================
-   STATE
-============================================================ */
-
-function setState(state){
-
-  orb.className =
-    "orb " + state;
-
-
-  if(state === "loading"){
-
-    status.textContent =
-      "LOADING AI";
-
-  }
-
-  else if(state === "listening"){
-
-    status.textContent =
-      navigationActive
-        ? "NAVIGATING"
-        : "LISTENING";
-
-  }
-
-  else if(state === "thinking"){
-
-    status.textContent =
-      "THINKING";
-
-  }
-
-  else if(state === "speaking"){
-
-    status.textContent =
-      navigationActive
-        ? "NAVIGATING"
-        : "SPEAKING";
-
-  }
-
-  else{
-
-    status.textContent =
-      navigationActive
-        ? "NAVIGATING"
-        : "READY";
-
-  }
-
-}
-
-
-/* ============================================================
-   SPEAK
-============================================================ */
-
-function speak(
-  text,
-  afterSpeech = null
-){
-
-  if(
-    !("speechSynthesis" in window)
-  ){
-
-    console.log(
-      "Speech synthesis unavailable."
-    );
-
-    if(afterSpeech){
-      afterSpeech();
-    }
-
-    return;
-
-  }
-
-
-  speaking =
-    true;
-
-
-  setState(
-    "speaking"
-  );
-
-
-  speechSynthesis.cancel();
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-
-  /*
-     IMPORTANT:
-
-     We deliberately do not select a
-     particular voice.
-
-     Safari chooses the available
-     system voice.
-  */
-
-  utterance.lang =
-    "en-GB";
-
-  utterance.rate =
-    .94;
-
-  utterance.pitch =
-    1.03;
-
-  utterance.volume =
-    1.0;
-
-
-  utterance.onstart =
-    () => {
-
-      console.log(
-        "ALEX: speech started"
-      );
-
-      setState(
-        "speaking"
-      );
-
-    };
-
-
-  utterance.onend =
-    () => {
-
-      console.log(
-        "ALEX: speech ended"
-      );
-
-      speaking =
-        false;
-
-
-      setState(
-        "ready"
-      );
-
-
-      if(afterSpeech){
-
-        afterSpeech();
-
-      }
-
-      else if(
-        continuousMode &&
-        !navigationActive
-      ){
-
-        startListeningSoon();
-
-      }
-
-    };
-
-
-  utterance.onerror =
-    event => {
-
-      console.error(
-        "ALEX TTS ERROR:",
-        event
-      );
-
-
-      speaking =
-        false;
-
-
-      setState(
-        "ready"
-      );
-
-
-      if(afterSpeech){
-
-        afterSpeech();
-
-      }
-
-      else if(
-        continuousMode &&
-        !navigationActive
-      ){
-
-        startListeningSoon();
-
-      }
-
-    };
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-
-  setTimeout(
-    () => {
-
-      if(
-        speechSynthesis.paused
-      ){
-
-        speechSynthesis.resume();
-
-      }
-
-    },
-    250
-  );
-
-}
-
-
-/* ============================================================
-   TEST VOICE
-============================================================ */
-
-function testVoice(){
-
-  if(
-    !("speechSynthesis" in window)
-  ){
-
-    prompt.textContent =
-      "Speech synthesis is unavailable.";
-
-    return;
-
-  }
-
-
-  continuousMode =
-    false;
-
-
-  speechSynthesis.cancel();
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      "Hello. This is Alex's voice test."
-    );
-
-
-  utterance.lang =
-    "en-GB";
-
-  utterance.rate =
-    .9;
-
-  utterance.pitch =
-    1;
-
-  utterance.volume =
-    1;
-
-
-  utterance.onstart =
-    () => {
-
-      setState(
-        "speaking"
-      );
-
-    };
-
-
-  utterance.onend =
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    };
-
-
-  utterance.onerror =
-    event => {
-
-      console.error(
-        "VOICE TEST ERROR:",
-        event
-      );
-
-      setState(
-        "ready"
-      );
-
-      prompt.textContent =
-        "Voice test failed.";
-
-    };
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-
-  setTimeout(
-    () => {
-
-      speechSynthesis.resume();
-
-    },
-    250
-  );
-
-}
-
-
-testVoiceButton.onclick =
-  testVoice;
-
-
-/* ============================================================
-   CONTINUOUS LISTENING
-============================================================ */
-
-function setupRecognition(){
-
-  const SR =
-
-    window.SpeechRecognition ||
-
-    window.webkitSpeechRecognition;
-
-
-  if(!SR){
-
-    prompt.textContent =
-      "Speech recognition isn't available in Safari.";
-
-    return null;
-
-  }
-
-
-  const r =
-    new SR();
-
-
-  r.lang =
-    "en-GB";
-
-
-  r.interimResults =
-    false;
-
-
-  /*
-     iPhone Safari may stop the recognition
-     session after each phrase.
-
-     We restart it automatically while
-     continuousMode is enabled.
-  */
-
-  r.continuous =
-    false;
-
-
-  r.maxAlternatives =
-    1;
-
-
-  r.onstart =
-    () => {
-
-      listening =
-        true;
-
-
-      mic.classList.add(
-        "active"
-      );
-
-
-      hint.textContent =
-        "TAP TO STOP";
-
-
-      setState(
-        "listening"
-      );
-
-
-      if(!navigationActive){
-
-        prompt.textContent =
-          "I'm listening…";
-
-      }
-
-    };
-
-
-  r.onresult =
-    event => {
-
-      const text =
-
-        event
-          .results
-          [0]
-          [0]
-          .transcript
-          .trim();
-
-
-      listening =
-        false;
-
-
-      console.log(
-        "USER:",
-        text
-      );
-
-
-      prompt.textContent =
-        "“" +
-        text +
-        "”";
-
-
-      /*
-         Check navigation first.
-      */
-
-      if(
-        isNavigationRequest(text)
-      ){
-
-        stopListening();
-
-
-        startNavigationFromSpeech(
-          text
+    phase += 0.045;
+
+    const center =
+        height / 2;
+
+    const bars =
+        55;
+
+    const gap =
+        width / bars;
+
+    for (
+        let i = 0;
+        i < bars;
+        i++
+    ) {
+
+        const x =
+            i * gap;
+
+        const distance =
+            Math.abs(
+                i - bars / 2
+            ) / (bars / 2);
+
+        const envelope =
+            1 - distance * .75;
+
+        const wave =
+            Math.abs(
+                Math.sin(
+                    i * .31 +
+                    phase
+                )
+            );
+
+        const secondary =
+            Math.abs(
+                Math.sin(
+                    i * .13 -
+                    phase * 1.4
+                )
+            );
+
+        const amount =
+            (
+                wave * .65 +
+                secondary * .35
+            ) * envelope;
+
+        const barHeight =
+            8 + amount * 58;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            center - barHeight
         );
 
-        return;
-
-      }
-
-
-      /*
-         Normal AI conversation.
-      */
-
-      askAlex(
-        text
-      );
-
-    };
-
-
-  r.onerror =
-    event => {
-
-      console.error(
-        "ALEX SPEECH ERROR:",
-        event
-      );
-
-
-      listening =
-        false;
-
-
-      if(
-        continuousMode &&
-        event.error !==
-        "not-allowed"
-      ){
-
-        startListeningSoon();
-
-      }
-
-      else{
-
-        setState(
-          "ready"
+        ctx.lineTo(
+            x,
+            center + barHeight
         );
 
-      }
+        ctx.lineWidth = 2;
 
-    };
+        ctx.strokeStyle =
+            i % 4 === 0
+                ? "#19d9ff"
+                : "#39ff14";
 
+        ctx.shadowBlur =
+            8;
 
-  r.onend =
-    () => {
+        ctx.shadowColor =
+            ctx.strokeStyle;
 
-      listening =
-        false;
+        ctx.stroke();
 
+    }
 
-      mic.classList.remove(
-        "active"
-      );
+    ctx.shadowBlur = 0;
 
-
-      /*
-         Keep listening until the user
-         taps the microphone again.
-      */
-
-      if(
-        continuousMode &&
-        !speaking
-      ){
-
-        startListeningSoon();
-
-      }
-
-      else if(
-        !continuousMode
-      ){
-
-        setState(
-          "ready"
-        );
-
-      }
-
-    };
-
-
-  return r;
-
-}
-
-
-/* ============================================================
-   START LISTENING
-============================================================ */
-
-function startListening(){
-
-  if(
-    !aiReady
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    !recognition
-  ){
-
-    recognition =
-      setupRecognition();
-
-  }
-
-
-  if(
-    !recognition
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    listening
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    recognition.start();
-
-  }
-
-  catch(error){
-
-    console.log(
-      "Recognition start:",
-      error
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   RESTART LISTENING
-============================================================ */
-
-function startListeningSoon(){
-
-  if(
-    !continuousMode ||
-    speaking ||
-    navigationActive
-  ){
-
-    return;
-
-  }
-
-
-  clearTimeout(
-    recognitionRestartTimer
-  );
-
-
-  recognitionRestartTimer =
-
-    setTimeout(
-      () => {
-
-        if(
-          continuousMode &&
-          !speaking &&
-          !listening
-        ){
-
-          startListening();
-
-        }
-
-      },
-      350
+    requestAnimationFrame(
+        drawWave
     );
 
 }
 
 
-/* ============================================================
-   STOP LISTENING
-============================================================ */
-
-function stopListening(){
-
-  continuousMode =
-    false;
-
-
-  clearTimeout(
-    recognitionRestartTimer
-  );
-
-
-  if(
-    recognition &&
-    listening
-  ){
-
-    try{
-
-      recognition.stop();
-
-    }
-
-    catch(error){
-
-      console.log(
-        error
-      );
-
-    }
-
-  }
-
-
-  listening =
-    false;
-
-
-  mic.classList.remove(
-    "active"
-  );
-
-
-  hint.textContent =
-    "TAP TO START";
-
-
-  setState(
-    "ready"
-  );
-
-}
-
-
-/* ============================================================
-   MICROPHONE BUTTON
-============================================================ */
-
-mic.onclick =
-  () => {
-
-    if(
-      !aiReady
-    ){
-
-      return;
-
-    }
-
-
-    /*
-       First tap:
-
-       unlock speech and begin
-       continuous listening.
-    */
-
-    if(
-      !continuousMode
-    ){
-
-      continuousMode =
-        true;
-
-
-      /*
-         This is a user gesture,
-         which is important for
-         Safari speech output.
-      */
-
-      if(
-        "speechSynthesis"
-        in window
-      ){
-
-        speechSynthesis.cancel();
-
-      }
-
-
-      hint.textContent =
-        "TAP TO STOP";
-
-
-      startListening();
-
-      return;
-
-    }
-
-
-    /*
-       Second tap:
-
-       completely stop voice mode.
-    */
-
-    stopListening();
-
-  };
-
-
-/* ============================================================
-   ASK LOCAL ALEX
-============================================================ */
-
-async function askAlex(text){
-
-  if(
-    !aiReady ||
-    !engine
-  ){
-
-    return;
-
-  }
-
-
-  setState(
-    "thinking"
-  );
-
-
-  conversation.push({
-
-    role:
-      "user",
-
-    content:
-      text
-
-  });
-
-
-  try{
-
-    const result =
-
-      await engine
-        .chat
-        .completions
-        .create({
-
-          messages:
-            conversation,
-
-          temperature:
-            .7,
-
-          max_tokens:
-            200
-
-        });
-
-
-    const answer =
-
-      result
-        ?.choices
-        ?.[0]
-        ?.message
-        ?.content
-        ?.trim();
-
-
-    if(!answer){
-
-      throw new Error(
-        "Alex returned no response."
-      );
-
-    }
-
-
-    conversation.push({
-
-      role:
-        "assistant",
-
-      content:
-        answer
-
-    });
-
-
-    prompt.textContent =
-      answer;
-
-
-    /*
-       Voice response.
-
-       When speech finishes,
-       continuous mode automatically
-       starts listening again.
-    */
-
-    speak(
-      answer
-    );
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX CHAT ERROR:",
-      error
-    );
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "I couldn't process that.";
-
-
-    if(
-      continuousMode
-    ){
-
-      startListeningSoon();
-
-    }
-
-  }
-
-}
-
-
-/* ============================================================
-   NAVIGATION REQUEST DETECTION
-============================================================ */
-
-function isNavigationRequest(
-  text
-){
-
-  const lower =
-    text.toLowerCase();
-
-
-  return (
-
-    lower.includes(
-      "take me to"
-    )
-
-    ||
-
-    lower.includes(
-      "navigate to"
-    )
-
-    ||
-
-    lower.includes(
-      "directions to"
-    )
-
-    ||
-
-    lower.includes(
-      "get me to"
-    )
-
-  );
-
-}
-
-
-/* ============================================================
-   EXTRACT DESTINATION
-============================================================ */
-
-function extractDestination(
-  text
-){
-
-  let destination =
-    text.trim();
-
-
-  destination =
-    destination.replace(
-      /^.*?take me to\s+/i,
-      ""
-    );
-
-
-  destination =
-    destination.replace(
-      /^.*?navigate to\s+/i,
-      ""
-    );
-
-
-  destination =
-    destination.replace(
-      /^.*?directions to\s+/i,
-      ""
-    );
-
-
-  destination =
-    destination.replace(
-      /^.*?get me to\s+/i,
-      ""
-    );
-
-
-  destination =
-    destination.trim();
-
-
-  return destination;
-
-}
-
-
-/* ============================================================
-   LOCATION
-============================================================ */
-
-function getCurrentLocation(){
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    ) => {
-
-      if(
-        !navigator.geolocation
-      ){
-
-        reject(
-          new Error(
-            "Location is not available on this device."
-          )
-        );
-
-        return;
-
-      }
-
-
-      navigator.geolocation.getCurrentPosition(
-
-        position => {
-
-          resolve({
-            lat:
-              position.coords.latitude,
-
-            lon:
-              position.coords.longitude
-          });
-
-        },
-
-        error => {
-
-          reject(
-            new Error(
-              "I couldn't access your location."
-            )
-          );
-
-        },
-
-        {
-
-          enableHighAccuracy:
-            true,
-
-          timeout:
-            15000,
-
-          maximumAge:
-            5000
-
-        }
-
-      );
-
-    }
-
-  );
-
-}
-
-
-/* ============================================================
-   DISTANCE
-============================================================ */
-
-function distanceMeters(
-  lat1,
-  lon1,
-  lat2,
-  lon2
-){
-
-  const R =
-    6371000;
-
-
-  const p1 =
-    lat1 *
-    Math.PI /
-    180;
-
-
-  const p2 =
-    lat2 *
-    Math.PI /
-    180;
-
-
-  const dp =
-    (
-      lat2 -
-      lat1
-    ) *
-    Math.PI /
-    180;
-
-
-  const dl =
-    (
-      lon2 -
-      lon1
-    ) *
-    Math.PI /
-    180;
-
-
-  const a =
-
-    Math.sin(dp / 2) *
-    Math.sin(dp / 2)
-
-    +
-
-    Math.cos(p1) *
-    Math.cos(p2) *
-    Math.sin(dl / 2) *
-    Math.sin(dl / 2);
-
-
-  return (
-    2 *
-    R *
-    Math.atan2(
-      Math.sqrt(a),
-      Math.sqrt(1-a)
-    )
-  );
-
-}
-
-
-/* ============================================================
-   FIND PLACE
-============================================================ */
-
-async function findDestination(
-  query,
-  location
-){
-
-  /*
-     Nominatim is only called after
-     the user explicitly asks for a
-     destination.
-  */
-
-  const delta =
-    0.08;
-
-
-  const left =
-    location.lon - delta;
-
-  const right =
-    location.lon + delta;
-
-  const top =
-    location.lat + delta;
-
-  const bottom =
-    location.lat - delta;
-
-
-  const params =
-    new URLSearchParams({
-
-      q:
-        query,
-
-      format:
-        "jsonv2",
-
-      limit:
-        "10",
-
-      addressdetails:
-        "1",
-
-      viewbox:
-        `${left},${top},${right},${bottom}`
-
-    });
-
-
-  const url =
-    "https://nominatim.openstreetmap.org/search?"
-    +
-    params.toString();
-
-
-  const response =
-    await fetch(
-      url
-    );
-
-
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      "Place search failed."
-    );
-
-  }
-
-
-  const places =
-    await response.json();
-
-
-  if(
-    !places.length
-  ){
-
-    throw new Error(
-      "I couldn't find that place nearby."
-    );
-
-  }
-
-
-  /*
-     Sort the results by actual
-     straight-line distance.
-  */
-
-  places.sort(
-    (
-      a,
-      b
-    ) => {
-
-      const da =
-        distanceMeters(
-
-          location.lat,
-          location.lon,
-
-          Number(a.lat),
-          Number(a.lon)
-
-        );
-
-
-      const db =
-        distanceMeters(
-
-          location.lat,
-          location.lon,
-
-          Number(b.lat),
-          Number(b.lon)
-
-        );
-
-
-      return da - db;
-
-    }
-  );
-
-
-  return places[0];
-
-}
-
-
-/* ============================================================
-   START NAVIGATION
-============================================================ */
-
-async function startNavigationFromSpeech(
-  text
-){
-
-  const destinationQuery =
-    extractDestination(
-      text
-    );
-
-
-  if(
-    !destinationQuery
-  ){
-
-    speak(
-      "Where would you like me to take you?"
-    );
-
-    return;
-
-  }
-
-
-  navigationActive =
-    false;
-
-
-  setState(
-    "thinking"
-  );
-
-
-  prompt.textContent =
-    "Finding " +
-    destinationQuery +
-    "…";
-
-
-  sub.textContent =
-    "Getting your location";
-
-
-  try{
-
-
-    const location =
-      await getCurrentLocation();
-
-
-    prompt.textContent =
-      "Finding the nearest " +
-      destinationQuery +
-      "…";
-
-
-    const place =
-      await findDestination(
-        destinationQuery,
-        location
-      );
-
-
-    navigationDestination = {
-
-      name:
-        place.display_name,
-
-      lat:
-        Number(place.lat),
-
-      lon:
-        Number(place.lon)
-
-    };
-
-
-    await buildRoute(
-      location,
-      navigationDestination
-    );
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "NAVIGATION ERROR:",
-      error
-    );
-
-
-    navigationActive =
-      false;
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      error.message;
-
-
-    speak(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   BUILD ROUTE
-============================================================ */
-
-async function buildRoute(
-  start,
-  destination
-){
-
-  prompt.textContent =
-    "Calculating walking route…";
-
-
-  sub.textContent =
-    "Voice navigation";
-
-
-  const coordinates =
-
-    `${start.lon},${start.lat};`
-    +
-    `${destination.lon},${destination.lat}`;
-
-
-  const url =
-
-    "https://router.project-osrm.org/route/v1/foot/"
-    +
-    coordinates
-    +
-    "?steps=true"
-    +
-    "&overview=false"
-    +
-    "&alternatives=false";
-
-
-  const response =
-    await fetch(
-      url
-    );
-
-
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      "The routing service isn't available."
-    );
-
-  }
-
-
-  const data =
-    await response.json();
-
-
-  if(
-    data.code !==
-    "Ok"
-  ){
-
-    throw new Error(
-      "I couldn't find a walking route."
-    );
-
-  }
-
-
-  const route =
-    data.routes?.[0];
-
-
-  if(
-    !route
-  ){
-
-    throw new Error(
-      "No walking route was found."
-    );
-
-  }
-
-
-  navigationSteps =
-    route.legs
-      .flatMap(
-        leg =>
-          leg.steps
-      )
-      .filter(
-        step =>
-          step.distance > 1
-      );
-
-
-  navigationStepIndex =
-    0;
-
-
-  navigationActive =
-    true;
-
-
-  lastNavigationAnnouncement =
-    Date.now();
-
-
-  const distance =
-    Math.round(
-      route.distance
-    );
-
-
-  const minutes =
-    Math.max(
-      1,
-      Math.round(
-        route.duration / 60
-      )
-    );
-
-
-  /*
-     Start watching the phone.
-  */
-
-  startNavigationTracking();
-
-
-  /*
-     Stop the normal continuous
-     voice recognition while
-     navigation speaks.
-  */
-
-  continuousMode =
-    false;
-
-
-  if(
-    recognition &&
-    listening
-  ){
-
-    try{
-
-      recognition.stop();
-
-    }
-
-    catch(e){}
-
-  }
-
-
-  mic.classList.add(
-    "active"
-  );
-
-
-  hint.textContent =
-    "TAP TO STOP NAVIGATION";
-
-
-  prompt.textContent =
-    "Navigating to " +
-    destination.name
-      .split(",")[0];
-
-
-  sub.textContent =
-    `${distance} metres • about ${minutes} minutes`;
-
-
-  speak(
-    `Navigation started. `
-    +
-    `The destination is about `
-    +
-    formatDistance(distance)
-    +
-    ` away. `
-    +
-    getStepInstruction(
-      navigationSteps[0]
-    ),
-    () => {
-
-      navigationActive =
-        true;
-
-      setState(
-        "ready"
-      );
-
-    }
-  );
-
-}
-
-
-/* ============================================================
-   FORMAT DISTANCE
-============================================================ */
-
-function formatDistance(
-  meters
-){
-
-  if(
-    meters < 1000
-  ){
-
-    return (
-      Math.round(meters)
-      +
-      " metres"
-    );
-
-  }
-
-
-  return (
-    (meters / 1000)
-      .toFixed(1)
-    +
-    " kilometres"
-  );
-
-}
-
-
-/* ============================================================
-   STEP INSTRUCTION
-============================================================ */
-
-function getStepInstruction(
-  step
-){
-
-  if(
-    !step
-  ){
-
-    return "Continue ahead.";
-
-  }
-
-
-  const distance =
-    Math.round(
-      step.distance
-    );
-
-
-  const maneuver =
-    step.maneuver
-      ?.type;
-
-
-  const modifier =
-    step.maneuver
-      ?.modifier;
-
-
-  let action =
-    "Continue";
-
-
-  if(
-    maneuver === "turn"
-  ){
-
-    if(
-      modifier === "left"
-    ){
-
-      action =
-        "turn left";
-
-    }
-
-    else if(
-      modifier === "right"
-    ){
-
-      action =
-        "turn right";
-
-    }
-
-    else if(
-      modifier === "slight left"
-    ){
-
-      action =
-        "bear left";
-
-    }
-
-    else if(
-      modifier === "slight right"
-    ){
-
-      action =
-        "bear right";
-
-    }
-
-    else{
-
-      action =
-        "turn";
-
-    }
-
-  }
-
-  else if(
-    maneuver === "roundabout"
-    ||
-    maneuver === "rotary"
-  ){
-
-    action =
-      "enter the roundabout";
-
-  }
-
-  else if(
-    maneuver === "depart"
-  ){
-
-    action =
-      "start by continuing";
-
-  }
-
-  else if(
-    maneuver === "arrive"
-  ){
-
-    return "You have arrived.";
-
-  }
-
-
-  if(
-    distance < 10
-  ){
-
-    return (
-      action +
-      " shortly."
-    );
-
-  }
-
-
-  return (
-    "In "
-    +
-    formatDistance(distance)
-    +
-    ", "
-    +
-    action
-    +
-    "."
-  );
-
-}
-
-
-/* ============================================================
-   NAVIGATION TRACKING
-============================================================ */
-
-function startNavigationTracking(){
-
-  if(
-    !navigator.geolocation
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    navigationWatch !== null
-  ){
-
-    navigator.geolocation.clearWatch(
-      navigationWatch
-    );
-
-  }
-
-
-  navigationWatch =
-
-    navigator.geolocation.watchPosition(
-
-      position => {
-
-        if(
-          !navigationActive ||
-          !navigationDestination
-        ){
-
-          return;
-
-        }
-
-
-        const current = {
-
-          lat:
-            position.coords.latitude,
-
-          lon:
-            position.coords.longitude
-
-        };
-
-
-        checkNavigationProgress(
-          current
-        );
-
-      },
-
-      error => {
-
-        console.log(
-          "Navigation GPS:",
-          error
-        );
-
-      },
-
-      {
-
-        enableHighAccuracy:
-          true,
-
-        maximumAge:
-          2000,
-
-        timeout:
-          10000
-
-      }
-
-    );
-
-}
-
-
-/* ============================================================
-   CHECK NAVIGATION
-============================================================ */
-
-function checkNavigationProgress(
-  current
-){
-
-  if(
-    !navigationSteps.length
-  ){
-
-    return;
-
-  }
-
-
-  const step =
-    navigationSteps[
-      navigationStepIndex
-    ];
-
-
-  if(
-    !step
-  ){
-
-    finishNavigation();
-
-    return;
-
-  }
-
-
-  const target =
-    step.maneuver
-      ?.location;
-
-
-  if(
-    !target ||
-    target.length < 2
-  ){
-
-    return;
-
-  }
-
-
-  const distanceToManeuver =
-
-    distanceMeters(
-
-      current.lat,
-      current.lon,
-
-      Number(target[1]),
-      Number(target[0])
-
-    );
-
-
-  /*
-     When we're close to the next
-     maneuver, announce it.
-  */
-
-  if(
-    distanceToManeuver <= 18
-  ){
-
-    navigationStepIndex++;
-
-
-    const nextStep =
-      navigationSteps[
-        navigationStepIndex
-      ];
-
-
-    if(!nextStep){
-
-      finishNavigation();
-
-      return;
-
-    }
-
-
-    const now =
-      Date.now();
-
-
-    if(
-      now -
-      lastNavigationAnnouncement
-      >
-      3000
-    ){
-
-      lastNavigationAnnouncement =
-        now;
-
-
-      const instruction =
-        getStepInstruction(
-          nextStep
-        );
-
-
-      prompt.textContent =
-        instruction;
-
-
-      speak(
-        instruction
-      );
-
-    }
-
-
-    return;
-
-  }
-
-
-  /*
-     Give an advance warning roughly
-     100 metres before the maneuver.
-  */
-
-  if(
-    distanceToManeuver <= 110
-    &&
-    distanceToManeuver >= 80
-  ){
-
-    const now =
-      Date.now();
-
-
-    if(
-      now -
-      lastNavigationAnnouncement
-      >
-      15000
-    ){
-
-      lastNavigationAnnouncement =
-        now;
-
-
-      const instruction =
-        getStepInstruction(
-          step
-        );
-
-
-      prompt.textContent =
-        instruction;
-
-
-      speak(
-        instruction
-      );
-
-    }
-
-  }
-
-
-  /*
-     Display distance only; don't
-     constantly speak it.
-  */
-
-  sub.textContent =
-    `${Math.round(
-      distanceToManeuver
-    )} m to next turn`;
-
-}
-
-
-/* ============================================================
-   FINISH NAVIGATION
-============================================================ */
-
-function finishNavigation(){
-
-  navigationActive =
-    false;
-
-
-  if(
-    navigationWatch !== null
-  ){
-
-    navigator.geolocation.clearWatch(
-      navigationWatch
-    );
-
-    navigationWatch =
-      null;
-
-  }
-
-
-  navigationSteps =
-    [];
-
-  navigationStepIndex =
-    0;
-
-
-  mic.classList.remove(
-    "active"
-  );
-
-
-  hint.textContent =
-    "TAP TO START";
-
-
-  prompt.textContent =
-    "You have arrived.";
-
-
-  sub.textContent =
-    "Navigation complete";
-
-
-  speak(
-    "You have arrived at your destination.",
-    () => {
-
-      setState(
-        "ready"
-      );
-
-    }
-  );
-
-}
-
-
-/* ============================================================
-   STOP NAVIGATION
-============================================================ */
-
-function stopNavigation(){
-
-  navigationActive =
-    false;
-
-
-  if(
-    navigationWatch !== null
-  ){
-
-    navigator.geolocation.clearWatch(
-      navigationWatch
-    );
-
-    navigationWatch =
-      null;
-
-  }
-
-
-  navigationSteps =
-    [];
-
-  navigationStepIndex =
-    0;
-
-
-  if(
-    "speechSynthesis"
-    in window
-  ){
-
-    speechSynthesis.cancel();
-
-  }
-
-
-  mic.classList.remove(
-    "active"
-  );
-
-
-  hint.textContent =
-    "TAP TO START";
-
-
-  setState(
-    "ready"
-  );
-
-
-  prompt.textContent =
-    "Navigation stopped.";
-
-}
-
-
-/* ============================================================
-   SECOND TAP WHILE NAVIGATING
-============================================================ */
-
-mic.addEventListener(
-  "click",
-  () => {
-
-    if(
-      navigationActive
-    ){
-
-      stopNavigation();
-
-    }
-
-  }
+window.addEventListener(
+    "resize",
+    resizeCanvas
 );
 
+resizeCanvas();
+drawWave();
 
-/* ============================================================
-   LOAD LOCAL AI
-============================================================ */
 
-async function loadAI(){
+/* =========================================================
+   INITIALISE
+   ========================================================= */
 
-  try{
-
-
-    setState(
-      "loading"
-    );
-
-
-    online.textContent =
-      "LOADING";
-
-
-    prompt.textContent =
-      "Loading Alex's local AI…";
-
-
-    sub.textContent =
-      "Preparing neural core";
-
-
-    const config =
-      webllm.prebuiltAppConfig;
-
-
-    const models =
-      config.model_list;
-
-
-    const model =
-      models.find(
-        item =>
-          item.model_id
-          ===
-          "SmolLM2-360M-Instruct-q4f32_1-MLC"
-      );
-
-
-    if(!model){
-
-      throw new Error(
-        "Small Alex model was not found."
-      );
-
-    }
-
-
-    online.textContent =
-      "DOWNLOADING";
-
-
-    prompt.textContent =
-      "Downloading Alex's neural core…";
-
-
-    sub.textContent =
-      "First launch only";
-
-
-    engine =
-
-      await webllm.CreateMLCEngine(
-
-        model.model_id,
-
-        {
-
-          initProgressCallback:
-            progress => {
-
-              console.log(
-                "ALEX PROGRESS:",
-                progress
-              );
-
-
-              if(
-                progress &&
-                typeof
-                progress.progress
-                ===
-                "number"
-              ){
-
-                const percent =
-                  Math.round(
-                    progress.progress *
-                    100
-                  );
-
-
-                online.textContent =
-                  percent + "%";
-
-
-                sub.textContent =
-                  "Local AI • "
-                  +
-                  percent
-                  +
-                  "%";
-
-
-                if(
-                  progress.text
-                ){
-
-                  prompt.textContent =
-                    progress.text;
-
-                }
-
-              }
-
-            }
-
-        }
-
-      );
-
-
-    aiReady =
-      true;
-
-
-    mic.disabled =
-      false;
-
-
-    online.textContent =
-      "AI ONLINE";
-
-
-    online.className =
-      "online ready";
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "Alex is ready.";
-
-
-    sub.textContent =
-      "Local AI • Voice • Navigation";
-
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX AI ERROR:",
-      error
-    );
-
-
-    aiReady =
-      false;
-
-
-    mic.disabled =
-      true;
-
-
-    online.textContent =
-      "AI ERROR";
-
-
-    online.className =
-      "online error";
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "Alex couldn't load.";
-
-
-    sub.textContent =
-      error?.message ||
-      String(error);
-
-  }
-
-}
-
-
-/* ============================================================
-   LOAD SAFARI VOICES
-============================================================ */
-
-if(
-  "speechSynthesis"
-  in window
-){
-
-  speechSynthesis.getVoices();
-
-
-  speechSynthesis.onvoiceschanged =
-    () => {
-
-      speechSynthesis.getVoices();
-
-    };
-
-}
-
-
-/* ============================================================
-   START ALEX
-============================================================ */
-
-loadAI();
-
+setStatus(
+    "STANDBY",
+    "SYSTEM ONLINE"
+);
 
 </script>
 
-
 </body>
-
 </html>
