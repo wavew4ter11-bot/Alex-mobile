@@ -3,26 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width,initial-scale=1,
-               viewport-fit=cover">
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 
 <title>A.L.E.X</title>
 
 <style>
 
 :root {
-    --bg: #020606;
-    --panel: #061010;
-    --panel2: #091818;
+    --bg: #030706;
+    --panel: #07100d;
+    --panel2: #0a1511;
+
     --green: #39ff14;
+    --green2: #8cff68;
+    --dim: #126b20;
+
     --cyan: #19d9ff;
-    --darkgreen: #0d5515;
-    --dim: #4c9b59;
-    --white: #d8ffdf;
-    --danger: #ff4545;
+    --white: #eaffea;
+
+    --border: rgba(57,255,20,.35);
+    --glow: rgba(57,255,20,.18);
+
+    --font: "Courier New", Consolas, monospace;
 }
 
 * {
@@ -31,38 +36,40 @@
 
 html,
 body {
-    margin: 0;
     width: 100%;
     height: 100%;
+    margin: 0;
     overflow: hidden;
 
     background: var(--bg);
-    color: var(--white);
+    color: var(--green);
 
-    font-family:
-        "Courier New",
-        monospace;
-}
-
-button,
-input {
-    font-family: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-#app {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    font-family: var(--font);
 }
 
 /* =========================================================
-   HOME
-   ========================================================= */
+   MAIN APP
+========================================================= */
+
+#app {
+    width: 100vw;
+    height: 100vh;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            rgba(20,100,40,.09),
+            transparent 42%
+        ),
+        #030706;
+}
+
+/* =========================================================
+   PORTRAIT HOME
+========================================================= */
 
 #home {
     position: absolute;
@@ -70,175 +77,138 @@ button {
 
     display: flex;
     flex-direction: column;
+    align-items: center;
 
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(20,70,45,.08),
-            transparent 48%
-        ),
-        var(--bg);
+    padding:
+        max(20px, env(safe-area-inset-top))
+        18px
+        max(20px, env(safe-area-inset-bottom));
+
+    transition: .25s ease;
 }
 
-/* HEADER */
-
-.header {
-    height: 58px;
-    min-height: 58px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-bottom:
-        1px solid rgba(57,255,20,.13);
-
-    position: relative;
+#home.hidden {
+    display: none;
 }
 
 .logo {
+    margin-top: 12px;
+
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 7px;
+
     color: var(--green);
 
-    font-size: 22px;
-    font-weight: bold;
-
-    letter-spacing: 5px;
-
     text-shadow:
-        0 0 8px rgba(57,255,20,.8),
-        0 0 22px rgba(57,255,20,.25);
+        0 0 7px var(--green),
+        0 0 20px rgba(57,255,20,.5);
 }
 
-.status {
-    position: absolute;
-
-    right: 15px;
-    top: 22px;
+.subtitle {
+    margin-top: 4px;
 
     font-size: 9px;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
 
-    color: var(--dim);
+    color: #197f2a;
 }
 
-.status.active {
+/* =========================================================
+   PORTRAIT STATUS
+========================================================= */
+
+.status {
+    margin-top: 28px;
+
+    font-size: 10px;
+    letter-spacing: 3px;
+
+    color: var(--green2);
+}
+
+.status::before {
+    content: "●";
+    margin-right: 8px;
+
     color: var(--green);
 
-    text-shadow:
-        0 0 8px rgba(57,255,20,.5);
+    text-shadow: 0 0 8px var(--green);
 }
 
 /* =========================================================
    WAVE
-   ========================================================= */
+========================================================= */
 
 .wave-area {
     position: relative;
 
-    flex: 1;
+    width: min(92vw, 480px);
+    height: 250px;
 
-    min-height: 0;
+    margin-top: 15px;
 
     display: flex;
     align-items: center;
     justify-content: center;
-
-    padding-bottom: 135px;
 }
 
 #wave {
-    width: 94%;
-    max-width: 850px;
-    height: 230px;
-}
-
-.core {
-    position: absolute;
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: var(--cyan);
-
-    box-shadow:
-        0 0 10px var(--cyan),
-        0 0 25px rgba(25,217,255,.65);
+    width: 100%;
+    height: 100%;
 }
 
 /* =========================================================
    CHAT
-   ========================================================= */
+========================================================= */
 
-.chat-panel {
-    position: absolute;
+#chat {
+    width: min(92vw, 520px);
 
-    left: 14px;
-    right: 14px;
-    bottom: 110px;
+    flex: 1;
 
-    height: 85px;
-
-    max-width: 700px;
-
-    margin: auto;
-
-    padding: 9px 11px;
+    min-height: 100px;
+    max-height: 38vh;
 
     overflow-y: auto;
 
-    background:
-        rgba(2,12,12,.9);
+    padding: 8px 6px;
 
-    border:
-        1px solid rgba(57,255,20,.23);
+    font-size: 11px;
+    line-height: 1.65;
 
-    box-shadow:
-        inset 0 0 18px rgba(0,0,0,.45);
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim) transparent;
 }
 
 .chat-line {
-    margin-bottom: 7px;
-
-    font-size: 10px;
-
-    line-height: 1.35;
+    margin-bottom: 10px;
 }
 
-.user {
+.chat-user {
     color: var(--cyan);
 }
 
-.alex {
-    color: var(--green);
+.chat-alex {
+    color: var(--green2);
+}
+
+.chat-time {
+    color: #397744;
+    font-size: 8px;
 }
 
 /* =========================================================
-   CONTROLS
-   ========================================================= */
+   HOME INPUT
+========================================================= */
 
-.controls {
-    position: absolute;
-
-    left: 12px;
-    right: 12px;
-    bottom: 10px;
-
-    height: 91px;
+.home-controls {
+    width: min(92vw, 520px);
 
     display: flex;
-    flex-direction: column;
+    gap: 8px;
 
-    gap: 7px;
-}
-
-.input-row {
-    width: 100%;
-
-    display: flex;
-
-    gap: 7px;
+    margin-top: 10px;
 }
 
 #textInput {
@@ -246,167 +216,233 @@ button {
 
     min-width: 0;
 
-    height: 39px;
+    background: var(--panel);
 
-    padding:
-        0 12px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
 
-    background: #030909;
+    color: var(--white);
 
-    border:
-        1px solid rgba(57,255,20,.32);
+    padding: 13px;
 
     outline: none;
 
-    color: var(--green);
-
+    font-family: var(--font);
     font-size: 11px;
+
+    box-shadow:
+        inset 0 0 15px rgba(0,0,0,.3);
 }
 
 #textInput:focus {
     border-color: var(--green);
 
     box-shadow:
-        0 0 10px rgba(57,255,20,.12);
+        0 0 10px var(--glow);
 }
 
-.control-row {
-    display: flex;
-
-    justify-content: center;
-
-    gap: 7px;
-}
-
-.alex-button {
-    height: 34px;
-
-    padding:
-        0 15px;
+button {
+    border: 1px solid var(--border);
 
     background:
-        rgba(5,18,14,.95);
-
-    border:
-        1px solid rgba(57,255,20,.35);
+        linear-gradient(
+            180deg,
+            #0a1910,
+            #050b08
+        );
 
     color: var(--green);
 
-    font-size: 9px;
+    font-family: var(--font);
+    font-size: 10px;
 
     letter-spacing: 1px;
 
-    white-space: nowrap;
+    padding: 11px 14px;
 
-    transition:
-        .15s ease;
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    transition: .15s ease;
 }
 
-.alex-button:hover {
+button:hover {
     border-color: var(--green);
 
+    color: white;
+
     box-shadow:
-        0 0 12px rgba(57,255,20,.16);
+        0 0 12px var(--glow);
 }
 
-.alex-button:active {
+button:active {
     transform: scale(.97);
 }
 
-.mic-button {
-    color: var(--cyan);
+/* =========================================================
+   BOTTOM BUTTONS
+========================================================= */
 
-    border-color:
-        rgba(25,217,255,.4);
+.home-buttons {
+    width: min(92vw, 520px);
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 9px;
 }
 
-.mic-button.listening {
-    color: white;
+.home-buttons button {
+    flex: 1;
+}
 
-    background:
-        rgba(25,217,255,.12);
-
-    border-color:
-        var(--cyan);
+.mic-active {
+    border-color: var(--cyan) !important;
+    color: var(--cyan) !important;
 
     box-shadow:
-        0 0 16px rgba(25,217,255,.3);
+        0 0 15px rgba(25,217,255,.25);
 }
 
 /* =========================================================
-   GENERAL SCREENS
-   ========================================================= */
+   ARCHIVE OVERLAY
+========================================================= */
 
-.screen {
+#archive {
     position: absolute;
     inset: 0;
 
     display: none;
 
-    background: var(--bg);
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(30,100,40,.08),
+            transparent 55%
+        ),
+        #020605;
 }
 
-.screen.active {
-    display: block;
+#archive.visible {
+    display: flex;
+    flex-direction: column;
 }
 
 /* =========================================================
-   ARCHIVE
-   LANDSCAPE DATABASE
-   ========================================================= */
+   ARCHIVE TOP BAR
+========================================================= */
 
-#archiveScreen {
-    overflow: hidden;
+.archive-top {
+    width: 100%;
+
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        max(10px, env(safe-area-inset-top))
+        16px
+        10px;
+
+    border-bottom: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7,20,13,.98),
+            rgba(3,9,6,.98)
+        );
+
+    flex-shrink: 0;
 }
 
-.archive-layout {
-    width: 100%;
-    height: 100%;
+.archive-title {
+    margin-right: auto;
+
+    min-width: 150px;
+}
+
+.archive-title-main {
+    font-size: 15px;
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 8px rgba(57,255,20,.4);
+}
+
+.archive-title-sub {
+    margin-top: 4px;
+
+    color: #297e36;
+
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.archive-toolbar {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.archive-toolbar button {
+    white-space: nowrap;
+}
+
+/* =========================================================
+   LANDSCAPE ARCHIVE BODY
+========================================================= */
+
+.archive-body {
+    flex: 1;
+
+    min-height: 0;
 
     display: grid;
 
     grid-template-columns:
-        minmax(250px, 36%)
-        minmax(0, 64%);
+        minmax(240px, 32%)
+        minmax(0, 68%);
+
+    gap: 0;
 }
 
-/* LEFT */
+/* =========================================================
+   SUIT LIST
+========================================================= */
 
-.archive-list {
+.suit-list {
     min-width: 0;
-
-    padding:
-        22px 18px 82px;
+    min-height: 0;
 
     overflow-y: auto;
 
-    border-right:
-        1px solid rgba(57,255,20,.2);
+    border-right: 1px solid var(--border);
 
-    background:
-        rgba(3,12,12,.45);
+    padding: 14px;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim) transparent;
 }
 
-.archive-title {
-    color: var(--green);
+.list-heading {
+    font-size: 9px;
+    letter-spacing: 2px;
 
-    font-size: 15px;
+    color: #34843f;
 
-    letter-spacing: 3px;
+    margin-bottom: 12px;
 }
 
-.archive-subtitle {
-    margin-top: 7px;
-    margin-bottom: 18px;
-
-    color: var(--dim);
-
-    font-size: 8px;
-
-    letter-spacing: 1px;
-}
-
-#suitList {
+#suitListItems {
     display: flex;
     flex-direction: column;
 
@@ -414,427 +450,463 @@ button {
 }
 
 .suit-card {
-    width: 100%;
+    display: grid;
 
-    min-height: 82px;
+    grid-template-columns: 68px 1fr;
 
-    display: flex;
+    gap: 10px;
 
-    gap: 11px;
+    min-height: 74px;
 
-    align-items: center;
+    padding: 7px;
 
-    padding: 9px;
+    border: 1px solid rgba(57,255,20,.18);
 
-    background:
-        rgba(5,17,17,.8);
+    background: rgba(5,15,10,.7);
 
-    border:
-        1px solid rgba(57,255,20,.17);
+    border-radius: 4px;
 
-    transition:
-        .15s ease;
+    cursor: pointer;
+
+    transition: .15s ease;
 }
 
 .suit-card:hover {
-    border-color:
-        rgba(57,255,20,.6);
+    border-color: var(--green);
+
+    background: rgba(20,50,25,.35);
 }
 
 .suit-card.selected {
-    border-color:
-        var(--cyan);
+    border-color: var(--green);
 
     box-shadow:
-        0 0 13px rgba(25,217,255,.1);
+        inset 3px 0 0 var(--green),
+        0 0 12px rgba(57,255,20,.08);
 }
 
 .suit-thumb {
-    width: 52px;
-    height: 64px;
-
-    flex-shrink: 0;
+    width: 68px;
+    height: 58px;
 
     object-fit: cover;
 
-    background: #010404;
+    background: #020504;
 
-    border:
-        1px solid rgba(57,255,20,.18);
+    border: 1px solid rgba(57,255,20,.15);
 }
 
-.suit-info {
-    min-width: 0;
-}
-
-.suit-name {
-    color: var(--green);
+.suit-card-name {
+    color: var(--green2);
 
     font-size: 10px;
+    font-weight: bold;
 
-    margin-bottom: 5px;
-
-    word-break: break-word;
+    margin-top: 5px;
 }
 
-.suit-era {
-    color: var(--dim);
+.suit-card-meta {
+    color: #447c4b;
 
-    font-size: 7px;
+    font-size: 8px;
 
-    letter-spacing: 1px;
-}
-
-/* EMPTY ARCHIVE */
-
-.empty-archive {
-    padding: 35px 15px;
-
-    text-align: center;
-
-    color: var(--dim);
-
-    font-size: 9px;
-
-    line-height: 1.7;
-
-    border:
-        1px dashed rgba(57,255,20,.15);
+    margin-top: 6px;
 }
 
 /* =========================================================
-   ARCHIVE PREVIEW
-   ========================================================= */
+   EMPTY ARCHIVE
+========================================================= */
 
-.archive-preview {
-    position: relative;
+.empty-archive {
+    padding: 35px 20px;
 
-    min-width: 0;
+    text-align: center;
 
-    display: flex;
+    color: #397344;
 
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        25px 25px 82px;
+    font-size: 10px;
+    line-height: 1.8;
 }
 
-.preview-title {
-    color: var(--cyan);
+.empty-icon {
+    font-size: 32px;
 
-    font-size: 11px;
+    margin-bottom: 12px;
 
-    letter-spacing: 2px;
+    color: #195d26;
+}
 
-    margin-bottom: 13px;
+/* =========================================================
+   SUIT VIEWER
+========================================================= */
+
+.suit-viewer {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(280px, 55%)
+        minmax(230px, 45%);
+
+    gap: 0;
+}
+
+/* =========================================================
+   IMAGE PANEL
+========================================================= */
+
+.image-panel {
+    min-width: 0;
+    min-height: 0;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(30,80,40,.10),
+            transparent 65%
+        );
 }
 
 #selectedImage {
-    max-width: 78%;
-    max-height: 59%;
+    max-width: 100%;
+    max-height: 100%;
 
     object-fit: contain;
 
-    background: #010404;
+    display: none;
 
-    border:
-        1px solid rgba(57,255,20,.22);
+    border: 1px solid rgba(57,255,20,.15);
 
     box-shadow:
-        0 0 25px rgba(57,255,20,.07);
+        0 0 25px rgba(57,255,20,.05);
 }
 
-.preview-name {
-    margin-top: 11px;
+.image-placeholder {
+    text-align: center;
 
-    color: var(--green);
+    color: #2b6734;
 
-    font-size: 13px;
-
+    font-size: 10px;
     letter-spacing: 2px;
-
-    text-align: center;
-}
-
-.preview-description {
-    max-width: 600px;
-
-    margin-top: 7px;
-
-    color: #7fb588;
-
-    font-size: 8px;
-
-    line-height: 1.5;
-
-    text-align: center;
 }
 
 /* =========================================================
-   ARCHIVE BOTTOM BAR
-   ========================================================= */
+   IMAGE NAV
+========================================================= */
 
-.archive-controls {
+.image-nav {
     position: absolute;
 
-    left: 15px;
-    right: 15px;
-    bottom: 12px;
+    left: 50%;
+    bottom: 18px;
 
-    height: 48px;
+    transform: translateX(-50%);
 
     display: flex;
 
-    justify-content: center;
-    align-items: center;
-
-    gap: 7px;
-
-    border-top:
-        1px solid rgba(57,255,20,.12);
-
-    padding-top: 8px;
-}
-
-.delete-button {
-    color: var(--danger);
-
-    border-color:
-        rgba(255,69,69,.4);
-}
-
-.delete-button:hover {
-    border-color:
-        var(--danger);
-
-    box-shadow:
-        0 0 12px rgba(255,69,69,.15);
+    gap: 8px;
 }
 
 /* =========================================================
-   SUIT VIEW
-   PORTRAIT
-   ========================================================= */
-
-#suitScreen {
-    overflow: hidden;
-}
-
-.suit-view {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-}
-
-.suit-header {
-    height: 57px;
-    min-height: 57px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-bottom:
-        1px solid rgba(57,255,20,.13);
-}
-
-.suit-image-area {
-    flex: 1;
-
-    min-height: 0;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 18px;
-}
-
-#suitLargeImage {
-    max-width: 92%;
-    max-height: 72%;
-
-    object-fit: contain;
-
-    background: #010404;
-
-    box-shadow:
-        0 0 28px rgba(57,255,20,.08);
-}
+   DETAILS
+========================================================= */
 
 .suit-details {
-    text-align: center;
+    min-width: 0;
+    min-height: 0;
 
-    padding:
-        4px 20px 83px;
+    overflow-y: auto;
+
+    padding: 30px 30px 80px;
+
+    border-left: 1px solid rgba(57,255,20,.15);
 }
 
-#suitLargeName {
-    color: var(--green);
-
-    font-size: 14px;
-
-    letter-spacing: 2px;
-}
-
-#suitLargeDescription {
-    max-width: 600px;
-
-    margin:
-        7px auto 0;
-
-    color: #7fb588;
+.detail-label {
+    color: #3b8745;
 
     font-size: 8px;
+    letter-spacing: 2px;
 
-    line-height: 1.5;
+    margin-bottom: 7px;
 }
 
-.suit-bottom {
-    position: absolute;
+#detailName {
+    color: var(--green);
 
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+    font-size: 22px;
+    font-weight: bold;
 
-    display: flex;
+    letter-spacing: 2px;
 
+    margin-bottom: 22px;
+}
+
+#detailDescription {
+    color: var(--white);
+
+    font-size: 11px;
+
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+}
+
+.detail-section {
+    margin-top: 25px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(57,255,20,.12);
+}
+
+/* =========================================================
+   ADD SUIT MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
     justify-content: center;
 
-    gap: 7px;
+    z-index: 100;
+
+    background: rgba(0,0,0,.75);
+}
+
+.modal.visible {
+    display: flex;
+}
+
+.modal-box {
+    width: min(92vw, 500px);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    background: #06100b;
+
+    border: 1px solid var(--green);
+
+    box-shadow:
+        0 0 30px rgba(57,255,20,.12);
+}
+
+.modal-title {
+    font-size: 15px;
+    letter-spacing: 3px;
+
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+
+    color: #47874f;
+
+    font-size: 8px;
+    letter-spacing: 2px;
+
+    margin: 14px 0 6px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+
+    background: #020604;
+
+    color: var(--white);
+
+    border: 1px solid rgba(57,255,20,.3);
+
+    padding: 11px;
+
+    outline: none;
+
+    font-family: var(--font);
+    font-size: 10px;
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.file-input {
+    width: 100%;
+
+    color: #8bb98e;
+
+    font-family: var(--font);
+    font-size: 9px;
+}
+
+.modal-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    flex: 1;
 }
 
 /* =========================================================
    TOAST
-   ========================================================= */
+========================================================= */
 
 #toast {
     position: fixed;
 
     left: 50%;
-    bottom: 75px;
+    bottom: 25px;
 
     transform:
-        translate(-50%,20px);
+        translateX(-50%)
+        translateY(20px);
 
     opacity: 0;
 
     pointer-events: none;
 
-    z-index: 100;
+    background: #06130b;
 
-    padding:
-        9px 14px;
+    border: 1px solid var(--green);
 
-    background:
-        #061010;
+    color: var(--green2);
 
-    border:
-        1px solid var(--green);
+    padding: 10px 18px;
 
-    color: var(--green);
-
+    font-family: var(--font);
     font-size: 9px;
 
-    transition:
-        .25s ease;
+    z-index: 200;
+
+    transition: .25s ease;
 }
 
 #toast.show {
     opacity: 1;
 
     transform:
-        translate(-50%,0);
+        translateX(-50%)
+        translateY(0);
 }
 
 /* =========================================================
-   MOBILE LANDSCAPE ARCHIVE
-   ========================================================= */
+   MOBILE ARCHIVE
+========================================================= */
 
-@media (max-height: 550px) {
+@media (max-width: 700px) {
 
-    .archive-list {
-        padding-top: 12px;
+    .archive-top {
+        min-height: 110px;
+
+        align-items: flex-start;
     }
 
     .archive-title {
-        font-size: 12px;
+        padding-top: 5px;
     }
 
-    .archive-subtitle {
-        margin-bottom: 9px;
+    .archive-toolbar {
+        max-width: 65%;
     }
 
-    .suit-card {
-        min-height: 58px;
-    }
-
-    .suit-thumb {
-        width: 40px;
-        height: 48px;
-    }
-
-    #selectedImage {
-        max-height: 50%;
-    }
-
-}
-
-/* =========================================================
-   PORTRAIT HOME
-   ========================================================= */
-
-@media (orientation: portrait) {
-
-    .wave-area {
-        padding-bottom: 130px;
-    }
-
-    .chat-panel {
-        bottom: 108px;
-    }
-
-    .controls {
-        bottom: 8px;
-    }
-
-    .logo {
-        font-size: 19px;
-    }
-
-}
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 430px) {
-
-    .alex-button {
-        padding:
-            0 10px;
-
+    .archive-toolbar button {
+        padding: 8px 9px;
         font-size: 8px;
     }
 
-    .control-row {
-        gap: 5px;
+    .archive-body {
+        grid-template-columns: 115px 1fr;
     }
 
-    .chat-panel {
-        left: 9px;
-        right: 9px;
+    .suit-card {
+        display: block;
     }
 
+    .suit-thumb {
+        width: 100%;
+        height: 70px;
+    }
+
+    .suit-card-name {
+        font-size: 8px;
+    }
+
+    .suit-card-meta {
+        display: none;
+    }
+
+    .suit-viewer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 55% 45%;
+    }
+
+    .suit-details {
+        border-left: none;
+        border-top: 1px solid rgba(57,255,20,.15);
+
+        padding: 15px 18px 60px;
+    }
+
+    #detailName {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    #detailDescription {
+        font-size: 9px;
+    }
+}
+
+/* =========================================================
+   LANDSCAPE SMALL SCREENS
+========================================================= */
+
+@media (orientation: landscape) and (max-height: 650px) {
+
+    #home {
+        padding-top: 8px;
+    }
+
+    .logo {
+        margin-top: 3px;
+    }
+
+    .status {
+        margin-top: 8px;
+    }
+
+    .wave-area {
+        height: 150px;
+        margin-top: 2px;
+    }
+
+    #chat {
+        max-height: 22vh;
+    }
 }
 
 </style>
@@ -844,351 +916,370 @@ button {
 
 <div id="app">
 
-<!-- =======================================================
+<!-- =====================================================
      HOME
-     ======================================================= -->
+===================================================== -->
 
 <section id="home">
 
-    <div class="header">
-
-        <div class="logo">
-            A.L.E.X
-        </div>
-
-        <div
-            id="status"
-            class="status"
-        >
-            STANDBY
-        </div>
-
+    <div class="logo">
+        A.L.E.X
     </div>
 
+    <div class="subtitle">
+        ADVANCED LOGIC &amp; EXPLORATION SYSTEM
+    </div>
+
+    <div id="status" class="status">
+        STANDBY
+    </div>
 
     <div class="wave-area">
-
         <canvas id="wave"></canvas>
+    </div>
 
-        <div class="core"></div>
+    <div id="chat"></div>
+
+    <div class="home-controls">
+
+        <input
+            id="textInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Speak to A.L.E.X..."
+        >
+
+        <button id="sendButton">
+            SEND
+        </button>
 
     </div>
 
+    <div class="home-buttons">
 
-    <div
-        id="chat"
-        class="chat-panel"
-    ></div>
+        <button id="micButton">
+            MIC OFF
+        </button>
 
+        <button id="speakButton">
+            SPEAK
+        </button>
 
-    <div class="controls">
-
-        <div class="input-row">
-
-            <input
-                id="textInput"
-                type="text"
-                autocomplete="off"
-                placeholder="ENTER COMMAND..."
-            >
-
-            <button
-                class="alex-button"
-                onclick="sendText()"
-            >
-                SEND
-            </button>
-
-        </div>
-
-
-        <div class="control-row">
-
-            <button
-                id="micButton"
-                class="alex-button mic-button"
-                onclick="toggleMic()"
-            >
-                MIC OFF
-            </button>
-
-            <button
-                class="alex-button"
-                onclick="openArchive()"
-            >
-                ARCHIVES
-            </button>
-
-            <button
-                class="alex-button"
-                onclick="speakLast()"
-            >
-                SPEAK
-            </button>
-
-        </div>
+        <button id="archiveButton">
+            ARCHIVES
+        </button>
 
     </div>
 
 </section>
 
 
-<!-- =======================================================
+<!-- =====================================================
      ARCHIVE
-     ======================================================= -->
+===================================================== -->
 
-<section
-    id="archiveScreen"
-    class="screen"
->
+<section id="archive">
 
-    <div class="archive-layout">
+    <div class="archive-top">
 
-        <div class="archive-list">
+        <div class="archive-title">
 
-            <div class="archive-title">
+            <div class="archive-title-main">
                 A.L.E.X // ARCHIVE
             </div>
 
-            <div class="archive-subtitle">
-                SUIT DATABASE // USER COLLECTION
+            <div class="archive-title-sub">
+                SUIT DATABASE
             </div>
-
-            <div id="suitList"></div>
 
         </div>
 
+        <div class="archive-toolbar">
 
-        <div class="archive-preview">
+            <button id="addSuitButton">
+                + ADD SUIT
+            </button>
 
-            <div class="preview-title">
-                SELECTED SUIT
-            </div>
+            <button id="deleteSuitButton">
+                DELETE
+            </button>
 
-
-            <img
-                id="selectedImage"
-                alt="Selected suit"
-            >
-
-
-            <div
-                id="selectedName"
-                class="preview-name"
-            ></div>
-
-
-            <div
-                id="selectedDescription"
-                class="preview-description"
-            ></div>
-
-
-            <div class="archive-controls">
-
-                <button
-                    class="alex-button"
-                    onclick="previousSuit()"
-                >
-                    &lt; PREV
-                </button>
-
-                <button
-                    class="alex-button"
-                    onclick="openSelectedSuit()"
-                >
-                    OPEN
-                </button>
-
-                <button
-                    class="alex-button"
-                    onclick="nextSuit()"
-                >
-                    NEXT &gt;
-                </button>
-
-                <button
-                    class="alex-button"
-                    onclick="document.getElementById('suitFile').click()"
-                >
-                    + ADD SUIT
-                </button>
-
-                <button
-                    class="alex-button delete-button"
-                    onclick="deleteSelectedSuit()"
-                >
-                    DELETE
-                </button>
-
-                <button
-                    class="alex-button"
-                    onclick="closeArchive()"
-                >
-                    HOME
-                </button>
-
-            </div>
+            <button id="backButton">
+                &lt; HOME
+            </button>
 
         </div>
 
     </div>
 
 
-    <input
-        id="suitFile"
-        type="file"
-        accept="image/*"
-        multiple
-        hidden
-    >
+    <div class="archive-body">
 
-</section>
+        <!-- SUIT LIST -->
+
+        <div class="suit-list">
+
+            <div class="list-heading">
+                ARCHIVED SUITS
+            </div>
+
+            <div id="suitListItems"></div>
+
+        </div>
 
 
-<!-- =======================================================
-     INDIVIDUAL SUIT VIEW
-     ======================================================= -->
+        <!-- VIEWER -->
 
-<section
-    id="suitScreen"
-    class="screen"
->
+        <div class="suit-viewer">
 
-    <div class="suit-view">
+            <div class="image-panel">
 
-        <div class="suit-header">
+                <div
+                    id="imagePlaceholder"
+                    class="image-placeholder"
+                >
+                    SELECT A SUIT
+                </div>
 
-            <div class="logo">
-                A.L.E.X // SUIT
+                <img
+                    id="selectedImage"
+                    alt="Selected suit"
+                >
+
+                <div class="image-nav">
+
+                    <button id="previousImage">
+                        &lt;
+                    </button>
+
+                    <button id="nextImage">
+                        &gt;
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="suit-details">
+
+                <div class="detail-label">
+                    CURRENT ARCHIVE ENTRY
+                </div>
+
+                <div id="detailName">
+                    NO SUIT SELECTED
+                </div>
+
+                <div class="detail-section">
+
+                    <div class="detail-label">
+                        DESCRIPTION
+                    </div>
+
+                    <div id="detailDescription">
+                        Add a suit to begin building the archive.
+                    </div>
+
+                </div>
+
+                <div class="detail-section">
+
+                    <div class="detail-label">
+                        IMAGE COUNT
+                    </div>
+
+                    <div id="detailImageCount">
+                        0
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
-
-
-        <div class="suit-image-area">
-
-            <img
-                id="suitLargeImage"
-                alt="Suit"
-            >
-
-        </div>
-
-
-        <div class="suit-details">
-
-            <div
-                id="suitLargeName"
-            ></div>
-
-            <div
-                id="suitLargeDescription"
-            ></div>
-
-        </div>
-
-    </div>
-
-
-    <div class="suit-bottom">
-
-        <button
-            class="alex-button"
-            onclick="previousSuitFromView()"
-        >
-            &lt;
-        </button>
-
-        <button
-            class="alex-button"
-            onclick="openArchive()"
-        >
-            ARCHIVE
-        </button>
-
-        <button
-            class="alex-button"
-            onclick="closeSuitView()"
-        >
-            HOME
-        </button>
-
-        <button
-            class="alex-button"
-            onclick="nextSuitFromView()"
-        >
-            &gt;
-        </button>
 
     </div>
 
 </section>
 
+
+<!-- =====================================================
+     ADD SUIT MODAL
+===================================================== -->
+
+<div id="addModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            ADD SUIT TO ARCHIVE
+        </div>
+
+        <label class="form-label">
+            SUIT NAME
+        </label>
+
+        <input
+            id="suitName"
+            class="form-input"
+            placeholder="e.g. INTEGRATED SUIT"
+        >
+
+        <label class="form-label">
+            DESCRIPTION
+        </label>
+
+        <textarea
+            id="suitDescription"
+            class="form-textarea"
+            placeholder="Leave blank for automatic description."
+        ></textarea>
+
+        <label class="form-label">
+            SUIT IMAGES
+        </label>
+
+        <input
+            id="suitImages"
+            class="file-input"
+            type="file"
+            accept="image/*"
+            multiple
+        >
+
+        <div class="modal-buttons">
+
+            <button id="saveSuitButton">
+                SAVE SUIT
+            </button>
+
+            <button id="cancelSuitButton">
+                CANCEL
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <div id="toast"></div>
 
+</div>
+
 
 <script>
 
 /* =========================================================
+   A.L.E.X
+   LOCAL ARCHIVE SYSTEM
+========================================================= */
+
+const STORAGE_KEY = "alex_suit_archive_v2";
+
+let suits = [];
+let selectedSuit = -1;
+let selectedImageIndex = 0;
+
+let micActive = false;
+let recognition = null;
+
+let speechEnabled = true;
+
+
+/* =========================================================
    ELEMENTS
-   ========================================================= */
+========================================================= */
 
-const home =
-    document.getElementById("home");
+const home = document.getElementById("home");
+const archive = document.getElementById("archive");
 
-const archiveScreen =
-    document.getElementById("archiveScreen");
+const chat = document.getElementById("chat");
 
-const suitScreen =
-    document.getElementById("suitScreen");
+const textInput = document.getElementById("textInput");
+const sendButton = document.getElementById("sendButton");
 
-const chat =
-    document.getElementById("chat");
+const micButton = document.getElementById("micButton");
+const speakButton = document.getElementById("speakButton");
 
-const input =
-    document.getElementById("textInput");
+const archiveButton = document.getElementById("archiveButton");
+
+const backButton = document.getElementById("backButton");
+
+const addSuitButton =
+    document.getElementById("addSuitButton");
+
+const deleteSuitButton =
+    document.getElementById("deleteSuitButton");
+
+const suitListItems =
+    document.getElementById("suitListItems");
+
+const selectedImage =
+    document.getElementById("selectedImage");
+
+const imagePlaceholder =
+    document.getElementById("imagePlaceholder");
+
+const detailName =
+    document.getElementById("detailName");
+
+const detailDescription =
+    document.getElementById("detailDescription");
+
+const detailImageCount =
+    document.getElementById("detailImageCount");
+
+const previousImage =
+    document.getElementById("previousImage");
+
+const nextImage =
+    document.getElementById("nextImage");
+
+const addModal =
+    document.getElementById("addModal");
+
+const suitName =
+    document.getElementById("suitName");
+
+const suitDescription =
+    document.getElementById("suitDescription");
+
+const suitImages =
+    document.getElementById("suitImages");
+
+const saveSuitButton =
+    document.getElementById("saveSuitButton");
+
+const cancelSuitButton =
+    document.getElementById("cancelSuitButton");
 
 const status =
     document.getElementById("status");
 
-const micButton =
-    document.getElementById("micButton");
-
-const wave =
-    document.getElementById("wave");
-
-const ctx =
-    wave.getContext("2d");
+const toast =
+    document.getElementById("toast");
 
 
 /* =========================================================
-   ARCHIVE DATA
-   IMPORTANT:
-   STARTS EMPTY
-   ========================================================= */
+   LOAD ARCHIVE
+========================================================= */
 
-let suits = [];
+function loadArchive() {
 
-let selectedIndex = -1;
+    try {
 
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
-/* =========================================================
-   LOAD SAVED SUITS
-   ========================================================= */
+        if (!saved) {
 
-try {
+            suits = [];
 
-    const saved =
-        localStorage.getItem(
-            "alex_suits_v3"
-        );
-
-    if (saved) {
+            return;
+        }
 
         const parsed =
             JSON.parse(saved);
@@ -1197,405 +1288,985 @@ try {
 
             suits = parsed;
 
+        } else {
+
+            suits = [];
         }
 
+    } catch (error) {
+
+        console.error(error);
+
+        suits = [];
     }
-
-} catch (error) {
-
-    console.log(
-        "Archive load error:",
-        error
-    );
-
-}
-
-
-if (suits.length) {
-
-    selectedIndex = 0;
-
 }
 
 
 /* =========================================================
-   SAVE
-   ========================================================= */
+   SAVE ARCHIVE
+========================================================= */
 
-function saveSuits() {
+function saveArchive() {
 
     try {
 
         localStorage.setItem(
-            "alex_suits_v3",
+            STORAGE_KEY,
             JSON.stringify(suits)
         );
 
     } catch (error) {
 
-        console.log(
-            "Archive save error:",
-            error
-        );
+        console.error(error);
 
-        toast(
-            "COULD NOT SAVE ARCHIVE"
+        showToast(
+            "Could not save archive."
         );
-
     }
+}
 
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+function showToast(text) {
+
+    toast.textContent = text;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(
+        () => {
+            toast.classList.remove("show");
+        },
+        2400
+    );
+}
+
+
+/* =========================================================
+   TIME
+========================================================= */
+
+function currentTime() {
+
+    return new Date().toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        }
+    );
 }
 
 
 /* =========================================================
    CHAT
-   ========================================================= */
+========================================================= */
 
 function addChat(
     speaker,
     text
 ) {
 
-    const line =
-        document.createElement(
-            "div"
-        );
+    const wrapper =
+        document.createElement("div");
 
-    line.className =
-        "chat-line " +
-        (
-            speaker === "USER"
-                ? "user"
-                : "alex"
-        );
+    wrapper.className =
+        "chat-line";
 
-    const now =
-        new Date().toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            }
-        );
+    const time =
+        document.createElement("div");
 
-    line.innerHTML =
-        "<b>" +
-        escapeHTML(speaker) +
+    time.className =
+        "chat-time";
+
+    time.textContent =
+        speaker +
         " // " +
-        escapeHTML(now) +
-        "</b><br>" +
-        escapeHTML(text);
+        currentTime();
 
-    chat.appendChild(line);
+    const message =
+        document.createElement("div");
+
+    message.className =
+        speaker === "USER"
+            ? "chat-user"
+            : "chat-alex";
+
+    message.textContent =
+        text;
+
+    wrapper.appendChild(time);
+    wrapper.appendChild(message);
+
+    chat.appendChild(wrapper);
 
     chat.scrollTop =
         chat.scrollHeight;
-
 }
 
 
 /* =========================================================
-   TEXT
-   ========================================================= */
+   LOCAL ALEX
+========================================================= */
 
-function sendText() {
+function alexResponse(text) {
 
-    const text =
-        input.value.trim();
+    const low =
+        text.toLowerCase();
 
-    if (!text) {
+    if (
+        low.includes("archive") ||
+        low.includes("suits")
+    ) {
+
+        openArchive();
+
         return;
     }
 
-    input.value = "";
+    if (
+        low.includes("hello") ||
+        low.includes("hi alex")
+    ) {
+
+        return "A.L.E.X online. Systems standing by.";
+
+    }
+
+    if (
+        low.includes("mic")
+    ) {
+
+        return micActive
+            ? "Microphone is currently active."
+            : "Microphone is currently inactive.";
+
+    }
+
+    if (
+        low.includes("status")
+    ) {
+
+        return "All local interface systems are operational.";
+
+    }
+
+    return (
+        "I’m running in local interface mode. " +
+        "I can control the archive, microphone, " +
+        "speech and workspace interface."
+    );
+}
+
+
+/* =========================================================
+   SEND
+========================================================= */
+
+function sendMessage() {
+
+    const text =
+        textInput.value.trim();
+
+    if (!text)
+        return;
+
+    textInput.value = "";
 
     addChat(
         "USER",
         text
     );
 
-    processCommand(text);
+    status.textContent =
+        "THINKING";
 
+    setTimeout(
+        () => {
+
+            const answer =
+                alexResponse(text);
+
+            if (answer) {
+
+                addChat(
+                    "ALEX",
+                    answer
+                );
+
+                if (speechEnabled) {
+
+                    speakText(answer);
+                }
+            }
+
+            status.textContent =
+                "STANDBY";
+
+        },
+        250
+    );
 }
 
 
-input.addEventListener(
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+textInput.addEventListener(
     "keydown",
-    function(event) {
+    event => {
 
         if (
             event.key === "Enter"
         ) {
 
-            sendText();
-
+            sendMessage();
         }
-
     }
 );
 
 
 /* =========================================================
-   COMMANDS
-   ========================================================= */
+   ARCHIVE NAVIGATION
+========================================================= */
 
-function processCommand(
-    text
-) {
+function openArchive() {
 
-    const low =
-        text.toLowerCase();
+    home.classList.add("hidden");
 
+    archive.classList.add("visible");
 
-    if (
-        low.includes("archive") ||
-        low.includes("archives")
-    ) {
+    renderArchive();
+}
 
-        openArchive();
+function closeArchive() {
 
-        alex(
-            "Opening the archive."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("add suit")
-    ) {
-
-        document
-            .getElementById("suitFile")
-            .click();
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("delete suit")
-    ) {
-
-        deleteSelectedSuit();
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("next suit")
-    ) {
-
-        nextSuit();
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("previous suit")
-    )
-    {
-
-        previousSuit();
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("close archive") ||
-        low.includes("go home")
-    ) {
-
-        closeArchive();
-
-        alex(
-            "Returning home."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("hello") ||
-        low.includes("hi alex") ||
-        low === "hi"
-    ) {
-
-        alex(
-            "Good to hear from you. Systems are standing by."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("status")
-    ) {
-
-        alex(
-            "A.L.E.X is online. Archive and voice systems are ready."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        low.includes("who are you")
-    ) {
-
-        alex(
-            "I am A.L.E.X, your personal assistant interface."
-        );
-
-        return;
-
-    }
-
-
-    alex(
-        "Command received. I can control the archive, navigate suits, add suits and remove suits."
+    archive.classList.remove(
+        "visible"
     );
 
+    home.classList.remove(
+        "hidden"
+    );
+
+    status.textContent =
+        "STANDBY";
+}
+
+archiveButton.addEventListener(
+    "click",
+    openArchive
+);
+
+backButton.addEventListener(
+    "click",
+    closeArchive
+);
+
+
+/* =========================================================
+   AUTOMATIC DESCRIPTION
+========================================================= */
+
+function generateDescription(
+    name
+) {
+
+    const upper =
+        name.toUpperCase();
+
+    const lower =
+        name.toLowerCase();
+
+    let style =
+        "advanced Spider-Man suit";
+
+    if (
+        lower.includes("iron") ||
+        lower.includes("tech")
+    ) {
+
+        style =
+            "technology-focused Spider-Man suit";
+
+    } else if (
+        lower.includes("stealth") ||
+        lower.includes("black")
+    ) {
+
+        style =
+            "stealth-oriented Spider-Man suit";
+
+    } else if (
+        lower.includes("classic") ||
+        lower.includes("red")
+    ) {
+
+        style =
+            "classic red-and-blue Spider-Man suit";
+
+    } else if (
+        lower.includes("symbiote")
+    ) {
+
+        style =
+            "dark symbiote-inspired Spider-Man suit";
+    }
+
+    return (
+        `${upper} is an ${style} concept. ` +
+        `The design combines a distinctive visual identity ` +
+        `with a practical superhero aesthetic. ` +
+        `Its appearance, materials and technology can be ` +
+        `expanded as additional archive information is added. ` +
+        `A.L.E.X has automatically generated this description ` +
+        `from the suit's archive name.`
+    );
 }
 
 
 /* =========================================================
-   ALEX
-   ========================================================= */
+   ADD SUIT MODAL
+========================================================= */
 
-let lastSpeech = "";
+function openAddModal() {
 
+    suitName.value = "";
+    suitDescription.value = "";
+    suitImages.value = "";
 
-function alex(
-    text
-) {
-
-    lastSpeech = text;
-
-    addChat(
-        "ALEX",
-        text
-    );
-
-    setStatus(
-        "RESPONDING"
+    addModal.classList.add(
+        "visible"
     );
 
     setTimeout(
-        function() {
-
-            setStatus(
-                "STANDBY"
-            );
-
-        },
-        900
+        () => suitName.focus(),
+        50
     );
-
 }
 
+function closeAddModal() {
 
-function setStatus(
-    value
-) {
-
-    status.textContent =
-        value;
-
-    status.classList.toggle(
-        "active",
-        value !== "STANDBY"
+    addModal.classList.remove(
+        "visible"
     );
+}
 
+addSuitButton.addEventListener(
+    "click",
+    openAddModal
+);
+
+cancelSuitButton.addEventListener(
+    "click",
+    closeAddModal
+);
+
+
+/* =========================================================
+   FILE -> DATA URL
+========================================================= */
+
+function fileToDataURL(file) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                () => resolve(
+                    reader.result
+                );
+
+            reader.onerror =
+                reject;
+
+            reader.readAsDataURL(
+                file
+            );
+        }
+    );
 }
 
 
 /* =========================================================
-   SPEAK
-   ========================================================= */
+   SAVE NEW SUIT
+========================================================= */
 
-function speakLast() {
+saveSuitButton.addEventListener(
+    "click",
+    async () => {
 
-    if (!lastSpeech) {
+        const name =
+            suitName.value.trim();
 
-        alex(
-            "Nothing is currently in my speech queue."
+        if (!name) {
+
+            showToast(
+                "Enter a suit name."
+            );
+
+            return;
+        }
+
+        const files =
+            Array.from(
+                suitImages.files
+            );
+
+        const images = [];
+
+        try {
+
+            for (
+                const file of files
+            ) {
+
+                images.push(
+                    await fileToDataURL(
+                        file
+                    )
+                );
+            }
+
+        } catch (error) {
+
+            showToast(
+                "Could not load an image."
+            );
+
+            return;
+        }
+
+        const description =
+            suitDescription.value.trim()
+                ||
+            generateDescription(
+                name
+            );
+
+        const newSuit = {
+
+            id:
+                Date.now(),
+
+            name:
+                name.toUpperCase(),
+
+            description:
+                description,
+
+            images:
+                images,
+
+            created:
+                new Date().toISOString()
+        };
+
+        suits.push(
+            newSuit
+        );
+
+        saveArchive();
+
+        selectedSuit =
+            suits.length - 1;
+
+        selectedImageIndex = 0;
+
+        closeAddModal();
+
+        renderArchive();
+
+        showToast(
+            `${name.toUpperCase()} added to archive.`
+        );
+    }
+);
+
+
+/* =========================================================
+   DELETE SUIT
+========================================================= */
+
+deleteSuitButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            selectedSuit < 0 ||
+            !suits[selectedSuit]
+        ) {
+
+            showToast(
+                "Select a suit first."
+            );
+
+            return;
+        }
+
+        const name =
+            suits[selectedSuit].name;
+
+        const confirmed =
+            confirm(
+                `Delete ${name} from the archive?`
+            );
+
+        if (!confirmed)
+            return;
+
+        suits.splice(
+            selectedSuit,
+            1
+        );
+
+        if (
+            suits.length === 0
+        ) {
+
+            selectedSuit = -1;
+
+        } else {
+
+            selectedSuit =
+                Math.min(
+                    selectedSuit,
+                    suits.length - 1
+                );
+        }
+
+        selectedImageIndex = 0;
+
+        saveArchive();
+
+        renderArchive();
+
+        showToast(
+            `${name} deleted.`
+        );
+    }
+);
+
+
+/* =========================================================
+   RENDER ARCHIVE
+========================================================= */
+
+function renderArchive() {
+
+    renderSuitList();
+
+    renderSelectedSuit();
+}
+
+
+/* =========================================================
+   SUIT LIST
+========================================================= */
+
+function renderSuitList() {
+
+    suitListItems.innerHTML = "";
+
+    if (
+        suits.length === 0
+    ) {
+
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "empty-archive";
+
+        empty.innerHTML =
+            `
+                <div class="empty-icon">◇</div>
+                ARCHIVE EMPTY
+                <br><br>
+                Use + ADD SUIT to create
+                your first archive entry.
+            `;
+
+        suitListItems.appendChild(
+            empty
         );
 
         return;
+    }
 
+    suits.forEach(
+        (suit, index) => {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "suit-card";
+
+            if (
+                index === selectedSuit
+            ) {
+
+                card.classList.add(
+                    "selected"
+                );
+            }
+
+            const thumb =
+                document.createElement("img");
+
+            thumb.className =
+                "suit-thumb";
+
+            if (
+                suit.images &&
+                suit.images.length
+            ) {
+
+                thumb.src =
+                    suit.images[0];
+
+            } else {
+
+                thumb.style.display =
+                    "none";
+            }
+
+            const information =
+                document.createElement("div");
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "suit-card-name";
+
+            name.textContent =
+                suit.name;
+
+            const meta =
+                document.createElement("div");
+
+            meta.className =
+                "suit-card-meta";
+
+            meta.textContent =
+                `${suit.images?.length || 0} IMAGE(S)`;
+
+            information.appendChild(
+                name
+            );
+
+            information.appendChild(
+                meta
+            );
+
+            card.appendChild(
+                thumb
+            );
+
+            card.appendChild(
+                information
+            );
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    selectedSuit =
+                        index;
+
+                    selectedImageIndex =
+                        0;
+
+                    renderArchive();
+                }
+            );
+
+            suitListItems.appendChild(
+                card
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   SELECTED SUIT
+========================================================= */
+
+function renderSelectedSuit() {
+
+    if (
+        selectedSuit < 0 ||
+        !suits[selectedSuit]
+    ) {
+
+        imagePlaceholder.style.display =
+            "block";
+
+        selectedImage.style.display =
+            "none";
+
+        detailName.textContent =
+            "NO SUIT SELECTED";
+
+        detailDescription.textContent =
+            "Add a suit to begin building the archive.";
+
+        detailImageCount.textContent =
+            "0";
+
+        return;
+    }
+
+    const suit =
+        suits[selectedSuit];
+
+    detailName.textContent =
+        suit.name;
+
+    detailDescription.textContent =
+        suit.description ||
+        generateDescription(
+            suit.name
+        );
+
+    const images =
+        suit.images || [];
+
+    detailImageCount.textContent =
+        String(
+            images.length
+        );
+
+    if (
+        images.length === 0
+    ) {
+
+        imagePlaceholder.style.display =
+            "block";
+
+        imagePlaceholder.textContent =
+            "NO IMAGE ATTACHED";
+
+        selectedImage.style.display =
+            "none";
+
+        return;
     }
 
     if (
-        !window.speechSynthesis
+        selectedImageIndex >= images.length
     ) {
 
-        alex(
-            "Speech synthesis is not supported by this browser."
-        );
-
-        return;
-
+        selectedImageIndex =
+            images.length - 1;
     }
 
-    speechSynthesis.cancel();
+    imagePlaceholder.style.display =
+        "none";
+
+    selectedImage.style.display =
+        "block";
+
+    selectedImage.src =
+        images[selectedImageIndex];
+}
+
+
+/* =========================================================
+   IMAGE NAVIGATION
+========================================================= */
+
+previousImage.addEventListener(
+    "click",
+    () => {
+
+        if (
+            selectedSuit < 0
+        )
+            return;
+
+        const images =
+            suits[selectedSuit].images || [];
+
+        if (
+            images.length < 2
+        )
+            return;
+
+        selectedImageIndex =
+            (
+                selectedImageIndex -
+                1 +
+                images.length
+            ) %
+            images.length;
+
+        renderSelectedSuit();
+    }
+);
+
+
+nextImage.addEventListener(
+    "click",
+    () => {
+
+        if (
+            selectedSuit < 0
+        )
+            return;
+
+        const images =
+            suits[selectedSuit].images || [];
+
+        if (
+            images.length < 2
+        )
+            return;
+
+        selectedImageIndex =
+            (
+                selectedImageIndex +
+                1
+            ) %
+            images.length;
+
+        renderSelectedSuit();
+    }
+);
+
+
+/* =========================================================
+   SPEECH SYNTHESIS
+========================================================= */
+
+function speakText(
+    text
+) {
+
+    if (
+        !speechEnabled ||
+        !("speechSynthesis" in window)
+    ) {
+
+        return;
+    }
+
+    window.speechSynthesis.cancel();
 
     const utterance =
         new SpeechSynthesisUtterance(
-            lastSpeech
+            text
         );
-
-    utterance.lang =
-        "en-GB";
 
     utterance.rate =
         .95;
 
     utterance.pitch =
+        .95;
+
+    utterance.volume =
         1;
+
+    const voices =
+        speechSynthesis.getVoices();
+
+    const preferred =
+        voices.find(
+            voice =>
+                /en-GB/i.test(
+                    voice.lang
+                )
+        );
+
+    if (preferred) {
+
+        utterance.voice =
+            preferred;
+    }
+
+    status.textContent =
+        "SPEAKING";
+
+    utterance.onend =
+        () => {
+
+            status.textContent =
+                "STANDBY";
+        };
 
     speechSynthesis.speak(
         utterance
     );
-
 }
 
 
 /* =========================================================
+   SPEAK BUTTON
+========================================================= */
+
+speakButton.addEventListener(
+    "click",
+    () => {
+
+        const last =
+            chat.querySelector(
+                ".chat-alex:last-child"
+            );
+
+        if (!last) {
+
+            speakText(
+                "A.L.E.X online."
+            );
+
+            return;
+        }
+
+        speakText(
+            last.textContent
+        );
+    }
+);
+
+
+/* =========================================================
    MICROPHONE
-   ========================================================= */
+========================================================= */
 
-let recognition =
-    null;
+function setupMicrophone() {
 
-let listening =
-    false;
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
 
+        recognition = null;
 
-if (SpeechRecognition) {
+        return;
+    }
 
     recognition =
         new SpeechRecognition();
+
+    recognition.lang =
+        "en-GB";
 
     recognition.continuous =
         false;
@@ -1603,837 +2274,236 @@ if (SpeechRecognition) {
     recognition.interimResults =
         false;
 
-    recognition.lang =
-        "en-GB";
-
+    recognition.maxAlternatives =
+        1;
 
     recognition.onstart =
-        function() {
+        () => {
 
-            listening =
-                true;
+            micActive = true;
 
             micButton.textContent =
                 "MIC ON";
 
             micButton.classList.add(
-                "listening"
+                "mic-active"
             );
 
-            setStatus(
-                "LISTENING"
-            );
-
+            status.textContent =
+                "LISTENING";
         };
 
-
     recognition.onresult =
-        function(event) {
+        event => {
 
-            const text =
-                event.results[0][0]
-                    .transcript;
+            const transcript =
+                event.results[0][0].transcript;
 
-            input.value =
-                text;
+            textInput.value =
+                transcript;
 
             addChat(
                 "USER",
-                text
+                transcript
             );
 
-            processCommand(
-                text
-            );
+            status.textContent =
+                "THINKING";
 
+            const answer =
+                alexResponse(
+                    transcript
+                );
+
+            setTimeout(
+                () => {
+
+                    addChat(
+                        "ALEX",
+                        answer
+                    );
+
+                    speakText(
+                        answer
+                    );
+
+                    status.textContent =
+                        "STANDBY";
+
+                },
+                250
+            );
         };
 
-
     recognition.onerror =
-        function(event) {
+        event => {
 
             console.log(
                 "Speech recognition:",
                 event.error
             );
 
-            if (
-                event.error ===
-                "not-allowed"
-            ) {
-
-                alex(
-                    "Microphone permission was denied. Allow microphone access in your browser."
-                );
-
-            }
-
+            showToast(
+                "Microphone error: " +
+                event.error
+            );
         };
 
-
     recognition.onend =
-        function() {
+        () => {
 
-            listening =
-                false;
+            micActive = false;
 
             micButton.textContent =
                 "MIC OFF";
 
             micButton.classList.remove(
-                "listening"
+                "mic-active"
             );
 
-            setStatus(
-                "STANDBY"
-            );
+            if (
+                status.textContent ===
+                "LISTENING"
+            ) {
 
+                status.textContent =
+                    "STANDBY";
+            }
         };
-
 }
 
 
-function toggleMic() {
+function toggleMicrophone() {
 
     if (!recognition) {
 
-        alex(
-            "Built-in speech recognition is unavailable in this browser. Chrome or Edge is recommended."
+        showToast(
+            "Speech recognition is not supported in this browser."
         );
 
         return;
-
     }
 
-
-    if (listening) {
+    if (micActive) {
 
         recognition.stop();
 
-        return;
+    } else {
 
+        try {
+
+            recognition.start();
+
+        } catch (error) {
+
+            console.log(error);
+        }
     }
-
-
-    try {
-
-        recognition.start();
-
-    } catch (error) {
-
-        console.log(
-            error
-        );
-
-    }
-
 }
+
+micButton.addEventListener(
+    "click",
+    toggleMicrophone
+);
 
 
 /* =========================================================
-   ARCHIVE OPEN
-   ========================================================= */
+   KEYBOARD MIC
+   M = TOGGLE MIC
+========================================================= */
 
-function openArchive() {
+document.addEventListener(
+    "keydown",
+    event => {
 
-    home.style.display =
-        "none";
-
-    suitScreen.classList.remove(
-        "active"
-    );
-
-    archiveScreen.classList.add(
-        "active"
-    );
-
-    renderArchive();
-
-}
-
-
-/* =========================================================
-   ARCHIVE CLOSE
-   ========================================================= */
-
-function closeArchive() {
-
-    archiveScreen.classList.remove(
-        "active"
-    );
-
-    suitScreen.classList.remove(
-        "active"
-    );
-
-    home.style.display =
-        "flex";
-
-}
-
-
-/* =========================================================
-   RENDER ARCHIVE
-   ========================================================= */
-
-function renderArchive() {
-
-    const list =
-        document.getElementById(
-            "suitList"
-        );
-
-    list.innerHTML = "";
-
-
-    if (!suits.length) {
-
-        selectedIndex =
-            -1;
-
-        list.innerHTML =
-
-            `<div class="empty-archive">
-
-                ARCHIVE EMPTY
-
-                <br><br>
-
-                No suits are currently stored.
-
-                <br>
-
-                Select <b>+ ADD SUIT</b>
-                to import your first suit.
-
-            </div>`;
-
-        document
-            .getElementById(
-                "selectedImage"
+        if (
+            event.key.toLowerCase() === "m" &&
+            document.activeElement !== textInput &&
+            !addModal.classList.contains(
+                "visible"
             )
-            .removeAttribute(
-                "src"
-            );
-
-        document
-            .getElementById(
-                "selectedName"
-            )
-            .textContent =
-            "NO SUIT SELECTED";
-
-        document
-            .getElementById(
-                "selectedDescription"
-            )
-            .textContent =
-            "The archive is waiting for your first suit.";
-
-        return;
-
-    }
-
-
-    if (
-        selectedIndex < 0 ||
-        selectedIndex >= suits.length
-    ) {
-
-        selectedIndex =
-            0;
-
-    }
-
-
-    suits.forEach(
-        function(
-            suit,
-            index
         ) {
 
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "suit-card" +
-                (
-                    index === selectedIndex
-                        ? " selected"
-                        : ""
-                );
-
-
-            card.onclick =
-                function() {
-
-                    selectedIndex =
-                        index;
-
-                    renderArchive();
-
-                };
-
-
-            card.innerHTML =
-
-                `<img
-                    class="suit-thumb"
-                    src="${escapeAttribute(suit.image)}"
-                    alt=""
-                >
-
-                <div class="suit-info">
-
-                    <div class="suit-name">
-                        ${escapeHTML(suit.name)}
-                    </div>
-
-                    <div class="suit-era">
-                        ${escapeHTML(suit.era)}
-                    </div>
-
-                </div>`;
-
-
-            list.appendChild(
-                card
-            );
-
+            toggleMicrophone();
         }
-    );
 
-
-    const selected =
-        suits[selectedIndex];
-
-
-    document
-        .getElementById(
-            "selectedImage"
-        )
-        .src =
-        selected.image;
-
-
-    document
-        .getElementById(
-            "selectedName"
-        )
-        .textContent =
-        selected.name;
-
-
-    document
-        .getElementById(
-            "selectedDescription"
-        )
-        .textContent =
-        selected.description;
-
-}
-
-
-/* =========================================================
-   NEXT
-   ========================================================= */
-
-function nextSuit() {
-
-    if (!suits.length) {
-
-        toast(
-            "ARCHIVE IS EMPTY"
-        );
-
-        return;
-
-    }
-
-    selectedIndex =
-        (
-            selectedIndex + 1
-        ) % suits.length;
-
-    renderArchive();
-
-}
-
-
-/* =========================================================
-   PREVIOUS
-   ========================================================= */
-
-function previousSuit() {
-
-    if (!suits.length) {
-
-        toast(
-            "ARCHIVE IS EMPTY"
-        );
-
-        return;
-
-    }
-
-    selectedIndex =
-        (
-            selectedIndex -
-            1 +
-            suits.length
-        ) % suits.length;
-
-    renderArchive();
-
-}
-
-
-/* =========================================================
-   OPEN SUIT
-   ========================================================= */
-
-function openSelectedSuit() {
-
-    if (
-        !suits.length ||
-        selectedIndex < 0
-    ) {
-
-        toast(
-            "NO SUIT SELECTED"
-        );
-
-        return;
-
-    }
-
-
-    const suit =
-        suits[selectedIndex];
-
-
-    document
-        .getElementById(
-            "suitLargeImage"
-        )
-        .src =
-        suit.image;
-
-
-    document
-        .getElementById(
-            "suitLargeName"
-        )
-        .textContent =
-        suit.name;
-
-
-    document
-        .getElementById(
-            "suitLargeDescription"
-        )
-        .textContent =
-        suit.description;
-
-
-    archiveScreen.classList.remove(
-        "active"
-    );
-
-    suitScreen.classList.add(
-        "active"
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE SUIT
-   ========================================================= */
-
-function closeSuitView() {
-
-    suitScreen.classList.remove(
-        "active"
-    );
-
-    home.style.display =
-        "flex";
-
-}
-
-
-/* =========================================================
-   SUIT VIEW NAVIGATION
-   ========================================================= */
-
-function previousSuitFromView() {
-
-    if (!suits.length)
-        return;
-
-    previousSuit();
-
-    openSelectedSuit();
-
-}
-
-
-function nextSuitFromView() {
-
-    if (!suits.length)
-        return;
-
-    nextSuit();
-
-    openSelectedSuit();
-
-}
-
-
-/* =========================================================
-   DELETE SUIT
-   ========================================================= */
-
-function deleteSelectedSuit() {
-
-    if (
-        !suits.length ||
-        selectedIndex < 0
-    ) {
-
-        toast(
-            "NO SUIT SELECTED"
-        );
-
-        return;
-
-    }
-
-
-    const suit =
-        suits[selectedIndex];
-
-
-    const confirmed =
-        confirm(
-            "DELETE " +
-            suit.name +
-            " FROM THE A.L.E.X ARCHIVE?"
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    suits.splice(
-        selectedIndex,
-        1
-    );
-
-
-    if (!suits.length) {
-
-        selectedIndex =
-            -1;
-
-    } else if (
-        selectedIndex >=
-        suits.length
-    ) {
-
-        selectedIndex =
-            suits.length - 1;
-
-    }
-
-
-    saveSuits();
-
-    renderArchive();
-
-    toast(
-        "SUIT DELETED"
-    );
-
-}
-
-
-/* =========================================================
-   ADD SUIT
-   ========================================================= */
-
-document
-    .getElementById(
-        "suitFile"
-    )
-    .addEventListener(
-        "change",
-        function(event) {
-
-            const files =
-                Array.from(
-                    event.target.files
-                );
-
-
-            if (!files.length)
-                return;
-
-
-            files.forEach(
-                function(file) {
-
-                    if (
-                        !file.type.startsWith(
-                            "image/"
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        function(e) {
-
-                            const cleanName =
-                                file.name
-                                    .replace(
-                                        /\.[^/.]+$/,
-                                        ""
-                                    )
-                                    .replace(
-                                        /[_-]+/g,
-                                        " "
-                                    )
-                                    .trim();
-
-
-                            const displayName =
-                                cleanName
-                                    ? cleanName
-                                        .toUpperCase()
-                                    : "CUSTOM SUIT";
-
-
-                            const description =
-                                generateDescription(
-                                    displayName,
-                                    file
-                                );
-
-
-                            suits.push({
-
-                                name:
-                                    displayName,
-
-                                era:
-                                    "CUSTOM",
-
-                                image:
-                                    e.target.result,
-
-                                description:
-                                    description,
-
-                                added:
-                                    new Date()
-                                        .toISOString()
-
-                            });
-
-
-                            selectedIndex =
-                                suits.length - 1;
-
-
-                            saveSuits();
-
-                            renderArchive();
-
-
-                            toast(
-                                "SUIT ADDED"
-                            );
-
-                        };
-
-
-                    reader.readAsDataURL(
-                        file
-                    );
-
-                }
-            );
-
-
-            event.target.value =
-                "";
-
+        if (
+            event.key === "Escape" &&
+            addModal.classList.contains(
+                "visible"
+            )
+        ) {
+
+            closeAddModal();
         }
-    );
+
+        if (
+            event.key === "Escape" &&
+            archive.classList.contains(
+                "visible"
+            ) &&
+            !addModal.classList.contains(
+                "visible"
+            )
+        ) {
+
+            closeArchive();
+        }
+    }
+);
 
 
 /* =========================================================
-   AUTOMATIC SUIT DESCRIPTION
-   =========================================================
-   This is intentionally local and does not use an AI API.
-   It uses the imported suit name/file metadata.
-   ========================================================= */
+   WAVEFORM
+========================================================= */
 
-function generateDescription(
-    name,
-    file
-) {
-
-    const lower =
-        name.toLowerCase();
-
-
-    let type =
-        "custom suit concept";
-
-
-    if (
-        lower.includes("black") ||
-        lower.includes("stealth")
-    ) {
-
-        type =
-            "dark, stealth-oriented suit concept";
-
-    }
-
-    else if (
-        lower.includes("red") ||
-        lower.includes("classic")
-    ) {
-
-        type =
-            "classic red-toned suit concept";
-
-    }
-
-    else if (
-        lower.includes("iron") ||
-        lower.includes("metal")
-    ) {
-
-        type =
-            "advanced metallic suit concept";
-
-    }
-
-    else if (
-        lower.includes("white")
-    ) {
-
-        type =
-            "light-toned suit concept";
-
-    }
-
-    else if (
-        lower.includes("2099")
-    ) {
-
-        type =
-            "futuristic suit concept";
-
-    }
-
-    else if (
-        lower.includes("stealth")
-    ) {
-
-        type =
-            "stealth suit concept";
-
-    }
-
-
-    const sizeKB =
-        Math.round(
-            file.size / 1024
-        );
-
-
-    return (
-        "A.L.E.X archive entry for " +
-        name +
-        ". " +
-        "This appears to be a " +
-        type +
-        ". " +
-        "Imported image size: " +
-        sizeKB +
-        " KB. " +
-        "The design is stored as a custom suit concept."
+const canvas =
+    document.getElementById(
+        "wave"
     );
 
-}
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
 
+let phase = 0;
 
-/* =========================================================
-   WAVE
-   ========================================================= */
-
-function resizeWave() {
+function resizeCanvas() {
 
     const rect =
-        wave.getBoundingClientRect();
+        canvas.getBoundingClientRect();
 
+    const dpr =
+        window.devicePixelRatio || 1;
 
-    const ratio =
-        window.devicePixelRatio ||
-        1;
+    canvas.width =
+        rect.width * dpr;
 
-
-    wave.width =
-        rect.width * ratio;
-
-
-    wave.height =
-        rect.height * ratio;
-
+    canvas.height =
+        rect.height * dpr;
 
     ctx.setTransform(
-        ratio,
+        dpr,
         0,
         0,
-        ratio,
+        dpr,
         0,
         0
     );
-
 }
-
-
-let waveTime =
-    0;
 
 
 function drawWave() {
 
+    const rect =
+        canvas.getBoundingClientRect();
+
     const width =
-        wave.clientWidth;
+        rect.width;
 
     const height =
-        wave.clientHeight;
-
+        rect.height;
 
     ctx.clearRect(
         0,
@@ -2442,20 +2512,11 @@ function drawWave() {
         height
     );
 
-
-    waveTime +=
-        listening
-            ? .095
-            : .045;
-
-
-    const bars =
-        65;
-
-
     const center =
         height / 2;
 
+    const bars =
+        61;
 
     for (
         let i = 0;
@@ -2464,11 +2525,13 @@ function drawWave() {
     ) {
 
         const x =
+            width / 2 -
+            width * .43 +
+            i *
             (
-                i /
+                width * .86 /
                 (bars - 1)
-            ) * width;
-
+            );
 
         const distance =
             Math.abs(
@@ -2476,206 +2539,92 @@ function drawWave() {
                 (bars - 1) / 2
             );
 
-
         const envelope =
             Math.max(
                 0,
                 1 -
                 distance /
-                (bars * .58)
+                ((bars - 1) / 2)
             );
-
-
-        const wave1 =
-            Math.sin(
-                i * .28 +
-                waveTime
-            );
-
-
-        const wave2 =
-            Math.sin(
-                i * .11 -
-                waveTime * 1.7
-            );
-
 
         const movement =
-            Math.abs(wave1) * .7 +
-            Math.abs(wave2) * .3;
+            Math.abs(
+                Math.sin(
+                    phase +
+                    i * .29
+                )
+            );
 
-
-        const boost =
-            listening
-                ? 1.8
-                : 1;
-
-
-        const barHeight =
-            6 +
+        const heightValue =
+            5 +
             movement *
-            72 *
-            envelope *
-            boost;
-
+            42 *
+            envelope;
 
         ctx.beginPath();
 
-
         ctx.moveTo(
             x,
-            center - barHeight
+            center -
+            heightValue
         );
-
 
         ctx.lineTo(
             x,
-            center + barHeight
+            center +
+            heightValue
         );
 
+        ctx.lineWidth =
+            2.5;
 
         ctx.strokeStyle =
-            i % 2
-                ? "#39ff14"
-                : "#19d9ff";
+            "rgba(57,255,20,.85)";
 
-
-        ctx.lineWidth =
-            2;
-
+        ctx.shadowColor =
+            "rgba(57,255,20,.45)";
 
         ctx.shadowBlur =
             8;
 
-
-        ctx.shadowColor =
-            i % 2
-                ? "#39ff14"
-                : "#19d9ff";
-
-
         ctx.stroke();
-
     }
 
+    ctx.shadowBlur = 0;
 
-    ctx.shadowBlur =
-        0;
-
+    phase += .055;
 
     requestAnimationFrame(
         drawWave
     );
-
 }
 
 
+/* =========================================================
+   RESIZE
+========================================================= */
+
 window.addEventListener(
     "resize",
-    resizeWave
+    resizeCanvas
 );
 
 
 /* =========================================================
-   TOAST
-   ========================================================= */
-
-let toastTimer =
-    null;
-
-
-function toast(
-    text
-) {
-
-    const element =
-        document.getElementById(
-            "toast"
-        );
-
-
-    element.textContent =
-        text;
-
-
-    element.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            function() {
-
-                element.classList.remove(
-                    "show"
-                );
-
-            },
-            1800
-        );
-
-}
-
-
-/* =========================================================
-   ESCAPE
-   ========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-function escapeAttribute(
-    value
-) {
-
-    return escapeHTML(value);
-
-}
-
-
-/* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
-resizeWave();
+loadArchive();
+
+setupMicrophone();
+
+resizeCanvas();
 
 drawWave();
 
 addChat(
     "ALEX",
-    "Systems online. Archive database ready."
+    "A.L.E.X online. Archive systems ready."
 );
 
 </script>
