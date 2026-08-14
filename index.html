@@ -20,7 +20,7 @@
 <meta name="theme-color"
       content="#05070a">
 
-<title>Alex Mobile v0.5</title>
+<title>Alex Mobile v0.6</title>
 
 
 <style>
@@ -30,6 +30,8 @@
   --cyan:#19d9ff;
   --green:#9cff19;
   --muted:#7f8b98;
+  --red:#ff5264;
+  --yellow:#ffd84d;
 }
 
 *{
@@ -76,7 +78,9 @@ body{
 }
 
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 header{
   height:74px;
@@ -95,7 +99,10 @@ header{
 .online{
   font-size:10px;
   letter-spacing:.16em;
-  color:#ffd84d;
+  color:var(--yellow);
+
+  transition:
+    color .3s ease;
 }
 
 .online:before{
@@ -108,12 +115,16 @@ header{
 
   border-radius:50%;
 
-  background:#ffd84d;
+  background:var(--yellow);
 
   box-shadow:
-    0 0 12px #ffd84d;
+    0 0 12px var(--yellow);
 
   margin-right:7px;
+
+  transition:
+    background .3s ease,
+    box-shadow .3s ease;
 }
 
 .online.ready{
@@ -122,20 +133,26 @@ header{
 
 .online.ready:before{
   background:var(--green);
-  box-shadow:0 0 12px var(--green);
+
+  box-shadow:
+    0 0 12px var(--green);
 }
 
 .online.error{
-  color:#ff5264;
+  color:var(--red);
 }
 
 .online.error:before{
-  background:#ff5264;
-  box-shadow:0 0 12px #ff5264;
+  background:var(--red);
+
+  box-shadow:
+    0 0 12px var(--red);
 }
 
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 main{
   flex:1;
@@ -161,7 +178,9 @@ main{
 }
 
 
-/* ORB */
+/* =========================
+   ORB
+========================= */
 
 .orb{
   width:min(62vw,260px);
@@ -185,12 +204,16 @@ main{
 
   border-radius:50%;
 
-  border:1px solid
+  border:
+    1px solid
     rgba(25,217,255,.35);
 
   box-shadow:
-    0 0 35px rgba(25,217,255,.08),
-    inset 0 0 35px rgba(156,255,25,.05);
+    0 0 35px
+    rgba(25,217,255,.08),
+
+    inset 0 0 35px
+    rgba(156,255,25,.05);
 }
 
 .orb:after{
@@ -200,11 +223,16 @@ main{
     rgba(156,255,25,.35);
 
   animation:
-    pulse 2.6s ease-in-out infinite;
+    pulse
+    2.6s
+    ease-in-out
+    infinite;
 }
 
 
-/* WAVE */
+/* =========================
+   WAVEFORM
+========================= */
 
 .wave{
   width:72%;
@@ -237,7 +265,8 @@ main{
     rgba(25,217,255,.5);
 
   animation:
-    breathe 1.05s
+    breathe
+    1.05s
     ease-in-out
     infinite
     alternate;
@@ -267,6 +296,10 @@ main{
   animation-delay:.48s;
 }
 
+.loading .bar{
+  animation-duration:1.3s;
+}
+
 .listening .bar{
   animation-duration:.42s;
 }
@@ -279,12 +312,10 @@ main{
   animation-duration:.25s;
 }
 
-.loading .bar{
-  animation-duration:1.3s;
-}
 
-
-/* TEXT */
+/* =========================
+   TEXT
+========================= */
 
 .prompt{
   margin-top:34px;
@@ -295,13 +326,15 @@ main{
 
   font-size:17px;
 
-  max-width:330px;
+  max-width:340px;
 
   line-height:1.45;
 
   min-height:52px;
 
   overflow:auto;
+
+  word-wrap:break-word;
 }
 
 .sub{
@@ -317,7 +350,9 @@ main{
 }
 
 
-/* CONTROLS */
+/* =========================
+   CONTROLS
+========================= */
 
 .controls{
   height:190px;
@@ -338,7 +373,8 @@ main{
 
   border-radius:50%;
 
-  border:1px solid
+  border:
+    1px solid
     rgba(156,255,25,.5);
 
   background:
@@ -358,6 +394,10 @@ main{
 
   -webkit-tap-highlight-color:
     transparent;
+
+  transition:
+    transform .1s ease,
+    opacity .2s ease;
 }
 
 .mic:active{
@@ -377,7 +417,9 @@ main{
 }
 
 
-/* NAV */
+/* =========================
+   NAV
+========================= */
 
 nav{
   height:72px;
@@ -415,7 +457,9 @@ nav button.active{
 }
 
 
-/* ANIMATIONS */
+/* =========================
+   ANIMATIONS
+========================= */
 
 @keyframes breathe{
 
@@ -468,7 +512,7 @@ nav button.active{
     id="status"
     class="status"
   >
-    INITIALISING
+    STARTING
   </div>
 
 
@@ -496,7 +540,7 @@ nav button.active{
     id="prompt"
     class="prompt"
   >
-    Checking your device…
+    Starting Alex's neural core…
   </div>
 
 
@@ -560,30 +604,44 @@ nav button.active{
 
 
 /* ============================================================
-   ALEX MOBILE v0.5
+   ALEX MOBILE v0.6
 
    LOCAL AI
-
    WebLLM
    WebGPU
-   Small model
+   SmolLM2 360M
    Speech recognition
    Speech synthesis
+
+   NO API KEY
 ============================================================ */
 
 
-import * as webllm
-from "https://esm.run/@mlc-ai/web-llm";
+/* ============================================================
+   WEBLLM
+============================================================ */
+
+import {
+  CreateMLCEngine
+} from
+  "https://esm.run/@mlc-ai/web-llm";
 
 
 /* ============================================================
    MODEL
-
-   Smaller model for first test.
 ============================================================ */
 
+/*
+   Small local model.
+
+   q4f32 version:
+   - about 580 MB VRAM
+   - does NOT require shader-f16
+   - 4096 token context
+*/
+
 const MODEL =
-  "SmolLM2-360M-Instruct-q4f16_1-MLC";
+  "SmolLM2-360M-Instruct-q4f32_1-MLC";
 
 
 /* ============================================================
@@ -592,22 +650,25 @@ const MODEL =
 
 const ALEX_SYSTEM_PROMPT = `
 
-You are ALEX.
+You are ALEX, a personal mobile AI assistant.
 
-You are a personal mobile AI assistant.
-
-Be intelligent, friendly, useful and
+You are intelligent, friendly, helpful and
 conversational.
 
-Your responses are normally spoken aloud,
-so keep them natural and reasonably concise.
+You are being used through a phone.
+
+Keep normal answers concise and natural.
+
+Your responses may be spoken aloud.
 
 Do not call yourself Gemini.
 
-Do not mention implementation details
-unless specifically asked.
+Do not mention WebLLM, WebGPU, models,
+APIs or implementation details unless
+the user specifically asks.
 
 `;
+
 
 
 /* ============================================================
@@ -638,6 +699,7 @@ const online =
   $("online");
 
 
+
 /* ============================================================
    VARIABLES
 ============================================================ */
@@ -655,8 +717,9 @@ let aiReady =
   false;
 
 
+
 /* ============================================================
-   MEMORY
+   CONVERSATION
 ============================================================ */
 
 const conversation = [
@@ -666,10 +729,10 @@ const conversation = [
 
     content:
       ALEX_SYSTEM_PROMPT
-
   }
 
 ];
+
 
 
 /* ============================================================
@@ -682,7 +745,14 @@ function setState(state){
     "orb " + state;
 
 
-  if(state === "listening"){
+  if(state === "loading"){
+
+    status.textContent =
+      "LOADING AI";
+
+  }
+
+  else if(state === "listening"){
 
     status.textContent =
       "LISTENING";
@@ -703,13 +773,6 @@ function setState(state){
 
   }
 
-  else if(state === "loading"){
-
-    status.textContent =
-      "LOADING AI";
-
-  }
-
   else{
 
     status.textContent =
@@ -720,41 +783,37 @@ function setState(state){
 }
 
 
+
 /* ============================================================
-   WEBGPU
+   FORMAT ERROR
 ============================================================ */
 
-async function checkGPU(){
+function getErrorMessage(error){
 
-  if(!navigator.gpu){
+  if(!error){
 
-    throw new Error(
-      "WebGPU is not available."
-    );
+    return "Unknown error.";
 
   }
 
 
-  const adapter =
-    await navigator.gpu.requestAdapter();
+  if(
+    error.message
+  ){
 
-
-  if(!adapter){
-
-    throw new Error(
-      "WebGPU GPU adapter unavailable."
-    );
+    return error.message;
 
   }
 
 
-  return adapter;
+  return String(error);
 
 }
 
 
+
 /* ============================================================
-   LOAD AI
+   LOAD LOCAL AI
 ============================================================ */
 
 async function loadAI(){
@@ -768,38 +827,39 @@ async function loadAI(){
 
 
     online.textContent =
-      "CHECKING GPU";
+      "AI LOADING";
+
+
+    online.className =
+      "online";
 
 
     prompt.textContent =
-      "Checking local graphics hardware…";
-
-
-    const adapter =
-      await checkGPU();
-
-
-    console.log(
-      "WebGPU adapter:",
-      adapter
-    );
-
-
-    online.textContent =
-      "DOWNLOADING AI";
-
-
-    prompt.textContent =
-      "Downloading Alex's neural core…";
+      "Starting local AI…";
 
 
     sub.textContent =
-      "First launch only";
+      "No API key required";
 
+
+    console.log(
+      "ALEX: starting WebLLM"
+    );
+
+
+    console.log(
+      "ALEX MODEL:",
+      MODEL
+    );
+
+
+    /* =========================
+       CREATE ENGINE
+    ========================= */
 
     engine =
 
-      await webllm.CreateMLCEngine(
+      await CreateMLCEngine(
 
         MODEL,
 
@@ -809,18 +869,48 @@ async function loadAI(){
             progress => {
 
               console.log(
-                "AI progress:",
+                "ALEX LOAD:",
                 progress
               );
 
 
               if(
                 progress &&
-                progress.text
+                typeof progress.progress ===
+                "number"
               ){
 
-                prompt.textContent =
-                  progress.text;
+                const percent =
+                  Math.round(
+                    progress.progress * 100
+                  );
+
+
+                online.textContent =
+                  percent + "%";
+
+
+                if(
+                  progress.text
+                ){
+
+                  prompt.textContent =
+                    progress.text;
+
+                }
+
+                else{
+
+                  prompt.textContent =
+                    "Loading Alex's neural core…";
+
+                }
+
+
+                sub.textContent =
+                  "Local AI • " +
+                  percent +
+                  "%";
 
               }
 
@@ -830,6 +920,10 @@ async function loadAI(){
 
       );
 
+
+    /* =========================
+       SUCCESS
+    ========================= */
 
     aiReady =
       true;
@@ -861,8 +955,9 @@ async function loadAI(){
 
 
     console.log(
-      "ALEX AI READY"
+      "ALEX: AI READY"
     );
+
 
   }
 
@@ -877,6 +972,10 @@ async function loadAI(){
 
     aiReady =
       false;
+
+
+    mic.disabled =
+      true;
 
 
     online.textContent =
@@ -897,8 +996,9 @@ async function loadAI(){
 
 
     sub.textContent =
-      error.message ||
-      "Unknown error";
+      getErrorMessage(
+        error
+      );
 
 
   }
@@ -906,8 +1006,133 @@ async function loadAI(){
 }
 
 
+
 /* ============================================================
-   SPEECH
+   ASK ALEX
+============================================================ */
+
+async function askAlex(text){
+
+  if(
+    !aiReady ||
+    !engine
+  ){
+
+    return;
+
+  }
+
+
+  setState(
+    "thinking"
+  );
+
+
+  prompt.textContent =
+    "Thinking…";
+
+
+  conversation.push({
+
+    role:
+      "user",
+
+    content:
+      text
+
+  });
+
+
+  try{
+
+
+    const result =
+
+      await engine.chat.completions.create({
+
+        messages:
+          conversation,
+
+        temperature:
+          0.7,
+
+        max_tokens:
+          200
+
+      });
+
+
+    const answer =
+
+      result
+        ?.choices
+        ?.[0]
+        ?.message
+        ?.content
+        ?.trim();
+
+
+    if(!answer){
+
+      throw new Error(
+        "Alex returned an empty response."
+      );
+
+    }
+
+
+    conversation.push({
+
+      role:
+        "assistant",
+
+      content:
+        answer
+
+    });
+
+
+    prompt.textContent =
+      answer;
+
+
+    speak(
+      answer
+    );
+
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "ALEX CHAT ERROR:",
+      error
+    );
+
+
+    setState(
+      "ready"
+    );
+
+
+    prompt.textContent =
+      "I couldn't process that.";
+
+    sub.textContent =
+      getErrorMessage(
+        error
+      );
+
+  }
+
+}
+
+
+
+/* ============================================================
+   TEXT TO SPEECH
 ============================================================ */
 
 function speak(text){
@@ -939,7 +1164,7 @@ function speak(text){
 
 
   utterance.rate =
-    .94;
+    0.94;
 
 
   utterance.pitch =
@@ -952,23 +1177,21 @@ function speak(text){
 
   const voice =
 
-    voices.find(v =>
-
-      v.lang === "en-GB" &&
-
-      /female|
-       Samantha|
-       Karen|
-       Martha|
-       Google UK English Female/i
-       .test(v.name)
-
+    voices.find(
+      v =>
+        v.lang === "en-GB" &&
+        /Samantha|
+         Karen|
+         Martha|
+         Google UK English Female/i
+         .test(v.name)
     )
 
     ||
 
-    voices.find(v =>
-      v.lang === "en-GB"
+    voices.find(
+      v =>
+        v.lang === "en-GB"
     );
 
 
@@ -1017,118 +1240,6 @@ function speak(text){
 }
 
 
-/* ============================================================
-   ASK ALEX
-============================================================ */
-
-async function askAlex(text){
-
-  if(
-    !aiReady ||
-    !engine
-  ){
-
-    return;
-
-  }
-
-
-  setState(
-    "thinking"
-  );
-
-
-  prompt.textContent =
-    "Thinking…";
-
-
-  conversation.push({
-
-    role:"user",
-
-    content:text
-
-  });
-
-
-  try{
-
-
-    const result =
-
-      await engine.chat.completions.create({
-
-        messages:
-          conversation,
-
-        temperature:
-          .7,
-
-        max_tokens:
-          200
-
-      });
-
-
-    const answer =
-
-      result
-        ?.choices
-        ?.[0]
-        ?.message
-        ?.content
-        ?.trim();
-
-
-    if(!answer){
-
-      throw new Error(
-        "Empty AI response."
-      );
-
-    }
-
-
-    conversation.push({
-
-      role:"assistant",
-
-      content:answer
-
-    });
-
-
-    prompt.textContent =
-      answer;
-
-
-    speak(
-      answer
-    );
-
-  }
-
-
-  catch(error){
-
-    console.error(
-      "ALEX CHAT ERROR:",
-      error
-    );
-
-
-    setState(
-      "ready"
-    );
-
-
-    prompt.textContent =
-      "I couldn't process that.";
-
-  }
-
-}
-
 
 /* ============================================================
    SPEECH RECOGNITION
@@ -1146,7 +1257,7 @@ function setupRecognition(){
   if(!SR){
 
     prompt.textContent =
-      "Speech recognition isn't available.";
+      "Speech recognition isn't available in this browser.";
 
     return null;
 
@@ -1224,7 +1335,7 @@ function setupRecognition(){
     event => {
 
       console.error(
-        "Speech error:",
+        "Speech recognition error:",
         event
       );
 
@@ -1239,7 +1350,7 @@ function setupRecognition(){
 
 
       prompt.textContent =
-        "I couldn't hear that.";
+        "I couldn't hear that. Try again.";
 
     };
 
@@ -1256,6 +1367,7 @@ function setupRecognition(){
   return r;
 
 }
+
 
 
 /* ============================================================
@@ -1298,6 +1410,7 @@ mic.onclick =
       catch(error){
 
         console.log(
+          "Recognition start:",
           error
         );
 
@@ -1308,8 +1421,9 @@ mic.onclick =
   };
 
 
+
 /* ============================================================
-   VOICES
+   SPEECH VOICES
 ============================================================ */
 
 if(
@@ -1330,14 +1444,15 @@ if(
 }
 
 
+
 /* ============================================================
-   START
+   START ALEX
 ============================================================ */
 
 loadAI();
 
-
 </script>
+
 
 </body>
 
