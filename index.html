@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
+      content="width=device-width,initial-scale=1,
                viewport-fit=cover">
 
 <meta name="mobile-web-app-capable" content="yes">
@@ -16,13 +16,13 @@
 :root {
     --bg: #020606;
     --panel: #061010;
-    --panel2: #081717;
+    --panel2: #091818;
     --green: #39ff14;
     --cyan: #19d9ff;
-    --dim: #147a24;
-    --white: #d9ffe0;
-    --red: #ff3030;
-    --border: rgba(57,255,20,.28);
+    --darkgreen: #0d5515;
+    --dim: #4c9b59;
+    --white: #d8ffdf;
+    --danger: #ff4545;
 }
 
 * {
@@ -34,10 +34,14 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+
     background: var(--bg);
     color: var(--white);
-    font-family: "Courier New", monospace;
-    overflow: hidden;
+
+    font-family:
+        "Courier New",
+        monospace;
 }
 
 button,
@@ -49,14 +53,10 @@ button {
     cursor: pointer;
 }
 
-/* =========================================================
-   APP
-   ========================================================= */
-
 #app {
+    position: relative;
     width: 100vw;
     height: 100vh;
-    position: relative;
     overflow: hidden;
 }
 
@@ -65,44 +65,67 @@ button {
    ========================================================= */
 
 #home {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
+
     display: flex;
     flex-direction: column;
-    position: relative;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(20,70,45,.08),
+            transparent 48%
+        ),
+        var(--bg);
 }
 
+/* HEADER */
+
 .header {
-    height: 70px;
-    min-height: 70px;
+    height: 58px;
+    min-height: 58px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    border-bottom:
+        1px solid rgba(57,255,20,.13);
+
     position: relative;
-    border-bottom: 1px solid rgba(57,255,20,.12);
 }
 
 .logo {
     color: var(--green);
-    font-size: 25px;
+
+    font-size: 22px;
     font-weight: bold;
+
     letter-spacing: 5px;
+
     text-shadow:
         0 0 8px rgba(57,255,20,.8),
-        0 0 22px rgba(57,255,20,.3);
+        0 0 22px rgba(57,255,20,.25);
 }
 
 .status {
     position: absolute;
-    right: 18px;
-    top: 26px;
-    color: var(--dim);
-    font-size: 10px;
+
+    right: 15px;
+    top: 22px;
+
+    font-size: 9px;
     letter-spacing: 2px;
+
+    color: var(--dim);
 }
 
 .status.active {
     color: var(--green);
+
+    text-shadow:
+        0 0 8px rgba(57,255,20,.5);
 }
 
 /* =========================================================
@@ -110,29 +133,38 @@ button {
    ========================================================= */
 
 .wave-area {
+    position: relative;
+
     flex: 1;
+
     min-height: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+
+    padding-bottom: 135px;
 }
 
 #wave {
     width: 94%;
-    max-width: 900px;
-    height: 260px;
+    max-width: 850px;
+    height: 230px;
 }
 
 .core {
     position: absolute;
-    width: 7px;
-    height: 7px;
-    background: var(--cyan);
+
+    width: 6px;
+    height: 6px;
+
     border-radius: 50%;
+
+    background: var(--cyan);
+
     box-shadow:
-        0 0 12px var(--cyan),
-        0 0 30px rgba(25,217,255,.8);
+        0 0 10px var(--cyan),
+        0 0 25px rgba(25,217,255,.65);
 }
 
 /* =========================================================
@@ -141,27 +173,37 @@ button {
 
 .chat-panel {
     position: absolute;
-    left: 18px;
-    right: 18px;
-    bottom: 122px;
+
+    left: 14px;
+    right: 14px;
+    bottom: 110px;
+
+    height: 85px;
+
     max-width: 700px;
+
     margin: auto;
-    height: 115px;
 
-    background: rgba(3,12,12,.86);
-    border: 1px solid var(--border);
-    box-shadow:
-        0 0 20px rgba(57,255,20,.05),
-        inset 0 0 20px rgba(0,0,0,.5);
+    padding: 9px 11px;
 
-    padding: 12px;
     overflow-y: auto;
-    font-size: 11px;
+
+    background:
+        rgba(2,12,12,.9);
+
+    border:
+        1px solid rgba(57,255,20,.23);
+
+    box-shadow:
+        inset 0 0 18px rgba(0,0,0,.45);
 }
 
 .chat-line {
-    margin-bottom: 9px;
-    line-height: 1.4;
+    margin-bottom: 7px;
+
+    font-size: 10px;
+
+    line-height: 1.35;
 }
 
 .user {
@@ -173,65 +215,88 @@ button {
 }
 
 /* =========================================================
-   INPUT
+   CONTROLS
    ========================================================= */
 
 .controls {
     position: absolute;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-    height: 90px;
+
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+
+    height: 91px;
 
     display: flex;
     flex-direction: column;
-    gap: 9px;
+
+    gap: 7px;
 }
 
 .input-row {
+    width: 100%;
+
     display: flex;
-    gap: 8px;
+
+    gap: 7px;
 }
 
 #textInput {
     flex: 1;
-    height: 43px;
+
+    min-width: 0;
+
+    height: 39px;
+
+    padding:
+        0 12px;
 
     background: #030909;
-    border: 1px solid rgba(57,255,20,.35);
-    color: var(--green);
+
+    border:
+        1px solid rgba(57,255,20,.32);
 
     outline: none;
-    padding: 0 13px;
 
-    font-size: 12px;
+    color: var(--green);
+
+    font-size: 11px;
 }
 
 #textInput:focus {
     border-color: var(--green);
-    box-shadow: 0 0 10px rgba(57,255,20,.12);
+
+    box-shadow:
+        0 0 10px rgba(57,255,20,.12);
 }
 
 .control-row {
     display: flex;
+
     justify-content: center;
-    gap: 8px;
+
+    gap: 7px;
 }
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
 .alex-button {
-    background: #06100c;
-    border: 1px solid rgba(57,255,20,.38);
+    height: 34px;
+
+    padding:
+        0 15px;
+
+    background:
+        rgba(5,18,14,.95);
+
+    border:
+        1px solid rgba(57,255,20,.35);
+
     color: var(--green);
 
-    height: 34px;
-    padding: 0 17px;
+    font-size: 9px;
 
-    font-size: 10px;
     letter-spacing: 1px;
+
+    white-space: nowrap;
 
     transition:
         .15s ease;
@@ -239,8 +304,9 @@ button {
 
 .alex-button:hover {
     border-color: var(--green);
+
     box-shadow:
-        0 0 12px rgba(57,255,20,.18);
+        0 0 12px rgba(57,255,20,.16);
 }
 
 .alex-button:active {
@@ -249,30 +315,35 @@ button {
 
 .mic-button {
     color: var(--cyan);
-    border-color: rgba(25,217,255,.4);
+
+    border-color:
+        rgba(25,217,255,.4);
 }
 
 .mic-button.listening {
-    color: #fff;
-    border-color: var(--cyan);
-    background: rgba(25,217,255,.12);
-    box-shadow:
-        0 0 18px rgba(25,217,255,.3);
-}
+    color: white;
 
-.archive-button {
-    color: var(--green);
+    background:
+        rgba(25,217,255,.12);
+
+    border-color:
+        var(--cyan);
+
+    box-shadow:
+        0 0 16px rgba(25,217,255,.3);
 }
 
 /* =========================================================
-   SCREENS
+   GENERAL SCREENS
    ========================================================= */
 
 .screen {
     position: absolute;
     inset: 0;
-    background: var(--bg);
+
     display: none;
+
+    background: var(--bg);
 }
 
 .screen.active {
@@ -281,7 +352,7 @@ button {
 
 /* =========================================================
    ARCHIVE
-   LANDSCAPE
+   LANDSCAPE DATABASE
    ========================================================= */
 
 #archiveScreen {
@@ -291,62 +362,105 @@ button {
 .archive-layout {
     width: 100%;
     height: 100%;
+
     display: grid;
-    grid-template-columns: 40% 60%;
+
+    grid-template-columns:
+        minmax(250px, 36%)
+        minmax(0, 64%);
 }
 
+/* LEFT */
+
 .archive-list {
-    border-right: 1px solid rgba(57,255,20,.2);
-    padding: 25px;
+    min-width: 0;
+
+    padding:
+        22px 18px 82px;
 
     overflow-y: auto;
+
+    border-right:
+        1px solid rgba(57,255,20,.2);
+
+    background:
+        rgba(3,12,12,.45);
 }
 
 .archive-title {
     color: var(--green);
-    font-size: 17px;
+
+    font-size: 15px;
+
     letter-spacing: 3px;
-    margin-bottom: 20px;
 }
 
 .archive-subtitle {
+    margin-top: 7px;
+    margin-bottom: 18px;
+
     color: var(--dim);
-    font-size: 9px;
-    margin-bottom: 20px;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+}
+
+#suitList {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
 }
 
 .suit-card {
-    border: 1px solid rgba(57,255,20,.18);
-    background: rgba(4,15,15,.7);
+    width: 100%;
 
-    padding: 12px;
-    margin-bottom: 10px;
+    min-height: 82px;
 
     display: flex;
-    align-items: center;
-    gap: 12px;
 
-    transition: .15s ease;
+    gap: 11px;
+
+    align-items: center;
+
+    padding: 9px;
+
+    background:
+        rgba(5,17,17,.8);
+
+    border:
+        1px solid rgba(57,255,20,.17);
+
+    transition:
+        .15s ease;
 }
 
 .suit-card:hover {
-    border-color: var(--green);
-    background: rgba(57,255,20,.05);
+    border-color:
+        rgba(57,255,20,.6);
 }
 
 .suit-card.selected {
-    border-color: var(--cyan);
+    border-color:
+        var(--cyan);
+
     box-shadow:
-        0 0 12px rgba(25,217,255,.12);
+        0 0 13px rgba(25,217,255,.1);
 }
 
 .suit-thumb {
-    width: 55px;
-    height: 70px;
+    width: 52px;
+    height: 64px;
+
+    flex-shrink: 0;
+
     object-fit: cover;
 
     background: #010404;
-    border: 1px solid rgba(57,255,20,.18);
+
+    border:
+        1px solid rgba(57,255,20,.18);
 }
 
 .suit-info {
@@ -355,80 +469,155 @@ button {
 
 .suit-name {
     color: var(--green);
-    font-size: 11px;
-    margin-bottom: 6px;
+
+    font-size: 10px;
+
+    margin-bottom: 5px;
+
+    word-break: break-word;
 }
 
 .suit-era {
     color: var(--dim);
-    font-size: 8px;
+
+    font-size: 7px;
+
+    letter-spacing: 1px;
 }
+
+/* EMPTY ARCHIVE */
+
+.empty-archive {
+    padding: 35px 15px;
+
+    text-align: center;
+
+    color: var(--dim);
+
+    font-size: 9px;
+
+    line-height: 1.7;
+
+    border:
+        1px dashed rgba(57,255,20,.15);
+}
+
+/* =========================================================
+   ARCHIVE PREVIEW
+   ========================================================= */
 
 .archive-preview {
     position: relative;
+
+    min-width: 0;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
-    padding: 30px;
+    padding:
+        25px 25px 82px;
 }
 
 .preview-title {
     color: var(--cyan);
-    font-size: 13px;
+
+    font-size: 11px;
+
     letter-spacing: 2px;
-    margin-bottom: 18px;
+
+    margin-bottom: 13px;
 }
 
 #selectedImage {
-    max-width: 75%;
-    max-height: 68%;
+    max-width: 78%;
+    max-height: 59%;
 
     object-fit: contain;
 
-    border: 1px solid rgba(57,255,20,.25);
+    background: #010404;
+
+    border:
+        1px solid rgba(57,255,20,.22);
 
     box-shadow:
-        0 0 25px rgba(57,255,20,.06);
+        0 0 25px rgba(57,255,20,.07);
 }
 
 .preview-name {
+    margin-top: 11px;
+
     color: var(--green);
-    margin-top: 15px;
-    font-size: 14px;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    text-align: center;
 }
 
 .preview-description {
-    max-width: 650px;
-    text-align: center;
-    color: #83ad89;
-    font-size: 9px;
+    max-width: 600px;
+
+    margin-top: 7px;
+
+    color: #7fb588;
+
+    font-size: 8px;
+
     line-height: 1.5;
-    margin-top: 8px;
+
+    text-align: center;
 }
+
+/* =========================================================
+   ARCHIVE BOTTOM BAR
+   ========================================================= */
 
 .archive-controls {
     position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
+
+    left: 15px;
+    right: 15px;
+    bottom: 12px;
+
+    height: 48px;
 
     display: flex;
+
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+
+    gap: 7px;
+
+    border-top:
+        1px solid rgba(57,255,20,.12);
+
+    padding-top: 8px;
+}
+
+.delete-button {
+    color: var(--danger);
+
+    border-color:
+        rgba(255,69,69,.4);
+}
+
+.delete-button:hover {
+    border-color:
+        var(--danger);
+
+    box-shadow:
+        0 0 12px rgba(255,69,69,.15);
 }
 
 /* =========================================================
-   ADD SUIT
-   ========================================================= */
-
-#suitFile {
-    display: none;
-}
-
-/* =========================================================
-   PORTRAIT SUIT VIEW
+   SUIT VIEW
+   PORTRAIT
    ========================================================= */
 
 #suitScreen {
@@ -440,65 +629,87 @@ button {
     height: 100%;
 
     display: flex;
+
     flex-direction: column;
 }
 
 .suit-header {
-    height: 65px;
-    min-height: 65px;
+    height: 57px;
+    min-height: 57px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    border-bottom: 1px solid rgba(57,255,20,.12);
+    border-bottom:
+        1px solid rgba(57,255,20,.13);
 }
 
 .suit-image-area {
     flex: 1;
+
+    min-height: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    padding: 25px;
+    padding: 18px;
 }
 
 #suitLargeImage {
     max-width: 92%;
-    max-height: 76%;
+    max-height: 72%;
 
     object-fit: contain;
 
+    background: #010404;
+
     box-shadow:
-        0 0 30px rgba(57,255,20,.08);
+        0 0 28px rgba(57,255,20,.08);
 }
 
 .suit-details {
     text-align: center;
-    padding: 5px 25px 95px;
+
+    padding:
+        4px 20px 83px;
 }
 
 #suitLargeName {
     color: var(--green);
-    font-size: 15px;
+
+    font-size: 14px;
+
     letter-spacing: 2px;
 }
 
 #suitLargeDescription {
-    color: #83ad89;
-    font-size: 9px;
+    max-width: 600px;
+
+    margin:
+        7px auto 0;
+
+    color: #7fb588;
+
+    font-size: 8px;
+
     line-height: 1.5;
-    margin-top: 8px;
 }
 
 .suit-bottom {
     position: absolute;
-    bottom: 14px;
-    left: 12px;
-    right: 12px;
+
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
 
     display: flex;
+
     justify-content: center;
+
     gap: 7px;
 }
 
@@ -508,70 +719,122 @@ button {
 
 #toast {
     position: fixed;
+
     left: 50%;
-    bottom: 110px;
+    bottom: 75px;
 
     transform:
-        translateX(-50%)
-        translateY(20px);
-
-    background: #061010;
-    border: 1px solid var(--green);
-    color: var(--green);
-
-    padding: 10px 15px;
-
-    font-size: 10px;
+        translate(-50%,20px);
 
     opacity: 0;
+
     pointer-events: none;
 
-    transition: .25s ease;
     z-index: 100;
+
+    padding:
+        9px 14px;
+
+    background:
+        #061010;
+
+    border:
+        1px solid var(--green);
+
+    color: var(--green);
+
+    font-size: 9px;
+
+    transition:
+        .25s ease;
 }
 
 #toast.show {
     opacity: 1;
+
     transform:
-        translateX(-50%)
-        translateY(0);
+        translate(-50%,0);
 }
 
 /* =========================================================
-   RESPONSIVE
+   MOBILE LANDSCAPE ARCHIVE
+   ========================================================= */
+
+@media (max-height: 550px) {
+
+    .archive-list {
+        padding-top: 12px;
+    }
+
+    .archive-title {
+        font-size: 12px;
+    }
+
+    .archive-subtitle {
+        margin-bottom: 9px;
+    }
+
+    .suit-card {
+        min-height: 58px;
+    }
+
+    .suit-thumb {
+        width: 40px;
+        height: 48px;
+    }
+
+    #selectedImage {
+        max-height: 50%;
+    }
+
+}
+
+/* =========================================================
+   PORTRAIT HOME
    ========================================================= */
 
 @media (orientation: portrait) {
 
-    .status {
-        font-size: 8px;
-        right: 10px;
+    .wave-area {
+        padding-bottom: 130px;
+    }
+
+    .chat-panel {
+        bottom: 108px;
+    }
+
+    .controls {
+        bottom: 8px;
     }
 
     .logo {
-        font-size: 20px;
+        font-size: 19px;
     }
 
-    .chat-panel {
-        bottom: 128px;
-        height: 100px;
-    }
-
-    #wave {
-        height: 230px;
-    }
 }
 
-@media (orientation: landscape) {
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
 
-    #home {
-        max-width: 900px;
-        margin: auto;
+@media (max-width: 430px) {
+
+    .alex-button {
+        padding:
+            0 10px;
+
+        font-size: 8px;
+    }
+
+    .control-row {
+        gap: 5px;
     }
 
     .chat-panel {
-        max-width: 750px;
+        left: 9px;
+        right: 9px;
     }
+
 }
 
 </style>
@@ -581,273 +844,290 @@ button {
 
 <div id="app">
 
-    <!-- =====================================================
-         HOME
-         ===================================================== -->
+<!-- =======================================================
+     HOME
+     ======================================================= -->
 
-    <section id="home">
+<section id="home">
 
-        <div class="header">
+    <div class="header">
 
-            <div class="logo">
-                A.L.E.X
-            </div>
-
-            <div
-                id="status"
-                class="status"
-            >
-                STANDBY
-            </div>
-
-        </div>
-
-        <div class="wave-area">
-
-            <canvas id="wave"></canvas>
-
-            <div class="core"></div>
-
+        <div class="logo">
+            A.L.E.X
         </div>
 
         <div
-            id="chat"
-            class="chat-panel"
+            id="status"
+            class="status"
         >
+            STANDBY
         </div>
 
-        <div class="controls">
-
-            <div class="input-row">
-
-                <input
-                    id="textInput"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="ENTER COMMAND..."
-                >
-
-                <button
-                    class="alex-button"
-                    onclick="sendText()"
-                >
-                    SEND
-                </button>
-
-            </div>
-
-            <div class="control-row">
-
-                <button
-                    class="alex-button mic-button"
-                    id="micButton"
-                    onclick="toggleMic()"
-                >
-                    MIC OFF
-                </button>
-
-                <button
-                    class="alex-button archive-button"
-                    onclick="openArchive()"
-                >
-                    ARCHIVES
-                </button>
-
-                <button
-                    class="alex-button"
-                    onclick="speakLast()"
-                >
-                    SPEAK
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
+    </div>
 
 
-    <!-- =====================================================
-         ARCHIVE
-         ===================================================== -->
+    <div class="wave-area">
 
-    <section
-        id="archiveScreen"
-        class="screen"
-    >
+        <canvas id="wave"></canvas>
 
-        <div class="archive-layout">
+        <div class="core"></div>
 
-            <div class="archive-list">
-
-                <div class="archive-title">
-                    A.L.E.X // ARCHIVE
-                </div>
-
-                <div class="archive-subtitle">
-                    SPIDER-MAN SUIT DATABASE
-                </div>
-
-                <div id="suitList"></div>
-
-            </div>
+    </div>
 
 
-            <div class="archive-preview">
-
-                <div class="preview-title">
-                    SELECTED SUIT
-                </div>
-
-                <img
-                    id="selectedImage"
-                    alt="Selected suit"
-                >
-
-                <div
-                    id="selectedName"
-                    class="preview-name"
-                >
-                </div>
-
-                <div
-                    id="selectedDescription"
-                    class="preview-description"
-                >
-                </div>
-
-                <div class="archive-controls">
-
-                    <button
-                        class="alex-button"
-                        onclick="previousSuit()"
-                    >
-                        &lt; PREVIOUS
-                    </button>
-
-                    <button
-                        class="alex-button"
-                        onclick="showSelectedSuit()"
-                    >
-                        OPEN
-                    </button>
-
-                    <button
-                        class="alex-button"
-                        onclick="nextSuit()"
-                    >
-                        NEXT &gt;
-                    </button>
-
-                    <button
-                        class="alex-button"
-                        onclick="document.getElementById('suitFile').click()"
-                    >
-                        ADD SUIT
-                    </button>
-
-                    <button
-                        class="alex-button"
-                        onclick="closeArchive()"
-                    >
-                        HOME
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <input
-            id="suitFile"
-            type="file"
-            accept="image/*"
-            multiple
-        >
-
-    </section>
+    <div
+        id="chat"
+        class="chat-panel"
+    ></div>
 
 
-    <!-- =====================================================
-         PORTRAIT SUIT VIEW
-         ===================================================== -->
+    <div class="controls">
 
-    <section
-        id="suitScreen"
-        class="screen"
-    >
+        <div class="input-row">
 
-        <div class="suit-view">
-
-            <div class="suit-header">
-
-                <div class="logo">
-                    A.L.E.X // SUIT
-                </div>
-
-            </div>
-
-            <div class="suit-image-area">
-
-                <img
-                    id="suitLargeImage"
-                    alt="Suit"
-                >
-
-            </div>
-
-            <div class="suit-details">
-
-                <div
-                    id="suitLargeName"
-                >
-                </div>
-
-                <div
-                    id="suitLargeDescription"
-                >
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="suit-bottom">
+            <input
+                id="textInput"
+                type="text"
+                autocomplete="off"
+                placeholder="ENTER COMMAND..."
+            >
 
             <button
                 class="alex-button"
-                onclick="previousSuitFromView()"
+                onclick="sendText()"
             >
-                &lt;
+                SEND
+            </button>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <button
+                id="micButton"
+                class="alex-button mic-button"
+                onclick="toggleMic()"
+            >
+                MIC OFF
             </button>
 
             <button
                 class="alex-button"
                 onclick="openArchive()"
             >
-                ARCHIVE
+                ARCHIVES
             </button>
 
             <button
                 class="alex-button"
-                onclick="closeSuitView()"
+                onclick="speakLast()"
             >
-                HOME
-            </button>
-
-            <button
-                class="alex-button"
-                onclick="nextSuitFromView()"
-            >
-                &gt;
+                SPEAK
             </button>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     ARCHIVE
+     ======================================================= -->
+
+<section
+    id="archiveScreen"
+    class="screen"
+>
+
+    <div class="archive-layout">
+
+        <div class="archive-list">
+
+            <div class="archive-title">
+                A.L.E.X // ARCHIVE
+            </div>
+
+            <div class="archive-subtitle">
+                SUIT DATABASE // USER COLLECTION
+            </div>
+
+            <div id="suitList"></div>
+
+        </div>
+
+
+        <div class="archive-preview">
+
+            <div class="preview-title">
+                SELECTED SUIT
+            </div>
+
+
+            <img
+                id="selectedImage"
+                alt="Selected suit"
+            >
+
+
+            <div
+                id="selectedName"
+                class="preview-name"
+            ></div>
+
+
+            <div
+                id="selectedDescription"
+                class="preview-description"
+            ></div>
+
+
+            <div class="archive-controls">
+
+                <button
+                    class="alex-button"
+                    onclick="previousSuit()"
+                >
+                    &lt; PREV
+                </button>
+
+                <button
+                    class="alex-button"
+                    onclick="openSelectedSuit()"
+                >
+                    OPEN
+                </button>
+
+                <button
+                    class="alex-button"
+                    onclick="nextSuit()"
+                >
+                    NEXT &gt;
+                </button>
+
+                <button
+                    class="alex-button"
+                    onclick="document.getElementById('suitFile').click()"
+                >
+                    + ADD SUIT
+                </button>
+
+                <button
+                    class="alex-button delete-button"
+                    onclick="deleteSelectedSuit()"
+                >
+                    DELETE
+                </button>
+
+                <button
+                    class="alex-button"
+                    onclick="closeArchive()"
+                >
+                    HOME
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <input
+        id="suitFile"
+        type="file"
+        accept="image/*"
+        multiple
+        hidden
+    >
+
+</section>
+
+
+<!-- =======================================================
+     INDIVIDUAL SUIT VIEW
+     ======================================================= -->
+
+<section
+    id="suitScreen"
+    class="screen"
+>
+
+    <div class="suit-view">
+
+        <div class="suit-header">
+
+            <div class="logo">
+                A.L.E.X // SUIT
+            </div>
+
+        </div>
+
+
+        <div class="suit-image-area">
+
+            <img
+                id="suitLargeImage"
+                alt="Suit"
+            >
+
+        </div>
+
+
+        <div class="suit-details">
+
+            <div
+                id="suitLargeName"
+            ></div>
+
+            <div
+                id="suitLargeDescription"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="suit-bottom">
+
+        <button
+            class="alex-button"
+            onclick="previousSuitFromView()"
+        >
+            &lt;
+        </button>
+
+        <button
+            class="alex-button"
+            onclick="openArchive()"
+        >
+            ARCHIVE
+        </button>
+
+        <button
+            class="alex-button"
+            onclick="closeSuitView()"
+        >
+            HOME
+        </button>
+
+        <button
+            class="alex-button"
+            onclick="nextSuitFromView()"
+        >
+            &gt;
+        </button>
+
+    </div>
+
+</section>
+
 
 </div>
+
 
 <div id="toast"></div>
 
@@ -855,7 +1135,7 @@ button {
 <script>
 
 /* =========================================================
-   A.L.E.X
+   ELEMENTS
    ========================================================= */
 
 const home =
@@ -887,61 +1167,33 @@ const ctx =
 
 
 /* =========================================================
-   SUIT DATABASE
+   ARCHIVE DATA
+   IMPORTANT:
+   STARTS EMPTY
    ========================================================= */
 
-let suits = [
+let suits = [];
 
-    {
-        name: "CLASSIC RED & BLUE",
-        era: "CLASSIC",
-        image:
-            "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=800&q=80",
-        description:
-            "Classic red and blue Spider-Man-inspired suit concept."
-    },
-
-    {
-        name: "BLACK SUIT",
-        era: "BLACK SUIT",
-        image:
-            "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
-        description:
-            "Dark Spider-Man-inspired suit concept with a stealth-oriented appearance."
-    },
-
-    {
-        name: "IRON SPIDER",
-        era: "ADVANCED",
-        image:
-            "https://images.unsplash.com/photo-1594736797933-d0e501ba2fe6?auto=format&fit=crop&w=800&q=80",
-        description:
-            "Advanced metallic Spider-Man-inspired suit concept."
-    }
-
-];
-
-let selectedIndex = 0;
+let selectedIndex = -1;
 
 
 /* =========================================================
-   LOCAL STORAGE
+   LOAD SAVED SUITS
    ========================================================= */
 
 try {
 
     const saved =
-        localStorage.getItem("alex_suits");
+        localStorage.getItem(
+            "alex_suits_v3"
+        );
 
     if (saved) {
 
         const parsed =
             JSON.parse(saved);
 
-        if (
-            Array.isArray(parsed) &&
-            parsed.length
-        ) {
+        if (Array.isArray(parsed)) {
 
             suits = parsed;
 
@@ -952,27 +1204,42 @@ try {
 } catch (error) {
 
     console.log(
-        "Could not load saved archive.",
+        "Archive load error:",
         error
     );
 
 }
 
 
+if (suits.length) {
+
+    selectedIndex = 0;
+
+}
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
 function saveSuits() {
 
     try {
 
         localStorage.setItem(
-            "alex_suits",
+            "alex_suits_v3",
             JSON.stringify(suits)
         );
 
     } catch (error) {
 
         console.log(
-            "Could not save archive.",
+            "Archive save error:",
             error
+        );
+
+        toast(
+            "COULD NOT SAVE ARCHIVE"
         );
 
     }
@@ -990,7 +1257,9 @@ function addChat(
 ) {
 
     const line =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     line.className =
         "chat-line " +
@@ -1011,7 +1280,11 @@ function addChat(
         );
 
     line.innerHTML =
-        `<b>${speaker} // ${now}</b><br>` +
+        "<b>" +
+        escapeHTML(speaker) +
+        " // " +
+        escapeHTML(now) +
+        "</b><br>" +
         escapeHTML(text);
 
     chat.appendChild(line);
@@ -1023,7 +1296,7 @@ function addChat(
 
 
 /* =========================================================
-   TEXT COMMANDS
+   TEXT
    ========================================================= */
 
 function sendText() {
@@ -1031,7 +1304,9 @@ function sendText() {
     const text =
         input.value.trim();
 
-    if (!text) return;
+    if (!text) {
+        return;
+    }
 
     input.value = "";
 
@@ -1062,7 +1337,7 @@ input.addEventListener(
 
 
 /* =========================================================
-   COMMAND ENGINE
+   COMMANDS
    ========================================================= */
 
 function processCommand(
@@ -1075,14 +1350,13 @@ function processCommand(
 
     if (
         low.includes("archive") ||
-        low.includes("archives") ||
-        low.includes("suits")
+        low.includes("archives")
     ) {
 
         openArchive();
 
         alex(
-            "Opening the Spider-Man archive."
+            "Opening the archive."
         );
 
         return;
@@ -1104,6 +1378,17 @@ function processCommand(
 
 
     if (
+        low.includes("delete suit")
+    ) {
+
+        deleteSelectedSuit();
+
+        return;
+
+    }
+
+
+    if (
         low.includes("next suit")
     ) {
 
@@ -1116,7 +1401,8 @@ function processCommand(
 
     if (
         low.includes("previous suit")
-    ) {
+    )
+    {
 
         previousSuit();
 
@@ -1141,34 +1427,10 @@ function processCommand(
     }
 
 
-    for (
-        let i = 0;
-        i < suits.length;
-        i++
-    ) {
-
-        const name =
-            suits[i].name.toLowerCase();
-
-        if (
-            low.includes(name)
-        ) {
-
-            selectedIndex = i;
-
-            showSelectedSuit();
-
-            return;
-
-        }
-
-    }
-
-
     if (
         low.includes("hello") ||
-        low.includes("hey") ||
-        low.includes("hi alex")
+        low.includes("hi alex") ||
+        low === "hi"
     ) {
 
         alex(
@@ -1181,11 +1443,11 @@ function processCommand(
 
 
     if (
-        low.includes("who are you")
+        low.includes("status")
     ) {
 
         alex(
-            "I am A.L.E.X. Your personal browser-based assistant interface."
+            "A.L.E.X is online. Archive and voice systems are ready."
         );
 
         return;
@@ -1194,11 +1456,11 @@ function processCommand(
 
 
     if (
-        low.includes("status")
+        low.includes("who are you")
     ) {
 
         alex(
-            "A.L.E.X is online. Archive, voice input and interface systems are ready."
+            "I am A.L.E.X, your personal assistant interface."
         );
 
         return;
@@ -1207,17 +1469,18 @@ function processCommand(
 
 
     alex(
-        "I heard you. I can control the archive, open suits, navigate suits and respond to basic commands. This version does not require an external AI API."
+        "Command received. I can control the archive, navigate suits, add suits and remove suits."
     );
 
 }
 
 
 /* =========================================================
-   ALEX RESPONSE
+   ALEX
    ========================================================= */
 
 let lastSpeech = "";
+
 
 function alex(
     text
@@ -1235,7 +1498,13 @@ function alex(
     );
 
     setTimeout(
-        () => setStatus("STANDBY"),
+        function() {
+
+            setStatus(
+                "STANDBY"
+            );
+
+        },
         900
     );
 
@@ -1243,22 +1512,22 @@ function alex(
 
 
 function setStatus(
-    text
+    value
 ) {
 
     status.textContent =
-        text;
+        value;
 
     status.classList.toggle(
         "active",
-        text !== "STANDBY"
+        value !== "STANDBY"
     );
 
 }
 
 
 /* =========================================================
-   SPEAK BUTTON
+   SPEAK
    ========================================================= */
 
 function speakLast() {
@@ -1266,7 +1535,7 @@ function speakLast() {
     if (!lastSpeech) {
 
         alex(
-            "There is nothing in my speech queue yet."
+            "Nothing is currently in my speech queue."
         );
 
         return;
@@ -1274,11 +1543,11 @@ function speakLast() {
     }
 
     if (
-        !("speechSynthesis" in window)
+        !window.speechSynthesis
     ) {
 
         alex(
-            "Browser speech synthesis is not available."
+            "Speech synthesis is not supported by this browser."
         );
 
         return;
@@ -1292,9 +1561,14 @@ function speakLast() {
             lastSpeech
         );
 
-    utterance.rate = 0.95;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
+    utterance.lang =
+        "en-GB";
+
+    utterance.rate =
+        .95;
+
+    utterance.pitch =
+        1;
 
     speechSynthesis.speak(
         utterance
@@ -1307,8 +1581,11 @@ function speakLast() {
    MICROPHONE
    ========================================================= */
 
-let recognition = null;
-let listening = false;
+let recognition =
+    null;
+
+let listening =
+    false;
 
 const SpeechRecognition =
     window.SpeechRecognition ||
@@ -1320,15 +1597,21 @@ if (SpeechRecognition) {
     recognition =
         new SpeechRecognition();
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous =
+        false;
 
-    recognition.lang = "en-GB";
+    recognition.interimResults =
+        false;
+
+    recognition.lang =
+        "en-GB";
+
 
     recognition.onstart =
         function() {
 
-            listening = true;
+            listening =
+                true;
 
             micButton.textContent =
                 "MIC ON";
@@ -1348,16 +1631,20 @@ if (SpeechRecognition) {
         function(event) {
 
             const text =
-                event.results[0][0].transcript;
+                event.results[0][0]
+                    .transcript;
 
-            input.value = text;
+            input.value =
+                text;
 
             addChat(
                 "USER",
                 text
             );
 
-            processCommand(text);
+            processCommand(
+                text
+            );
 
         };
 
@@ -1366,7 +1653,7 @@ if (SpeechRecognition) {
         function(event) {
 
             console.log(
-                "Speech recognition error:",
+                "Speech recognition:",
                 event.error
             );
 
@@ -1376,7 +1663,7 @@ if (SpeechRecognition) {
             ) {
 
                 alex(
-                    "Microphone permission was denied. Allow microphone access in your browser settings and try again."
+                    "Microphone permission was denied. Allow microphone access in your browser."
                 );
 
             }
@@ -1387,7 +1674,8 @@ if (SpeechRecognition) {
     recognition.onend =
         function() {
 
-            listening = false;
+            listening =
+                false;
 
             micButton.textContent =
                 "MIC OFF";
@@ -1410,7 +1698,7 @@ function toggleMic() {
     if (!recognition) {
 
         alex(
-            "Your browser does not support built-in speech recognition. Try Microsoft Edge or Google Chrome."
+            "Built-in speech recognition is unavailable in this browser. Chrome or Edge is recommended."
         );
 
         return;
@@ -1433,7 +1721,9 @@ function toggleMic() {
 
     } catch (error) {
 
-        console.log(error);
+        console.log(
+            error
+        );
 
     }
 
@@ -1441,7 +1731,7 @@ function toggleMic() {
 
 
 /* =========================================================
-   ARCHIVE
+   ARCHIVE OPEN
    ========================================================= */
 
 function openArchive() {
@@ -1461,6 +1751,10 @@ function openArchive() {
 
 }
 
+
+/* =========================================================
+   ARCHIVE CLOSE
+   ========================================================= */
 
 function closeArchive() {
 
@@ -1491,8 +1785,72 @@ function renderArchive() {
 
     list.innerHTML = "";
 
+
+    if (!suits.length) {
+
+        selectedIndex =
+            -1;
+
+        list.innerHTML =
+
+            `<div class="empty-archive">
+
+                ARCHIVE EMPTY
+
+                <br><br>
+
+                No suits are currently stored.
+
+                <br>
+
+                Select <b>+ ADD SUIT</b>
+                to import your first suit.
+
+            </div>`;
+
+        document
+            .getElementById(
+                "selectedImage"
+            )
+            .removeAttribute(
+                "src"
+            );
+
+        document
+            .getElementById(
+                "selectedName"
+            )
+            .textContent =
+            "NO SUIT SELECTED";
+
+        document
+            .getElementById(
+                "selectedDescription"
+            )
+            .textContent =
+            "The archive is waiting for your first suit.";
+
+        return;
+
+    }
+
+
+    if (
+        selectedIndex < 0 ||
+        selectedIndex >= suits.length
+    ) {
+
+        selectedIndex =
+            0;
+
+    }
+
+
     suits.forEach(
-        (suit, index) => {
+        function(
+            suit,
+            index
+        ) {
 
             const card =
                 document.createElement(
@@ -1506,6 +1864,7 @@ function renderArchive() {
                         ? " selected"
                         : ""
                 );
+
 
             card.onclick =
                 function() {
@@ -1547,45 +1906,51 @@ function renderArchive() {
     );
 
 
-    if (suits.length) {
+    const selected =
+        suits[selectedIndex];
 
-        const suit =
-            suits[selectedIndex];
 
-        document
-            .getElementById(
-                "selectedImage"
-            )
-            .src =
-            suit.image;
+    document
+        .getElementById(
+            "selectedImage"
+        )
+        .src =
+        selected.image;
 
-        document
-            .getElementById(
-                "selectedName"
-            )
-            .textContent =
-            suit.name;
 
-        document
-            .getElementById(
-                "selectedDescription"
-            )
-            .textContent =
-            suit.description;
+    document
+        .getElementById(
+            "selectedName"
+        )
+        .textContent =
+        selected.name;
 
-    }
+
+    document
+        .getElementById(
+            "selectedDescription"
+        )
+        .textContent =
+        selected.description;
 
 }
 
 
 /* =========================================================
-   SUIT NAVIGATION
+   NEXT
    ========================================================= */
 
 function nextSuit() {
 
-    if (!suits.length)
+    if (!suits.length) {
+
+        toast(
+            "ARCHIVE IS EMPTY"
+        );
+
         return;
+
+    }
 
     selectedIndex =
         (
@@ -1597,14 +1962,26 @@ function nextSuit() {
 }
 
 
+/* =========================================================
+   PREVIOUS
+   ========================================================= */
+
 function previousSuit() {
 
-    if (!suits.length)
+    if (!suits.length) {
+
+        toast(
+            "ARCHIVE IS EMPTY"
+        );
+
         return;
+
+    }
 
     selectedIndex =
         (
-            selectedIndex - 1 +
+            selectedIndex -
+            1 +
             suits.length
         ) % suits.length;
 
@@ -1614,16 +1991,28 @@ function previousSuit() {
 
 
 /* =========================================================
-   OPEN SELECTED SUIT
+   OPEN SUIT
    ========================================================= */
 
-function showSelectedSuit() {
+function openSelectedSuit() {
 
-    if (!suits.length)
+    if (
+        !suits.length ||
+        selectedIndex < 0
+    ) {
+
+        toast(
+            "NO SUIT SELECTED"
+        );
+
         return;
+
+    }
+
 
     const suit =
         suits[selectedIndex];
+
 
     document
         .getElementById(
@@ -1632,6 +2021,7 @@ function showSelectedSuit() {
         .src =
         suit.image;
 
+
     document
         .getElementById(
             "suitLargeName"
@@ -1639,12 +2029,14 @@ function showSelectedSuit() {
         .textContent =
         suit.name;
 
+
     document
         .getElementById(
             "suitLargeDescription"
         )
         .textContent =
         suit.description;
+
 
     archiveScreen.classList.remove(
         "active"
@@ -1656,6 +2048,10 @@ function showSelectedSuit() {
 
 }
 
+
+/* =========================================================
+   CLOSE SUIT
+   ========================================================= */
 
 function closeSuitView() {
 
@@ -1669,30 +2065,114 @@ function closeSuitView() {
 }
 
 
+/* =========================================================
+   SUIT VIEW NAVIGATION
+   ========================================================= */
+
 function previousSuitFromView() {
+
+    if (!suits.length)
+        return;
 
     previousSuit();
 
-    showSelectedSuit();
+    openSelectedSuit();
 
 }
 
 
 function nextSuitFromView() {
 
+    if (!suits.length)
+        return;
+
     nextSuit();
 
-    showSelectedSuit();
+    openSelectedSuit();
 
 }
 
 
 /* =========================================================
-   ADD SUITS
+   DELETE SUIT
+   ========================================================= */
+
+function deleteSelectedSuit() {
+
+    if (
+        !suits.length ||
+        selectedIndex < 0
+    ) {
+
+        toast(
+            "NO SUIT SELECTED"
+        );
+
+        return;
+
+    }
+
+
+    const suit =
+        suits[selectedIndex];
+
+
+    const confirmed =
+        confirm(
+            "DELETE " +
+            suit.name +
+            " FROM THE A.L.E.X ARCHIVE?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    suits.splice(
+        selectedIndex,
+        1
+    );
+
+
+    if (!suits.length) {
+
+        selectedIndex =
+            -1;
+
+    } else if (
+        selectedIndex >=
+        suits.length
+    ) {
+
+        selectedIndex =
+            suits.length - 1;
+
+    }
+
+
+    saveSuits();
+
+    renderArchive();
+
+    toast(
+        "SUIT DELETED"
+    );
+
+}
+
+
+/* =========================================================
+   ADD SUIT
    ========================================================= */
 
 document
-    .getElementById("suitFile")
+    .getElementById(
+        "suitFile"
+    )
     .addEventListener(
         "change",
         function(event) {
@@ -1702,35 +2182,63 @@ document
                     event.target.files
                 );
 
+
             if (!files.length)
                 return;
 
+
             files.forEach(
-                file => {
+                function(file) {
+
+                    if (
+                        !file.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
 
                     const reader =
                         new FileReader();
 
+
                     reader.onload =
                         function(e) {
 
-                            const name =
+                            const cleanName =
                                 file.name
                                     .replace(
                                         /\.[^/.]+$/,
                                         ""
                                     )
                                     .replace(
-                                        /[_-]/g,
+                                        /[_-]+/g,
                                         " "
                                     )
-                                    .toUpperCase();
+                                    .trim();
+
+
+                            const displayName =
+                                cleanName
+                                    ? cleanName
+                                        .toUpperCase()
+                                    : "CUSTOM SUIT";
+
+
+                            const description =
+                                generateDescription(
+                                    displayName,
+                                    file
+                                );
+
 
                             suits.push({
 
                                 name:
-                                    name ||
-                                    "CUSTOM SUIT",
+                                    displayName,
 
                                 era:
                                     "CUSTOM",
@@ -1739,22 +2247,30 @@ document
                                     e.target.result,
 
                                 description:
-                                    "Custom suit image added to the A.L.E.X archive."
+                                    description,
+
+                                added:
+                                    new Date()
+                                        .toISOString()
 
                             });
 
+
                             selectedIndex =
                                 suits.length - 1;
+
 
                             saveSuits();
 
                             renderArchive();
 
+
                             toast(
-                                "SUIT ADDED TO ARCHIVE"
+                                "SUIT ADDED"
                             );
 
                         };
+
 
                     reader.readAsDataURL(
                         file
@@ -1763,14 +2279,116 @@ document
                 }
             );
 
-            event.target.value = "";
+
+            event.target.value =
+                "";
 
         }
     );
 
 
 /* =========================================================
-   WAVEFORM
+   AUTOMATIC SUIT DESCRIPTION
+   =========================================================
+   This is intentionally local and does not use an AI API.
+   It uses the imported suit name/file metadata.
+   ========================================================= */
+
+function generateDescription(
+    name,
+    file
+) {
+
+    const lower =
+        name.toLowerCase();
+
+
+    let type =
+        "custom suit concept";
+
+
+    if (
+        lower.includes("black") ||
+        lower.includes("stealth")
+    ) {
+
+        type =
+            "dark, stealth-oriented suit concept";
+
+    }
+
+    else if (
+        lower.includes("red") ||
+        lower.includes("classic")
+    ) {
+
+        type =
+            "classic red-toned suit concept";
+
+    }
+
+    else if (
+        lower.includes("iron") ||
+        lower.includes("metal")
+    ) {
+
+        type =
+            "advanced metallic suit concept";
+
+    }
+
+    else if (
+        lower.includes("white")
+    ) {
+
+        type =
+            "light-toned suit concept";
+
+    }
+
+    else if (
+        lower.includes("2099")
+    ) {
+
+        type =
+            "futuristic suit concept";
+
+    }
+
+    else if (
+        lower.includes("stealth")
+    ) {
+
+        type =
+            "stealth suit concept";
+
+    }
+
+
+    const sizeKB =
+        Math.round(
+            file.size / 1024
+        );
+
+
+    return (
+        "A.L.E.X archive entry for " +
+        name +
+        ". " +
+        "This appears to be a " +
+        type +
+        ". " +
+        "Imported image size: " +
+        sizeKB +
+        " KB. " +
+        "The design is stored as a custom suit concept."
+    );
+
+}
+
+
+/* =========================================================
+   WAVE
    ========================================================= */
 
 function resizeWave() {
@@ -1778,23 +2396,34 @@ function resizeWave() {
     const rect =
         wave.getBoundingClientRect();
 
+
+    const ratio =
+        window.devicePixelRatio ||
+        1;
+
+
     wave.width =
-        rect.width *
-        window.devicePixelRatio;
+        rect.width * ratio;
+
 
     wave.height =
-        rect.height *
-        window.devicePixelRatio;
+        rect.height * ratio;
 
-    ctx.scale(
-        window.devicePixelRatio,
-        window.devicePixelRatio
+
+    ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
     );
 
 }
 
 
-let waveTime = 0;
+let waveTime =
+    0;
 
 
 function drawWave() {
@@ -1804,6 +2433,7 @@ function drawWave() {
 
     const height =
         wave.clientHeight;
+
 
     ctx.clearRect(
         0,
@@ -1815,11 +2445,13 @@ function drawWave() {
 
     waveTime +=
         listening
-            ? 0.09
-            : 0.045;
+            ? .095
+            : .045;
 
 
-    const bars = 65;
+    const bars =
+        65;
+
 
     const center =
         height / 2;
@@ -1869,58 +2501,67 @@ function drawWave() {
 
 
         const movement =
-            (
-                Math.abs(wave1) * .7 +
-                Math.abs(wave2) * .3
-            );
+            Math.abs(wave1) * .7 +
+            Math.abs(wave2) * .3;
 
 
-        const listeningBoost =
+        const boost =
             listening
                 ? 1.8
                 : 1;
 
 
         const barHeight =
-            8 +
+            6 +
             movement *
-            80 *
+            72 *
             envelope *
-            listeningBoost;
+            boost;
 
 
         ctx.beginPath();
+
 
         ctx.moveTo(
             x,
             center - barHeight
         );
 
+
         ctx.lineTo(
             x,
             center + barHeight
         );
+
 
         ctx.strokeStyle =
             i % 2
                 ? "#39ff14"
                 : "#19d9ff";
 
-        ctx.lineWidth = 2;
 
-        ctx.shadowBlur = 8;
+        ctx.lineWidth =
+            2;
+
+
+        ctx.shadowBlur =
+            8;
+
 
         ctx.shadowColor =
             i % 2
                 ? "#39ff14"
                 : "#19d9ff";
 
+
         ctx.stroke();
 
     }
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur =
+        0;
+
 
     requestAnimationFrame(
         drawWave
@@ -1939,7 +2580,8 @@ window.addEventListener(
    TOAST
    ========================================================= */
 
-let toastTimer = null;
+let toastTimer =
+    null;
 
 
 function toast(
@@ -1951,20 +2593,24 @@ function toast(
             "toast"
         );
 
+
     element.textContent =
         text;
+
 
     element.classList.add(
         "show"
     );
 
+
     clearTimeout(
         toastTimer
     );
 
+
     toastTimer =
         setTimeout(
-            () => {
+            function() {
 
                 element.classList.remove(
                     "show"
@@ -1978,14 +2624,14 @@ function toast(
 
 
 /* =========================================================
-   ESCAPE HTML
+   ESCAPE
    ========================================================= */
 
 function escapeHTML(
-    text
+    value
 ) {
 
-    return String(text)
+    return String(value)
         .replace(
             /&/g,
             "&amp;"
@@ -2011,10 +2657,10 @@ function escapeHTML(
 
 
 function escapeAttribute(
-    text
+    value
 ) {
 
-    return escapeHTML(text);
+    return escapeHTML(value);
 
 }
 
@@ -2029,7 +2675,7 @@ drawWave();
 
 addChat(
     "ALEX",
-    "Systems online. A.L.E.X is standing by."
+    "Systems online. Archive database ready."
 );
 
 </script>
